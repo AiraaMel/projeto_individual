@@ -1,65 +1,36 @@
-# Boilerplate MVC em Node.js com PostgreSQL
+# Vibra | Aplicação web de gerenciamento de inscrições
 
-Este projeto é um boilerplate básico para uma aplicação Node.js seguindo o padrão MVC (Model-View-Controller), utilizando PostgreSQL como banco de dados.
+Vibra é uma aplicação web, com foco inicial em dispositivos móveis, que facilita o gerenciamento de inscrições em eventos culturais. A plataforma conecta pessoas de diferentes culturas, proporcionando uma maneira fácil de descobrir e participar de eventos ao redor do mundo.
 
-## Requisitos
+## Estrutura de pastas
 
-- Node.js (versão v22.13.1)
-- PostgreSQL (versão 17.4)
-
-## Instalação
-
-1. **Clonar o repositório:**
-
-```bash
-   git clone https://github.com/AiraaMel/projeto_individual
-   cd seu-projeto
 ```
-
-2. **Instalar as dependências:**
-    
-```bash
-npm install
+projeto_individual/
+│
+├── config/                # Arquivos de configuração do banco
+│   └── database.js
+├── controllers/           # Lógica de controle das requisições
+│   └── HomeController.js
+├── models/                # Definição de modelos de dados (estrutura do banco)
+│   └── User.js
+├── routes/                # Definição das rotas do sistema
+│   └── index.js
+├── services/              # Serviços auxiliares do sistema
+│   └── userService.js
+├── assets/                # Arquivos públicos como imagens e fontes
+├── scripts/               # Arquivos de JavaScript públicos
+├── styles/                # Arquivos CSS públicos
+├── tests/                 # Arquivos de testes unitários
+│   └── example.test.js
+├── .gitignore             # Arquivo para ignorar arquivos no Git
+├── .env                   # Arquivo de variáveis de ambiente
+├── jest.config.js         # Arquivo de configuração do Jest
+├── package-lock.json      # Gerenciador de dependências do Node.js
+├── package.json           # Gerenciador de dependências do Node.js
+├── readme.md              # Documentação do projeto (Markdown)
+├── server.js              # Arquivo principal que inicializa o servidor
+└── rest.http              # Teste de endpoints
 ```
-    
-3. **Configurar o arquivo `.env`:**
-    
-Renomeie o arquivo `.env.example` para `.env` e configure as variáveis de ambiente necessárias, como as configurações do banco de dados PostgreSQL.
-    
-
-Configuração do Banco de Dados
-------------------------------
-
-1. **Criar banco de dados:**
-    
-    Crie um banco de dados PostgreSQL com o nome especificado no seu arquivo `.env`.
-    
-2. **Executar o script SQL de inicialização:**
-    
-```bash
-npm run init-db
-```
-    
-Isso criará a tabela `users` no seu banco de dados PostgreSQL com UUID como chave primária e inserirá alguns registros de exemplo.
-    
-
-Funcionalidades
----------------
-
-* **Padrão MVC:** Estrutura organizada em Model, View e Controller.
-* **PostgreSQL:** Banco de dados relacional utilizado para persistência dos dados.
-* **UUID:** Utilização de UUID como chave primária na tabela `users`.
-* **Scripts com `nodemon`:** Utilização do `nodemon` para reiniciar automaticamente o servidor após alterações no código.
-* **Testes:** Inclui estrutura básica para testes automatizados.
-
-Scripts Disponíveis
--------------------
-
-* `npm start`: Inicia o servidor Node.js.
-* `npm run dev`: Inicia o servidor com `nodemon`, reiniciando automaticamente após alterações no código.
-* `npm run test`: Executa os testes automatizados.
-* `npm run test:coverage`: Executa os testes e gera um relatório de cobertura de código.
-
 Estrutura de Diretórios
 -----------------------
 
@@ -70,10 +41,48 @@ Estrutura de Diretórios
 * **`tests/`**: Testes automatizados.
 * **`views/`**: Views da aplicação (se aplicável).
 
-Contribuição
-------------
+## Requisitos
 
-Contribuições são bem-vindas! Sinta-se à vontade para abrir um issue ou enviar um pull request.
+- Node.js (versão v22.13.1)
+- PostgreSQL (versão 17.4)
+
+## Instalação
+
+1. **Clonar o repositório:**
+Abra o terminal e digite:
+```bash
+   git clone https://github.com/AiraaMel/projeto_individual
+   cd seu-projeto
+```
+
+2. **Instalar as dependências:**
+No terminal, rode:
+```bash
+    npm install
+```
+
+3. **Configure as variáveis de ambiente**
+Crie um arquivo .env na raiz do projeto com as configurações do banco de dados, como:
+
+```in 
+    DB_HOST=localhost
+    DB_PORT=5432
+    DB_NAME=vibra
+    DB_USER=seu_usuario
+    DB_PASSWORD=sua_senha
+    PORT=3000
+```
+
+4. **Inicie o servidor**
+Execute:
+```bash
+    node server.js
+```
+O servidor deve rodar em http://localhost:3000. 
+    
+Desenvolvedora
+-------
+Desenvolvido por Aira Mel, estudante de ADM TECH no Inteli.
 
 Licença
 -------
