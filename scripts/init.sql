@@ -44,7 +44,7 @@ CREATE TABLE "feedback" (
   "id" INT PRIMARY KEY,
   "user_id" INT,
   "event_id" INT,
-  "comments" varchar(500),
+  "comments" VARCHAR(500),
   "grade" DECIMAL,
   "date" DATE,
   "hour" TIME
