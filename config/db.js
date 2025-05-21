@@ -1,6 +1,7 @@
 const { Pool } = require('pg');
 require('dotenv').config();
 
+// permite conectar a bancos em nuvem
 const isSSL = process.env.DB_SSL === 'true';
 
 const pool = new Pool({
