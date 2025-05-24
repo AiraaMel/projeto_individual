@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastro de Localizações</title>
+</head>
+<body>
+  <h1>Cadastro de Localizações</h1>
+
+  <!-- Formulário para adicionar localização -->
+  <form action="/locations" method="POST">
+    <input name="country" placeholder="País" required>
+    <input name="language" placeholder="Idioma" required>
+    <input name="coin" placeholder="Moeda" required>
+    <textarea name="customs" placeholder="Costumes" required></textarea>
+    <textarea name="curiosities" placeholder="Curiosidades" required></textarea>
+    <button type="submit">Adicionar</button>
+  </form>
+
+  <hr>
+
+  <h2>Lista de Localizações</h2>
+  <% locations.forEach(location => { %>
+    <!-- Editar localização -->
+    <form action="/locations/edit/<%= location.id %>" method="POST" style="display:inline;">
+      <input name="country" value="<%= location.country %>" required>
+      <input name="language" value="<%= location.language %>" required>
+      <input name="coin" value="<%= location.coin %>" required>
+      <textarea name="customs" required><%= location.customs %></textarea>
+      <textarea name="curiosities" required><%= location.curiosities %></textarea>
+      <button type="submit">✏️</button>
+    </form>
+
+    <!-- Deletar localização -->
+    <form action="/locations/delete/<%= location.id %>" method="POST" style="display:inline;">
+      <button type="submit" onclick="return confirm('Tem certeza que deseja excluir?')">🗑️</button>
+    </form>
+    <br>
+  <% }) %>
+</body>
+</html>

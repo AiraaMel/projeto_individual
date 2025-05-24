@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastro de Eventos</title>
+</head>
+<body>
+  <h1>Cadastro de Eventos</h1>
+
+  <!-- Formulário para adicionar evento -->
+  <form action="/events" method="POST">
+    <input name="title" placeholder="Título do evento" required>
+    <input name="type" placeholder="Tipo do evento" required>
+    <textarea name="description" placeholder="Descrição do evento" required></textarea>
+    <input name="photo" placeholder="URL da foto" required>
+    <input name="locations_id" placeholder="ID da localização" required>
+    <button type="submit">Adicionar</button>
+  </form>
+
+  <hr>
+
+  <h2>Lista de Eventos</h2>
+  <% events.forEach(event => { %>
+    <!-- Editar evento -->
+    <form action="/events/edit/<%= event.id %>" method="POST" style="display:inline;">
+      <input name="title" value="<%= event.title %>" required>
+      <input name="type" value="<%= event.type %>" required>
+      <textarea name="description" required><%= event.description %></textarea>
+      <input name="photo" value="<%= event.photo %>" required>
+      <input name="locations_id" value="<%= event.locations_id %>" required>
+      <button type="submit">✏️</button>
+    </form>
+
+    <!-- Deletar evento -->
+    <form action="/events/delete/<%= event.id %>" method="POST" style="display:inline;">
+      <button type="submit" onclick="return confirm('Tem certeza que deseja excluir?')">🗑️</button>
+    </form>
+    <br>
+  <% }) %>
+</body>
+</html>
