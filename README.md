@@ -8,17 +8,31 @@ Vibra é uma aplicação web, com foco inicial em dispositivos móveis, que faci
 projeto_individual/
 │
 ├── config/                # Arquivos de configuração do banco
-│   └── database.js
+│   └── db.js
 ├── controllers/           # Lógica de controle das requisições
-│   └── HomeController.js
+│   └── eventsController.js
+│   └── feedbacksController.js
+│   └── locationsController.js
+│   └── playlistsController.js
+│   └── subscriptionsController.js
+│   └── usersController.js
 ├── models/                # Definição de modelos de dados (estrutura do banco)
-│   └── User.js
+│   └── eventsModel.js
+│   └── feedbacksModel.js
+│   └── locationsModel.js
+│   └── playlistsModel.js
+│   └── subscriptionsModel.js
+│   └── usersModel.js
 ├── routes/                # Definição das rotas do sistema
-│   └── index.js
-├── services/              # Serviços auxiliares do sistema
-│   └── userService.js
+│   └── eventsRoutes.js
+│   └── feedbacksRoutes.js]
+│   └── locationsRoutes.js
+│   └── playlistsRoutes.js
+│   └── subscriptionsRoutes.js
+│   └── usersRoutes.js
 ├── assets/                # Arquivos públicos como imagens e fontes
 ├── scripts/               # Arquivos de JavaScript públicos
+│   └── init.sql
 ├── styles/                # Arquivos CSS públicos
 ├── tests/                 # Arquivos de testes unitários
 │   └── example.test.js
