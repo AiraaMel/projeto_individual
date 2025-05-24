@@ -4,8 +4,8 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Tabelas do banco de dados
-CREATE TABLE "user" (
-  "id" INT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS "users" (
+  "id" SERIAL PRIMARY KEY,
   "name" VARCHAR(100),
   "email" VARCHAR(100),
   "password" VARCHAR(255),
@@ -13,17 +13,17 @@ CREATE TABLE "user" (
   "preferences" VARCHAR(255)
 );
 
-CREATE TABLE "event" (
-  "id" INT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS "events" (
+  "id" SERIAL PRIMARY KEY,
   "title" VARCHAR(100),
   "type" VARCHAR(50),
   "description" VARCHAR(500),
   "photo" VARCHAR(255),
-  "location_id" INT
+  "locations_id" INT
 );
 
-CREATE TABLE "location" (
-  "id" INT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS "locations" (
+  "id" SERIAL PRIMARY KEY,
   "country" VARCHAR(100),
   "language" VARCHAR(100),
   "coin" VARCHAR(50),
@@ -31,51 +31,48 @@ CREATE TABLE "location" (
   "curiosities" VARCHAR(500)
 );
 
-CREATE TABLE "subscriptions" (
-  "id" INT PRIMARY KEY,
-  "user_id" INT,
-  "event_id" INT,
+CREATE TABLE IF NOT EXISTS "subscriptions" (
+  "id" SERIAL PRIMARY KEY,
+  "users_id" INT,
+  "events_id" INT,
   "date" DATE,
   "hour" TIME,
   "status" VARCHAR(50)
 );
 
-CREATE TABLE "feedback" (
-  "id" INT PRIMARY KEY,
-  "user_id" INT,
-  "event_id" INT,
+CREATE TABLE IF NOT EXISTS "feedbacks" (
+  "id" SERIAL PRIMARY KEY,
+  "users_id" INT,
+  "events_id" INT,
   "comments" VARCHAR(500),
   "grade" DECIMAL,
   "date" DATE,
   "hour" TIME
 );
 
-CREATE TABLE "playlist" (
-  "id" INT PRIMARY KEY,
-  "location_id" INT,
+CREATE TABLE IF NOT EXISTS "playlists" (
+  "id" SERIAL PRIMARY KEY,
+  "locations_id" INT,
   "name" VARCHAR(100),
   "link" VARCHAR(255)
 );
 
-ALTER TABLE "subscriptions" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
+ALTER TABLE "subscriptions" ADD FOREIGN KEY ("users_id") REFERENCES "users" ("id");
+ALTER TABLE "subscriptions" ADD FOREIGN KEY ("events_id") REFERENCES "events" ("id");
 
-ALTER TABLE "subscriptions" ADD FOREIGN KEY ("event_id") REFERENCES "event" ("id");
+ALTER TABLE "events" ADD FOREIGN KEY ("locations_id") REFERENCES "locations" ("id");
 
-ALTER TABLE "event" ADD FOREIGN KEY ("location_id") REFERENCES "location" ("id");
+ALTER TABLE "feedbacks" ADD FOREIGN KEY ("users_id") REFERENCES "users" ("id");
+ALTER TABLE "feedbacks" ADD FOREIGN KEY ("events_id") REFERENCES "events" ("id");
 
-ALTER TABLE "feedback" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
-
-ALTER TABLE "feedback" ADD FOREIGN KEY ("event_id") REFERENCES "event" ("id");
-
-ALTER TABLE "playlist" ADD FOREIGN KEY ("location_id") REFERENCES "location" ("id");
-
+ALTER TABLE "playlists" ADD FOREIGN KEY ("locations_id") REFERENCES "locations" ("id");
 
 -- Inserir 20 usuários com nomes e emails aleatórios
 INSERT INTO users (name, email)
 VALUES 
-  ('Alice Smith', 'alice.smith@example.com'),
   ('Bob Johnson', 'bob.johnson@example.com'),
   ('Carol Williams', 'carol.williams@example.com'),
+  ('Alice Smith', 'alice.smith@example.com'),
   ('David Jones', 'david.jones@example.com'),
   ('Emma Brown', 'emma.brown@example.com'),
   ('Frank Davis', 'frank.davis@example.com'),
