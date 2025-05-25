@@ -1,6 +1,6 @@
 const Events = require('../models/eventsModel');
 
-// Listar todos os eventos
+// Listar eventos
 exports.index = async (req, res) => {
   try {
     const events = await Events.findAll();
