@@ -85,7 +85,7 @@ O modelo relacional é uma etapa fundamental no processo de modelagem de banco d
 O modelo físico representa a implementação concreta da estrutura do banco de dados, baseada no que foi definido no modelo relacional. Por meio da linguagem SQL, são criadas as tabelas, os campos e os relacionamentos que tornam possível o armazenamento e a manipulação dos dados dentro da aplicação. No caso da Vibra, o modelo físico foi projetado para garantir desempenho, organização e integridade, permitindo que informações como usuários, eventos, localidades e playlists sejam gerenciadas de forma eficiente.
 
 ### **Tabela** 
-**Usuários (user)**: Representa as pessoas que utilizam a aplicação web.
+**Usuários (users)**: Representa as pessoas que utilizam a aplicação web.
 - `id`: Identificador único do usuário (PK).
 - `name`: Nome do usuário.
 - `email`: Endereço de e-mail.
@@ -95,30 +95,30 @@ O modelo físico representa a implementação concreta da estrutura do banco de 
 
 **Inscrições (subscriptions)**: Representa as inscrições dos usuários nos eventos.
 - `id`: Identificador da inscrição (PK).
-- `user_id`, `event_id`: Relacionam inscriçoes ao usuário e evento (FK).
+- `users_id`, `events_id`: Relacionam inscriçoes ao usuário e evento (FK).
 - `status`: Situação da inscrição(confirmada, pendente, etc.).
 
-**Feedback (feedback)**: Representa os feedbacks dos eventos.
+**Feedback (feedbacks)**: Representa os feedbacks dos eventos.
 - `id`: Identificador do Feedback (PK).
-- `user_id`, `event_id`: Relacionam feedback ao usuário e evento (FK).
+- `users_id`, `events_id`: Relacionam feedback ao usuário e evento (FK).
 - `comments`: Comentário textual.
 - `grade`: Nota ou avaliação numérica.
 - `when`: Momento do feedback.
 
-**Evento (event)**: Representa eventos cadastrados na aplicação web.
+**Evento (events)**: Representa eventos cadastrados na aplicação web.
 - `id`: Identificador do evento (PK).
 - `title`,`type`, `description`, `photo`: Detalhes do evento.
 - `when`: Data e hora do evento.
-- `location_id`: Localidade do evento (FK).
+- `locations_id`: Localidade do evento (FK).
 
-**Localidade (location)**: Representa onde os evetntos acontecem.
+**Localidade (locations)**: Representa onde os evetntos acontecem.
 - `id`: Identificador da localidade (PK)
 - `country``language`, `coin`: Dados culturais do país.
 - `customs`, `curiosities`: Costumes e curiosidades.
 
 ```SQL
-CREATE TABLE "user" (
-  "id" INT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS "users" (
+  "id" SERIAL PRIMARY KEY,
   "name" VARCHAR(100),
   "email" VARCHAR(100),
   "password" VARCHAR(255),
@@ -126,16 +126,16 @@ CREATE TABLE "user" (
   "preferences" VARCHAR(255)
 );
 
-CREATE TABLE "event" (
+CREATE TABLE IF NOT EXISTS "events" (
   "id" INT PRIMARY KEY,
   "title" VARCHAR(100),
   "type" VARCHAR(50),
   "description" VARCHAR(500),
   "photo" VARCHAR(255),
-  "location_id" INT
+  "locations_id" INT
 );
 
-CREATE TABLE "location" (
+CREATE TABLE IF NOT EXISTS "locations" (
   "id" INT PRIMARY KEY,
   "country" VARCHAR(100),
   "language" VARCHAR(100),
@@ -144,28 +144,28 @@ CREATE TABLE "location" (
   "curiosities" VARCHAR(500)
 );
 
-CREATE TABLE "subscriptions" (
+CREATE TABLE IF NOT EXISTS "subscriptions" (
   "id" INT PRIMARY KEY,
-  "user_id" INT,
-  "event_id" INT,
+  "users_id" INT,
+  "events_id" INT,
   "date" DATE,
   "hour" TIME,
   "status" VARCHAR(50)
 );
 
-CREATE TABLE "feedback" (
+CREATE TABLE IF NOT EXISTS "feedbacks" (
   "id" INT PRIMARY KEY,
-  "user_id" INT,
-  "event_id" INT,
-  "comments" varchar(500),
+  "users_id" INT,
+  "events_id" INT,
+  "comments" VARCHAR(500),
   "grade" DECIMAL,
   "date" DATE,
   "hour" TIME
 );
 
-CREATE TABLE "playlist" (
+CREATE TABLE IF NOT EXISTS "playlists" (
   "id" INT PRIMARY KEY,
-  "location_id" INT,
+  "locations_id" INT,
   "name" VARCHAR(100),
   "link" VARCHAR(255)
 );
@@ -197,17 +197,15 @@ CREATE TABLE "playlist" (
 - Cada playlist ocorre em uma localidade.
 
 ```SQL
-ALTER TABLE "subscriptions" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
+ALTER TABLE "subscriptions" ADD FOREIGN KEY ("users_id") REFERENCES "users" ("id");
+ALTER TABLE "subscriptions" ADD FOREIGN KEY ("events_id") REFERENCES "events" ("id");
 
-ALTER TABLE "subscriptions" ADD FOREIGN KEY ("event_id") REFERENCES "event" ("id");
+ALTER TABLE "events" ADD FOREIGN KEY ("locations_id") REFERENCES "locations" ("id");
 
-ALTER TABLE "event" ADD FOREIGN KEY ("location_id") REFERENCES "location" ("id");
+ALTER TABLE "feedbacks" ADD FOREIGN KEY ("users_id") REFERENCES "users" ("id");
+ALTER TABLE "feedbacks" ADD FOREIGN KEY ("events_id") REFERENCES "events" ("id");
 
-ALTER TABLE "feedback" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
-
-ALTER TABLE "feedback" ADD FOREIGN KEY ("event_id") REFERENCES "event" ("id");
-
-ALTER TABLE "playlist" ADD FOREIGN KEY ("location_id") REFERENCES "location" ("id");
+ALTER TABLE "playlists" ADD FOREIGN KEY ("locations_id") REFERENCES "locations" ("id");
 ```
 
 A modelagem do banco de dados da aplicação Vibra organiza as entidades principais, como eventos, inscrições, playlists e feedbacks, proporcionando uma experiência fluida para os usuários. A estrutura também facilita futuras expansões, como integração com redes sociais e novos conteúdos.
@@ -218,14 +216,26 @@ A modelagem do banco de dados da aplicação Vibra organiza as entidades princip
 
 ### 3.2. Arquitetura (Semana 5)
 
-*Posicione aqui o diagrama de arquitetura da sua solução de aplicação web. Atualize sempre que necessário.*
+O desenvolvimento da aplicação Vibra segue o padrão arquitetural MVC (Model-View-Controller), uma abordagem que separa as responsabilidades da aplicação em três camadas principais: Model, View e Controller. Isso garante maior organização, escalabilidade e facilidade de manutenção do código.
 
-**Instruções para criação do diagrama de arquitetura**  
-- **Model**: A camada que lida com a lógica de negócios e interage com o banco de dados.
-- **View**: A camada responsável pela interface de usuário.
-- **Controller**: A camada que recebe as requisições, processa as ações e atualiza o modelo e a visualização.
-  
-*Adicione as setas e explicações sobre como os dados fluem entre o Model, Controller e View.*
+O diagrama abaixo representa a arquitetura da aplicação, evidenciando a forma como os dados fluem entre cliente, servidor e banco de dados:
+
+<div align="center">
+<sub>Figura 4 - Diagrama arquitetura MVC - Vibra </sub>
+<img src="../assets/wad/arquitetura-mvc.png">
+<sup>Fonte: Autoria Própia, Faculdade Inteli 2025</sup>
+</div>
+
+#### View (Visualização)
+A camada responsável pela interface com o usuário. É por meio dela que os usuários interagem com a aplicação. No momento, essa camada ainda será implementada, mas sua função será apresentar os dados processados pela Controller de forma clara e intuitiva.
+
+#### Controller (Controle)
+Atua como intermediária entre a View e o Model. Recebe as requisições feitas pelos usuários (por exemplo, criar uma conta, buscar eventos ou deixar feedback), processa essas ações e, se necessário, comunica-se com o Model para manipular os dados. No projeto, temos controllers específicos para cada entidade: `usersController`, `locationsController`, `eventsController`, `subscriptionsController`, `feedbacksController` e `playlistsController`.
+
+#### Model (Modelo)
+A camada que lida diretamente com a lógica de negócios e com o banco de dados. É responsável por representar e gerenciar os dados da aplicação. Cada model representa uma tabela no banco de dados (ex: users, locations, events, etc), incluindo seus atributos e relacionamentos.
+
+Esse padrão permite que cada parte da aplicação seja modificada de forma independente. Assim, a arquitetura MVC torna o projeto Vibra mais modular, seguro e fácil de evoluir conforme novas funcionalidades forem implementadas.
 
 ### 3.3. Wireframes (Semana 03)
 
@@ -259,12 +269,81 @@ A página de perfil permite ao usuário visualizar e editar seus dados e prefer�
 
 ### 3.4. Guia de estilos (Semana 05)
 
-*Descreva aqui orientações gerais para o leitor sobre como utilizar os componentes do guia de estilos de sua solução.*
+O guia de estilos foi desenvolvido para garantir consistência visual e reforçar a identidade da plataforma Vibra. Ele reúne os principais elementos gráficos utilizados no projeto, como cores, tipografia, botões, ícones e componentes, orientando na criação de interfaces coesas e intuitivas.
 
+A proposta estética reflete os valores da marca: movimento, energia e conexão cultural. A escolha das cores vibrantes, a tipografia moderna e os elementos minimalistas foram pensados para criar uma experiência envolvente, acessível e inspiradora para usuários ao redor do mundo.
+
+#### Paleta de cores
+
+A identidade visual do Vibra é marcada por tons quentes e vibrantes, que transmitem energia, acolhimento e diversidade cultural. A paleta principal é composta por:
+
+- #FF6363 – Rosa vibrante, usado para elementos de destaque e interação.
+- #CC4C5A – Vermelho escuro, que transmite profundidade e contraste.  
+- #FF8282 – Rosa claro, aplicado em fundos suaves ou realces secundários.
+- #FFFFFF – Branco, utilizado para equilíbrio e espaços negativos.
+- #333333 – Cinza escuro, ideal para textos e legibilidade.
+
+<div align="center">
+<sub>Figura 4 - Paleta de cores - Vibra </sub>
+<img src="../assets/wad/paleta.png">
+<sup>Fonte: Autoria Própia, Faculdade Inteli 2025</sup>
+</div>
+
+#### Tipografia
+A fonte escolhida para a plataforma, Sora, é moderna, legível e amigável, garantindo uma leitura confortável em diferentes tamanhos de tela. O estilo tipográfico estabelece uma hierarquia clara entre títulos, subtítulos e textos:
+
+- Títulos (H1, H2): Negrito, destaque e impacto visual.
+- Subtítulos e sessões (H3, H4): Peso médio, orientação e clareza.
+- Texto padrão e parágrafos: Leve, com foco em fluidez e legibilidade.
+- Botões e menus: Caixa alta ou destaque sutil, com contraste adequado.
+
+<div align="center">
+<sub>Figura 4 - Wireframe - Vibra </sub>
+<img src="../assets/wad/tipografia.png">
+<sup>Fonte: Autoria Própia, Faculdade Inteli 2025</sup>
+</div>
+
+#### Ícones
+Os ícones são minimalistas e seguem uma linha clara, com proporções uniformes. Eles reforçam a ação visualmente e facilitam a navegação, sendo utilizados em menus, botões e seções informativas.
+<div align="center">
+<sub>Figura 4 - Ícones - Vibra </sub>
+<img src="../assets/wad/icones.png">
+<sup>Fonte: Autoria Própia, Faculdade Inteli 2025</sup>
+</div>
+
+#### Componentes
+Os componentes foram criados para garantir consistência visual e facilitar a manutenção da interface. Elementos como cards de evento, campos de busca, botões e seções de perfil seguem padrões de espaçamento, tipografia e cores definidos no guia, promovendo uma experiência coesa e intuitiva para o usuário.
+<div align="center">
+<sub>Figura 4 - Componentes - Vibra </sub>
+<img src="../assets/wad/componentes.png">
+<sup>Fonte: Autoria Própia, Faculdade Inteli 2025</sup>
+</div>
+
+#### Acesso ao Figma
+
+Para visualização completa do **guia de estilos** e do **design system**, acesse os arquivos no Figma pelos links abaixo:
+
+- [Guia de Estilos no Figma](https://www.figma.com/design/8gX8vSk4MDCOcZRkOv70lw/Projeto-individual?node-id=9-311&t=qG1GqaxuU5wDfTGj-1)
+- [Design System no Figma](https://www.figma.com/design/8gX8vSk4MDCOcZRkOv70lw/Projeto-individual?node-id=231-1713&t=qG1GqaxuU5wDfTGj-1)
+
+Esses documentos reúnem as definições visuais e os principais elementos reutilizáveis da interface, servindo como referência para o desenvolvimento do produto.
 
 ### 3.5. Protótipo de alta fidelidade (Semana 05)
 
-*Posicione aqui algumas imagens demonstrativas de seu protótipo de alta fidelidade e o link para acesso ao protótipo completo (mantenha o link sempre público para visualização).*
+O protótipo de alta fidelidade representa uma versão visual próxima do produto final, integrando a identidade visual, os componentes definidos no design system e a experiência pensada a partir das necessidades dos usuários. Através dele, é possível visualizar o fluxo de navegação, testar interações e validar decisões de design antes do desenvolvimento.
+
+<div align="center">
+<sub>Figura 4 - Protótipo - Vibra </sub>
+<img src="../assets/wad/prototipo.png">
+<sup>Fonte: Autoria Própia, Faculdade Inteli 2025</sup>
+</div>
+
+O protótipo de alta fidelidade do Vibra foi desenvolvido com base nas necessidades levantadas nas histórias de usuário e nos objetivos centrais da plataforma: promover experiências culturais autênticas de forma acessível e intuitiva. As telas foram desenhadas para dispositivos móveis, priorizando a usabilidade em contextos de mobilidade, como viagen
+
+Para visualização completa acesse os arquivos no Figma pelos links abaixo:
+
+- [Protótipo](https://www.figma.com/design/8gX8vSk4MDCOcZRkOv70lw/Projeto-individual?node-id=147-3858&t=qG1GqaxuU5wDfTGj-1)
+- [Protótipo Interativo](https://www.figma.com/design/8gX8vSk4MDCOcZRkOv70lw/Projeto-individual?node-id=147-4899&t=qG1GqaxuU5wDfTGj-1)
 
 ### 3.6. WebAPI e endpoints (Semana 05)
 

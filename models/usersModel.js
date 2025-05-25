@@ -14,7 +14,7 @@ module.exports = {
   },
 
   async update(id, data) {
-    const query = 'UPDATE users SET name = $1, email = $2, password = $3, photo = $4, preferences = $5, updated_at = CURRENT_TIMESTAMP WHERE id = $6 RETURNING *';
+    const query = 'UPDATE users SET name = $1, email = $2, password = $3, photo = $4, preferences = $5, WHERE id = $6 RETURNING *';
     const values = [data.name, data.email, data.password, data.photo, data.preferences, id];
     return db.query(query, values);
   },

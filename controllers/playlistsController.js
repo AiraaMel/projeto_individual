@@ -4,7 +4,11 @@ const Playlists = require('../models/playlistsModel');
 exports.index = async (req, res) => {
   try {
     const playlists = await Playlists.findAll();
-    res.status(200).json(playlists);
+    if (req.headers.accept && req.headers.accept.includes('application/json')) {
+      res.status(200).json(playlists);
+    } else {
+      res.render('playlists/index', { playlists });
+    }
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -15,8 +19,12 @@ exports.create = async (req, res) => {
   const { locations_id, name, link } = req.body;
 
   try {
-    await Playlists.create({ locations_id, name, link });
-    res.redirect('/playlists');
+    const playlist = await Playlists.create({ locations_id, name, link });
+    if (req.headers.accept && req.headers.accept.includes('application/json')) {
+      res.status(201).json(playlist);
+    } else {
+      res.redirect('/playlists');
+    }
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -28,8 +36,12 @@ exports.update = async (req, res) => {
   const { locations_id, name, link } = req.body;
 
   try {
-    await Playlists.update(id, { locations_id, name, link });
-    res.redirect('/playlists');
+    await Playlists.update({ locations_id, name, link }, { where: { id } });
+    if (req.headers.accept && req.headers.accept.includes('application/json')) {
+      res.status(200).json({ message: 'Playlist updated successfully' });
+    } else {
+      res.redirect('/playlists');
+    }
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -41,7 +53,11 @@ exports.delete = async (req, res) => {
 
   try {
     await Playlists.delete(id);
-    res.redirect('/playlists');
+    if (req.headers.accept && req.headers.accept.includes('application/json')) {
+      res.status(200).json({ message: 'Playlist deleted successfully' });
+    } else {
+      res.redirect('/playlists');
+    }
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

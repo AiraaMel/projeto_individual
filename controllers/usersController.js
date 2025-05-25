@@ -4,7 +4,11 @@ const Users = require('../models/usersModel');
 exports.index = async (req, res) => {
   try {
     const users = await Users.findAll();
-    res.render('users/index', { users });
+    if (req.headers.accept && req.headers.accept.includes('application/json')) {
+      res.status(200).json(users);
+    } else {
+      res.render('users/index', { users });
+    }
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
