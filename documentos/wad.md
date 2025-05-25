@@ -459,7 +459,7 @@ DELETE /events/:id              → eventsController.delete // Exclui um evento
 
 Cada rota acima representa uma operação disponível para os usuários da aplicação.
 
-## Controle de Eventos
+#### Controle de Eventos
 
 | Método | Rota | Controller & Função | Descrição |
 |--------|------|--------------------|------------|
