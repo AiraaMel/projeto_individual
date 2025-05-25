@@ -212,13 +212,6 @@ A modelagem do banco de dados da aplicação Vibra organiza as entidades princip
 
 
 ### 3.1.1 BD e Models (Semana 5)
-*Descreva aqui os Models implementados no sistema web*
-
-Nesta etapa do desenvolvimento, foram definidos os **models** do sistema Vibra, que representam as principais entidades da aplicação. Esses models refletem a estrutura do banco de dados relacional implementado com **PostgreSQL**, sendo utilizados para mapear e manipular os dados da aplicação de forma consistente.
-
-Cada model está diretamente associado a uma tabela do banco de dados e define os atributos que representam os campos de cada entidade, bem como os relacionamentos entre elas.
-
-### 3.1.1 BD e Models (Semana 5)
 
 #### BD
 
@@ -450,39 +443,31 @@ A WebAPI da aplicação foi pensada para permitir que usuários possam:
 
 Essa estrutura também facilita a integração com interfaces front-end e serviços externos, promovendo flexibilidade e escalabilidade à aplicação.
 
-A seguir, apresentamos uma amostra das rotas implementadas e seus respectivos controllers:
+A seguir, uma amostra das rotas implementadas e seus respectivos controllers:
 
 ---
 
 ```js
-// ROTAS DE AUTENTICAÇÃO
-POST   /login                     → AuthController.login // Realiza autenticação de usuário
-
-// ROTAS DE USUÁRIO
-POST   /usuarios                 → UserController.create // Cria um novo usuário
-GET    /usuarios/:id             → UserController.show   // Retorna dados de um usuário
-PUT    /usuarios/:id             → UserController.update // Atualiza dados de um usuário
-DELETE /usuarios/:id             → UserController.delete // Remove um usuário
 
 // ROTAS DE EVENTO
-GET    /eventos                  → EventController.index // Lista todos os eventos
-GET    /eventos/:id              → EventController.show  // Retorna detalhes de um evento
-POST   /eventos                  → EventController.create // Cria um novo evento
-PUT    /eventos/:id              → EventController.update // Atualiza um evento
-DELETE /eventos/:id              → EventController.delete // Exclui um evento
+GET    /events                  → eventsController.index // Lista todos os eventos
+POST   /events                  → eventsController.create // Cria um novo evento
+PUT    /events/:id              → eventsController.update // Atualiza um evento
+DELETE /events/:id              → eventsController.delete // Exclui um evento
 
-// ROTAS DE INSCRIÇÃO
-POST   /inscricoes               → SubscriptionController.create // Realiza inscrição em evento
-GET    /inscricoes/usuario/:id   → SubscriptionController.userSubscriptions // Lista inscrições de um usuário
 ```
 
-Cada rota acima representa uma operação disponível para os usuários da aplicação. Por exemplo:
+Cada rota acima representa uma operação disponível para os usuários da aplicação.
 
-- `POST /usuarios`: permite o cadastro de novos usuários na plataforma.
-- `POST /login`: autentica um usuário e retorna um token JWT.
-- `GET /eventos`: retorna todos os eventos disponíveis para o público.
-- `POST /inscricoes`: permite que o usuário se inscreva em um evento.
-- `GET /inscricoes/usuario/:id`: permite ao usuário consultar suas inscrições.
+## Controle de Eventos
+
+| Método | Rota | Controller & Função | Descrição |
+|--------|------|--------------------|------------|
+| `GET` | `/events` | `eventsController.index` | Lista todos os eventos |
+| `POST` | `/events` | `eventsController.create` | Cria um novo evento |
+| `PUT` | `/events/:id` | `eventsController.update` | Atualiza um evento |
+| `DELETE` | `/events/:id` | `eventsController.delete` | Exclui um evento |
+
 
 Esses endpoints são fundamentais para o funcionamento da aplicação Vibra, pois determinam como as interações com o sistema ocorrem. Além disso, com a autenticação por token, as rotas protegidas garantem que apenas usuários autenticados possam realizar ações sensíveis, como criar eventos ou se inscrever neles.
 
