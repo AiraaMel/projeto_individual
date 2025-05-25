@@ -214,6 +214,94 @@ A modelagem do banco de dados da aplicação Vibra organiza as entidades princip
 ### 3.1.1 BD e Models (Semana 5)
 *Descreva aqui os Models implementados no sistema web*
 
+Nesta etapa do desenvolvimento, foram definidos os **models** do sistema Vibra, que representam as principais entidades da aplicação. Esses models refletem a estrutura do banco de dados relacional implementado com **PostgreSQL**, sendo utilizados para mapear e manipular os dados da aplicação de forma consistente.
+
+Cada model está diretamente associado a uma tabela do banco de dados e define os atributos que representam os campos de cada entidade, bem como os relacionamentos entre elas.
+
+### 3.1.1 BD e Models (Semana 5)
+
+#### BD
+
+O arquivo `db.js` é responsável por configurar e gerenciar a conexão com o banco de dados **PostgreSQL** utilizado na aplicação Vibra. Ele utiliza a biblioteca `pg`, um cliente PostgreSQL para Node.js, amplamente adotado em projetos web.
+
+```js
+const { Pool } = require('pg');
+require('dotenv').config();
+
+const isSSL = process.env.DB_SSL === 'true';
+
+const pool = new Pool({
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_DATABASE,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
+  ssl: isSSL ? { rejectUnauthorized: false } : false,
+});
+
+module.exports = {
+  query: (text, params) => pool.query(text, params),
+  connect: () => pool.connect(),
+};
+```
+Essa implementação garante que a comunicação com o banco de dados seja feita de forma eficiente, segura e centralizada, promovendo boas práticas no desenvolvimento do backend da aplicação.
+
+#### Models
+
+Nesta etapa do projeto, foram definidos os **models** responsáveis por realizar a comunicação entre a aplicação e o banco de dados **PostgreSQL**, utilizando queries SQL por meio da biblioteca `pg`. Cada model representa uma entidade da aplicação e encapsula as operações CRUD (Create, Read, Update, Delete).
+
+Abaixo, exemplo da estrutura do model `event`, responsável por manipular os dados da tabela `events`.
+
+Arquivo: `models/eventsModel.js`
+
+Este model gerencia os dados dos eventos culturais disponíveis na aplicação. Ele contém métodos para criar, buscar, atualizar e deletar registros da tabela `events`.
+
+**Atributos armazenados:**
+- `id`: identificador único do evento (gerado automaticamente)
+- `title`: título do evento
+- `type`: tipo ou categoria (ex: música, teatro)
+- `description`: descrição detalhada do evento
+- `photo`: URL de imagem representando o evento
+- `locations_id`: referência ao local onde o evento será realizado (chave estrangeira)
+
+**Métodos implementados:**
+
+```js
+// Criação de um novo evento
+async create(data) {
+  const query = 'INSERT INTO Events (title, type, description, photo, locations_id) VALUES ($1, $2, $3, $4, $5) RETURNING *';
+  const values = [data.title, data.type, data.description, data.photo, data.location_id];
+  return db.query(query, values);
+}
+
+// Consulta de todos os eventos
+async findAll() {
+  const result = await db.query('SELECT id, title, type, description, photo, locations_id FROM events ORDER BY id ASC');
+  return result.rows;
+}
+
+// Atualização de um evento por ID
+async update(id, data) {
+  const query = 'UPDATE Events SET title = $1, type = $2, description = $3, photo = $4, locations_id = $5 WHERE id = $6 RETURNING *';
+  const values = [data.type, data.description, data.photo, data.location_id, id];
+  return db.query(query, values);
+}
+
+// Exclusão de um evento por ID
+async delete(id) {
+  const query = 'DELETE FROM events WHERE id = $1 RETURNING *';
+  return db.query(query, [id]);
+}
+```
+A estrutura de models implementada no projeto segue princípios fundamentais de organização e desacoplamento da lógica de acesso a dados. Cada entidade possui responsabilidades definidas, encapsulando suas operações em módulos separados. Essa abordagem facilita a manutenção do sistema, permitindo que atualizações, correções e expansões futuras sejam feitas de maneira mais eficiente e segura.
+
+Esses models são a base das operações CRUD realizadas pela API e foram organizados conforme os princípios da arquitetura MVC. A definição dos relacionamentos entre entidades garante a integridade dos dados e facilita a construção de funcionalidades como:
+
+- Listagem de eventos com usuários inscritos
+- Consulta de eventos em que um usuário está inscrito
+- Validação de dados na criação de eventos e usuários
+
+
 ### 3.2. Arquitetura (Semana 5)
 
 O desenvolvimento da aplicação Vibra segue o padrão arquitetural MVC (Model-View-Controller), uma abordagem que separa as responsabilidades da aplicação em três camadas principais: Model, View e Controller. Isso garante maior organização, escalabilidade e facilidade de manutenção do código.
@@ -226,13 +314,13 @@ O diagrama abaixo representa a arquitetura da aplicação, evidenciando a forma 
 <sup>Fonte: Autoria Própia, Faculdade Inteli 2025</sup>
 </div>
 
-#### View (Visualização)
+#### **View (Visualização)**
 A camada responsável pela interface com o usuário. É por meio dela que os usuários interagem com a aplicação. No momento, essa camada ainda será implementada, mas sua função será apresentar os dados processados pela Controller de forma clara e intuitiva.
 
-#### Controller (Controle)
+#### **Controller (Controle)**
 Atua como intermediária entre a View e o Model. Recebe as requisições feitas pelos usuários (por exemplo, criar uma conta, buscar eventos ou deixar feedback), processa essas ações e, se necessário, comunica-se com o Model para manipular os dados. No projeto, temos controllers específicos para cada entidade: `usersController`, `locationsController`, `eventsController`, `subscriptionsController`, `feedbacksController` e `playlistsController`.
 
-#### Model (Modelo)
+#### **Model (Modelo)**
 A camada que lida diretamente com a lógica de negócios e com o banco de dados. É responsável por representar e gerenciar os dados da aplicação. Cada model representa uma tabela no banco de dados (ex: users, locations, events, etc), incluindo seus atributos e relacionamentos.
 
 Esse padrão permite que cada parte da aplicação seja modificada de forma independente. Assim, a arquitetura MVC torna o projeto Vibra mais modular, seguro e fácil de evoluir conforme novas funcionalidades forem implementadas.
@@ -273,7 +361,7 @@ O guia de estilos foi desenvolvido para garantir consistência visual e reforça
 
 A proposta estética reflete os valores da marca: movimento, energia e conexão cultural. A escolha das cores vibrantes, a tipografia moderna e os elementos minimalistas foram pensados para criar uma experiência envolvente, acessível e inspiradora para usuários ao redor do mundo.
 
-#### Paleta de cores
+#### **Paleta de cores**
 
 A identidade visual do Vibra é marcada por tons quentes e vibrantes, que transmitem energia, acolhimento e diversidade cultural. A paleta principal é composta por:
 
@@ -289,7 +377,7 @@ A identidade visual do Vibra é marcada por tons quentes e vibrantes, que transm
 <sup>Fonte: Autoria Própia, Faculdade Inteli 2025</sup>
 </div>
 
-#### Tipografia
+#### **Tipografia**
 A fonte escolhida para a plataforma, Sora, é moderna, legível e amigável, garantindo uma leitura confortável em diferentes tamanhos de tela. O estilo tipográfico estabelece uma hierarquia clara entre títulos, subtítulos e textos:
 
 - Títulos (H1, H2): Negrito, destaque e impacto visual.
@@ -303,7 +391,7 @@ A fonte escolhida para a plataforma, Sora, é moderna, legível e amigável, gar
 <sup>Fonte: Autoria Própia, Faculdade Inteli 2025</sup>
 </div>
 
-#### Ícones
+#### **Ícones**
 Os ícones são minimalistas e seguem uma linha clara, com proporções uniformes. Eles reforçam a ação visualmente e facilitam a navegação, sendo utilizados em menus, botões e seções informativas.
 <div align="center">
 <sub>Figura 4 - Ícones - Vibra </sub>
@@ -311,7 +399,7 @@ Os ícones são minimalistas e seguem uma linha clara, com proporções uniforme
 <sup>Fonte: Autoria Própia, Faculdade Inteli 2025</sup>
 </div>
 
-#### Componentes
+#### **Componentes**
 Os componentes foram criados para garantir consistência visual e facilitar a manutenção da interface. Elementos como cards de evento, campos de busca, botões e seções de perfil seguem padrões de espaçamento, tipografia e cores definidos no guia, promovendo uma experiência coesa e intuitiva para o usuário.
 <div align="center">
 <sub>Figura 4 - Componentes - Vibra </sub>
@@ -319,7 +407,7 @@ Os componentes foram criados para garantir consistência visual e facilitar a ma
 <sup>Fonte: Autoria Própia, Faculdade Inteli 2025</sup>
 </div>
 
-#### Acesso ao Figma
+#### **Acesso ao Figma**
 
 Para visualização completa do **guia de estilos** e do **design system**, acesse os arquivos no Figma pelos links abaixo:
 
@@ -347,7 +435,57 @@ Para visualização completa acesse os arquivos no Figma pelos links abaixo:
 
 ### 3.6. WebAPI e endpoints (Semana 05)
 
-*Utilize um link para outra página de documentação contendo a descrição completa de cada endpoint. Ou descreva aqui cada endpoint criado para seu sistema.*  
+
+Nesta seção, é apresentada a estrutura de WebAPI desenvolvida para o projeto Vibra, uma plataforma para gestão e divulgação de eventos. A aplicação foi construída utilizando Node.js com Express e banco de dados PostgreSQL. A WebAPI é responsável por disponibilizar os recursos do sistema para o front-end, permitindo operações como criação de usuários, autenticação, cadastro de eventos e inscrições.
+
+Os **endpoints** são componentes essenciais de qualquer aplicação web moderna. Eles definem como a aplicação responde a solicitações HTTP (como GET, POST, PUT e DELETE), funcionando como pontos de acesso à lógica de negócios e ao banco de dados.
+
+No contexto do projeto **Vibra**, os endpoints foram implementados utilizando o framework **Express.js**, com estrutura baseada no padrão **MVC (Model-View-Controller)**. Cada rota é mapeada para uma ação específica em um controller, o que garante organização, modularidade e manutenibilidade ao sistema.
+
+A WebAPI da aplicação foi pensada para permitir que usuários possam:
+
+- Criar contas e realizar login (com autenticação via JWT)
+- Visualizar, criar, editar e deletar eventos
+- Realizar e consultar inscrições em eventos
+
+Essa estrutura também facilita a integração com interfaces front-end e serviços externos, promovendo flexibilidade e escalabilidade à aplicação.
+
+A seguir, apresentamos uma amostra das rotas implementadas e seus respectivos controllers:
+
+---
+
+```js
+// ROTAS DE AUTENTICAÇÃO
+POST   /login                     → AuthController.login // Realiza autenticação de usuário
+
+// ROTAS DE USUÁRIO
+POST   /usuarios                 → UserController.create // Cria um novo usuário
+GET    /usuarios/:id             → UserController.show   // Retorna dados de um usuário
+PUT    /usuarios/:id             → UserController.update // Atualiza dados de um usuário
+DELETE /usuarios/:id             → UserController.delete // Remove um usuário
+
+// ROTAS DE EVENTO
+GET    /eventos                  → EventController.index // Lista todos os eventos
+GET    /eventos/:id              → EventController.show  // Retorna detalhes de um evento
+POST   /eventos                  → EventController.create // Cria um novo evento
+PUT    /eventos/:id              → EventController.update // Atualiza um evento
+DELETE /eventos/:id              → EventController.delete // Exclui um evento
+
+// ROTAS DE INSCRIÇÃO
+POST   /inscricoes               → SubscriptionController.create // Realiza inscrição em evento
+GET    /inscricoes/usuario/:id   → SubscriptionController.userSubscriptions // Lista inscrições de um usuário
+```
+
+Cada rota acima representa uma operação disponível para os usuários da aplicação. Por exemplo:
+
+- `POST /usuarios`: permite o cadastro de novos usuários na plataforma.
+- `POST /login`: autentica um usuário e retorna um token JWT.
+- `GET /eventos`: retorna todos os eventos disponíveis para o público.
+- `POST /inscricoes`: permite que o usuário se inscreva em um evento.
+- `GET /inscricoes/usuario/:id`: permite ao usuário consultar suas inscrições.
+
+Esses endpoints são fundamentais para o funcionamento da aplicação Vibra, pois determinam como as interações com o sistema ocorrem. Além disso, com a autenticação por token, as rotas protegidas garantem que apenas usuários autenticados possam realizar ações sensíveis, como criar eventos ou se inscrever neles.
+
 
 ### 3.7 Interface e Navegação (Semana 07)
 
