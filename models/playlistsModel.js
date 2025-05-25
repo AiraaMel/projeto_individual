@@ -13,7 +13,7 @@ module.exports = {
   },
 
   async update(id, data) {
-    const query = 'UPDATE playlists SET location_id = $1, name = $2, link = $3, updated_at = CURRENT_TIMESTAMP WHERE id = $4 RETURNING *';
+    const query = 'UPDATE playlists SET location_id = $1, name = $2, link = $3 WHERE id = $4 RETURNING *';
     const values = [data.location_id, data.name, data.link, id];
     return db.query(query, values);
   },
