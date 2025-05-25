@@ -13,7 +13,7 @@ module.exports = {
   },
 
   async update(id, data) {
-    const query = 'UPDATE feedbacks SET comments = $1, grade = $2, date = $3, hour = $4, updated_at = CURRENT_TIMESTAMP WHERE id = $5 RETURNING *';
+    const query = 'UPDATE feedbacks SET comments = $1, grade = $2, date = $3, hour = $4 WHERE id = $5 RETURNING *';
     const values = [data.comments, data.grade, data.date, data.hour, id];
     return db.query(query, values);
   },

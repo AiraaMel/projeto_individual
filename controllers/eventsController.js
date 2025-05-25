@@ -1,47 +1,63 @@
-const Events = require('../models/eventsModel');
+const Subscriptions = require('../models/subscriptionsModel');
 
-// Listar todos os eventos
+// Listar todas as inscrições
 exports.index = async (req, res) => {
   try {
-    const events = await Events.findAll();
-    res.render('events/index', { events });
+    const subscriptions = await Subscriptions.findAll();
+    if (req.headers.accept && req.headers.accept.includes('application/json')) {
+      res.status(200).json(subscriptions);
+    } else {
+      res.render('subscriptions/index', { subscriptions });
+    }
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// Criar um novo evento
+// Criar uma nova inscrição
 exports.create = async (req, res) => {
-  const { title, type, description, photo, locations_id } = req.body;
+  const { users_id, events_id, date, hour, status } = req.body;
 
   try {
-    await Events.create({ title, type, description, photo, locations_id });
-    res.redirect('/events');
+    const subscription = await Subscriptions.create({ users_id, events_id, date, hour, status });
+    if (req.headers.accept && req.headers.accept.includes('application/json')) {
+      res.status(201).json(subscription);
+    } else {
+      res.redirect('/subscriptions');
+    }
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// Atualizar dados do evento
+// Atualizar dados da inscrição
 exports.update = async (req, res) => {
   const { id } = req.params;
-  const { title, type, description, photo, locations_id } = req.body;
+  const { users_id, events_id, date, hour, status } = req.body;
 
   try {
-    await Events.update(id, { title, type, description, photo, locations_id });
-    res.redirect('/events');
+    const subscription = await Subscriptions.update(id, { users_id, events_id, date, hour, status });
+    if (req.headers.accept && req.headers.accept.includes('application/json')) {
+      res.status(200).json(subscription);
+    } else {
+      res.redirect('/subscriptions');
+    }
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// Deletar evento
+// Deletar inscrição
 exports.delete = async (req, res) => {
   const { id } = req.params;
 
   try {
-    await Events.delete(id);
-    res.redirect('/events');
+    const subscription = await Subscriptions.delete(id);
+    if (req.headers.accept && req.headers.accept.includes('application/json')) {
+      res.status(200).json({ message: 'Subscription deleted successfully', subscription });
+    } else {
+      res.redirect('/subscriptions');
+    }
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

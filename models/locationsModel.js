@@ -11,9 +11,8 @@ module.exports = {
     const result = await db.query('SELECT * FROM locations ORDER BY id ASC');
     return result.rows;
   },
-
   async update(id, data) {
-    const query = 'UPDATE locations SET country = $1, language = $2, coin = $3, customs = $4, curiosities = $5, updated_at = CURRENT_TIMESTAMP WHERE id = $6 RETURNING *';
+    const query = 'UPDATE locations SET country = $1, language = $2, coin = $3, customs = $4, curiosities = $5 WHERE id = $6 RETURNING *';
     const values = [data.country, data.language, data.coin, data.customs, data.curiosities, id];
     return db.query(query, values);
   },
