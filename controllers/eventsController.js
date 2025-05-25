@@ -1,6 +1,6 @@
 const Subscriptions = require('../models/subscriptionsModel');
 
-// Listar todos os eventos
+// Listar eventos
 exports.index = async (req, res) => {
   try {
     const subscriptions = await Subscriptions.findAll();
