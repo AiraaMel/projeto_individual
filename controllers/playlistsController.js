@@ -19,12 +19,8 @@ exports.create = async (req, res) => {
   const { locations_id, name, link } = req.body;
 
   try {
-    const playlist = await Playlists.create({ locations_id, name, link });
-    if (req.headers.accept && req.headers.accept.includes('application/json')) {
-      res.status(201).json(playlist);
-    } else {
-      res.redirect('/playlists');
-    }
+    await Playlists.create({ locations_id, name, link });
+      res.status(201).json({message: "Playlist criado"});
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

@@ -17,14 +17,9 @@ exports.index = async (req, res) => {
 // Criar uma nova localização
 exports.create = async (req, res) => {
   const { country, language, coin, customs, curiosities } = req.body;
-
   try {
-    const location = await Locations.create({ country, language, coin, customs, curiosities });
-    if (req.headers.accept && req.headers.accept.includes('application/json')) {
-      res.status(201).json(location);
-    } else {
-      res.redirect('/locations');
-    }
+    await Locations.create({ country, language, coin, customs, curiosities });
+      res.status(200).json({message: "Evento criado"});
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

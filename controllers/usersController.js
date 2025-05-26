@@ -17,10 +17,9 @@ exports.index = async (req, res) => {
 // Criar um novo usuário
 exports.create = async (req, res) => {
   const { name, email, password, photo, preferences } = req.body;
-
   try {
     await Users.create({ name, email, password, photo, preferences });
-    res.redirect('/users');
+    res.status(200).json({message: "Usuário criado"});
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -33,7 +32,7 @@ exports.update = async (req, res) => {
 
   try {
     await Users.update(id, { name, email, password, photo, preferences });
-    res.redirect('/users');
+    res.status(200).json({message: "Usuário atualizado"})
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -45,7 +44,7 @@ exports.delete = async (req, res) => {
 
   try {
     await Users.delete(id);
-    res.redirect('/users');
+    res.status(200).json({message: "Usuário deletado"});
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

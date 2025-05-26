@@ -1,13 +1,13 @@
-const Subscriptions = require('../models/subscriptionsModel');
+const Events = require('../models/eventsModel');
 
 // Listar eventos
 exports.index = async (req, res) => {
   try {
-    const subscriptions = await Subscriptions.findAll();
+    const events = await Events.findAll();
     if (req.headers.accept && req.headers.accept.includes('application/json')) {
-      res.status(200).json(subscriptions);
+      res.status(200).json(events);
     } else {
-      res.render('subscriptions/index', { subscriptions });
+      res.render('events/index', { events });
     }
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -19,12 +19,8 @@ exports.create = async (req, res) => {
   const { users_id, events_id, date, hour, status } = req.body;
 
   try {
-    const subscription = await Subscriptions.create({ users_id, events_id, date, hour, status });
-    if (req.headers.accept && req.headers.accept.includes('application/json')) {
-      res.status(201).json(subscription);
-    } else {
-      res.redirect('/subscriptions');
-    }
+    await Events.create({ users_id, events_id, date, hour, status });
+    res.status(200).json({message: "Evento criado"});
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -36,11 +32,11 @@ exports.update = async (req, res) => {
   const { users_id, events_id, date, hour, status } = req.body;
 
   try {
-    const subscription = await Subscriptions.update(id, { users_id, events_id, date, hour, status });
+    const event = await Events.update(id, { users_id, events_id, date, hour, status });
     if (req.headers.accept && req.headers.accept.includes('application/json')) {
-      res.status(200).json(subscription);
+      res.status(200).json(event);
     } else {
-      res.redirect('/subscriptions');
+      res.redirect('/events');
     }
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -52,11 +48,11 @@ exports.delete = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const subscription = await Subscriptions.delete(id);
+    const event = await Events.delete(id);
     if (req.headers.accept && req.headers.accept.includes('application/json')) {
-      res.status(200).json({ message: 'Subscription deleted successfully', subscription });
+      res.status(200).json({ message: 'event deleted successfully', event });
     } else {
-      res.redirect('/subscriptions');
+      res.redirect('/events');
     }
   } catch (err) {
     res.status(500).json({ error: err.message });

@@ -19,12 +19,8 @@ exports.create = async (req, res) => {
   const { users_id, events_id, comments, grade, date, hour } = req.body;
 
   try {
-    const feedback = await Feedbacks.create({ users_id, events_id, comments, grade, date, hour });
-    if (req.headers.accept && req.headers.accept.includes('application/json')) {
-      res.status(201).json(feedback);
-    } else {
-      res.redirect('/feedbacks');
-    }
+    await Feedbacks.create({ users_id, events_id, comments, grade, date, hour });
+      res.status(201).json({message: "Feedback criado"});
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

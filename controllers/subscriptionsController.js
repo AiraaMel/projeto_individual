@@ -13,10 +13,9 @@ exports.index = async (req, res) => {
 // Criar uma nova inscrição
 exports.create = async (req, res) => {
   const { users_id, events_id, date, hour, status } = req.body;
-
   try {
     await Subscriptions.create({ users_id, events_id, date, hour, status });
-    res.redirect('/subscriptions');
+    res.status(200).json({message: "Evento criado"});
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
