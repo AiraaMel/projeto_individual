@@ -28,7 +28,7 @@ exports.update = async (req, res) => {
 
   try {
     await Subscriptions.update(id, { users_id, events_id, date, hour, status });
-    res.redirect('/subscriptions');
+    res.status(200).json({message: "Inscrição atualizada"});
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

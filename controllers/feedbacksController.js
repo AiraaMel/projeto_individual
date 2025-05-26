@@ -32,12 +32,8 @@ exports.update = async (req, res) => {
   const { comments, grade, date, hour } = req.body;
 
   try {
-    const feedback = await Feedbacks.update(id, { comments, grade, date, hour });
-    if (req.headers.accept && req.headers.accept.includes('application/json')) {
-      res.status(200).json(feedback);
-    } else {
-      res.redirect('/feedbacks');
-    }
+    await Feedbacks.update(id, { comments, grade, date, hour });
+    res.status(200).json({message: "Inscrição atualizada"});
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

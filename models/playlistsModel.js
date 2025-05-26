@@ -2,8 +2,8 @@ const db = require('../config/db');
 
 module.exports = {
   async create(data) {
-    const query = 'INSERT INTO playlists (location_id, name, link) VALUES ($1, $2, $3) RETURNING *';
-    const values = [data.location_id, data.name, data.link];
+    const query = 'INSERT INTO playlists (locations_id, name, link) VALUES ($1, $2, $3) RETURNING *';
+    const values = [data.locations_id, data.name, data.link];
     return db.query(query, values);
   },
 
@@ -13,8 +13,8 @@ module.exports = {
   },
 
   async update(id, data) {
-    const query = 'UPDATE playlists SET location_id = $1, name = $2, link = $3 WHERE id = $4 RETURNING *';
-    const values = [data.location_id, data.name, data.link, id];
+    const query = 'UPDATE playlists SET locations_id = $1, name = $2, link = $3 WHERE id = $4 RETURNING *';
+    const values = [data.locations_id, data.name, data.link, id];
     return db.query(query, values);
   },
 

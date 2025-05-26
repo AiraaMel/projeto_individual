@@ -31,12 +31,8 @@ exports.update = async (req, res) => {
   const { country, language, coin, customs, curiosities } = req.body;
 
   try {
-    const location = await Locations.update(id, { country, language, coin, customs, curiosities });
-    if (req.headers.accept && req.headers.accept.includes('application/json')) {
-      res.status(200).json(location);
-    } else {
-      res.redirect('/locations');
-    }
+    await Locations.update(id, { country, language, coin, customs, curiosities });
+    res.status(200).json({message: "Localização atualizada"});
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
