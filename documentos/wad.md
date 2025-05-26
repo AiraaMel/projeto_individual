@@ -459,7 +459,7 @@ DELETE /events/:id              → eventsController.delete // Exclui um evento
 
 ```js
 
-// ROTAS DE EVENTO
+// ROTAS DE FEEDBACK
 GET    /feedbacks                  → feedbacksController.index // Lista todos os feedbacks
 POST   /feedbacks                  → feedbacksController.create // Cria um novo feedback
 PUT    /feedbacks/:id              → feedbacksController.update // Atualiza um feedback
@@ -469,7 +469,7 @@ DELETE /feedbacks/:id              → feedbacksController.delete // Exclui um f
 
 ```js
 
-// ROTAS DE EVENTO
+// ROTAS DE LOCALIZAÇÃO
 GET    /locations                  → locationsController.index // Lista todos as localizações
 POST   /locations                  → locationsController.create // Cria uma nova localização
 PUT    /locations/:id              → locationsController.update // Atualiza uma localização
@@ -478,7 +478,7 @@ DELETE /locations/:id              → locationsController.delete // Exclui uma 
 ```
 ``` js
 
-// ROTAS DE EVENTO
+// ROTAS DE PLAYLIST
 GET    /playlists                  → playlistsController.index // Lista todos as playlists
 POST   /playlists                  → playlistsController.create // Cria uma nova playlist
 PUT    /playlists/:id              → playlistsController.update // Atualiza uma playlist
@@ -487,7 +487,7 @@ DELETE /playlists/:id              → playlistsController.delete // Exclui uma 
 ```
 ``` js
 
-// ROTAS DE EVENTO
+// ROTAS DE INSCRIÇÃO
 GET    /subscriptions                  → subscriptionsController.index // Lista todas as inscrições
 POST   /subscriptions                  → subscriptionsController.create // Cria uma nova inscrição
 PUT    /subscriptions/:id              → subscriptionsController.update // Atualiza uma inscrição
@@ -496,7 +496,7 @@ DELETE /subscriptions/:id              → subscriptionsController.delete // Exc
 ```
 ``` js
 
-// ROTAS DE EVENTO
+// ROTAS DE USUÁRIOS
 GET    /users                  → usersController.index // Lista todos os usuários
 POST   /users                  → usersController.create // Cria um novo usuário
 PUT    /users/:id              → usersController.update // Atualiza um usuário
