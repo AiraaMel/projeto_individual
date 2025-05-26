@@ -47,12 +47,8 @@ exports.delete = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const location = await Locations.delete(id);
-    if (req.headers.accept && req.headers.accept.includes('application/json')) {
-      res.status(200).json({ message: 'Location deleted successfully', location });
-    } else {
-      res.redirect('/locations');
-    }
+    await Locations.delete(id);
+    res.status(200).json({ message: 'Localização deletada' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

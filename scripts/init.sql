@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS "playlists" (
 );
 
 ALTER TABLE "subscriptions" ADD FOREIGN KEY ("users_id") REFERENCES "users" ("id");
-ALTER TABLE "subscriptions" ADD FOREIGN KEY ("events_id") REFERENCES "events" ("id");
+ALTER TABLE "subscriptions" ADD FOREIGN KEY ("events_id") REFERENCES "events" ("id") ON DELETE CASCADE; 
 
 ALTER TABLE "events" ADD FOREIGN KEY ("locations_id") REFERENCES "locations" ("id");
 

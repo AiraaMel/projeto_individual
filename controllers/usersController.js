@@ -3,7 +3,7 @@ const Users = require('../models/usersModel');
 // Listar todos os usuários
 exports.index = async (req, res) => {
   try {
-    const users = await Users.findAll();
+    await Users.findAll();
     if (req.headers.accept && req.headers.accept.includes('application/json')) {
       res.status(200).json(users);
     } else {

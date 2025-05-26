@@ -49,11 +49,7 @@ exports.delete = async (req, res) => {
 
   try {
     await Playlists.delete(id);
-    if (req.headers.accept && req.headers.accept.includes('application/json')) {
-      res.status(200).json({ message: 'Playlist deleted successfully' });
-    } else {
-      res.redirect('/playlists');
-    }
+    res.status(200).json({ message: 'Playlist deletada' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

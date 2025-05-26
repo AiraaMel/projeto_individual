@@ -15,7 +15,7 @@ exports.create = async (req, res) => {
   const { users_id, events_id, date, hour, status } = req.body;
   try {
     await Subscriptions.create({ users_id, events_id, date, hour, status });
-    res.status(200).json({message: "Evento criado"});
+    res.status(200).json({message: "Inscrição criada"});
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -40,7 +40,7 @@ exports.delete = async (req, res) => {
 
   try {
     await Subscriptions.delete(id);
-    res.redirect('/subscriptions');
+    res.status(200).json({message: "Inscrição deletada"});
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
