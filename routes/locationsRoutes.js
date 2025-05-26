@@ -9,9 +9,9 @@ router.get('/', controller.index);
 router.post('/', controller.create);
 
 // Editar localização
-router.post('/edit/:id', controller.update);
+router.put('/update/:id', controller.update);
 
 // Deletar localização
-router.post('/delete/:id', controller.delete);
+router.delete('/delete/:id', controller.delete);
 
 module.exports = router;

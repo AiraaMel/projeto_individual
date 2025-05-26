@@ -9,9 +9,9 @@ router.get('/', controller.index);
 router.post('/', controller.create);
 
 // Editar playlist
-router.post('/edit/:id', controller.update);
+router.put('/update/:id', controller.update);
 
 // Deletar playlist
-router.post('/delete/:id', controller.delete);
+router.delete('/delete/:id', controller.delete);
 
 module.exports = router;

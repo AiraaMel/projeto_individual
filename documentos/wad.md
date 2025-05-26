@@ -457,16 +457,102 @@ DELETE /events/:id              → eventsController.delete // Exclui um evento
 
 ```
 
+```js
+
+// ROTAS DE EVENTO
+GET    /feedbacks                  → feedbacksController.index // Lista todos os feedbacks
+POST   /feedbacks                  → feedbacksController.create // Cria um novo feedback
+PUT    /feedbacks/:id              → feedbacksController.update // Atualiza um feedback
+DELETE /feedbacks/:id              → feedbacksController.delete // Exclui um feedback
+
+```
+
+```js
+
+// ROTAS DE EVENTO
+GET    /locations                  → locationsController.index // Lista todos as localizações
+POST   /locations                  → locationsController.create // Cria uma nova localização
+PUT    /locations/:id              → locationsController.update // Atualiza uma localização
+DELETE /locations/:id              → locationsController.delete // Exclui uma localização
+
+```
+``` js
+
+// ROTAS DE EVENTO
+GET    /playlists                  → playlistsController.index // Lista todos as playlists
+POST   /playlists                  → playlistsController.create // Cria uma nova playlist
+PUT    /playlists/:id              → playlistsController.update // Atualiza uma playlist
+DELETE /playlists/:id              → playlistsController.delete // Exclui uma playlists
+
+```
+``` js
+
+// ROTAS DE EVENTO
+GET    /subscriptions                  → subscriptionsController.index // Lista todas as inscrições
+POST   /subscriptions                  → subscriptionsController.create // Cria uma nova inscrição
+PUT    /subscriptions/:id              → subscriptionsController.update // Atualiza uma inscrição
+DELETE /subscriptions/:id              → subscriptionsController.delete // Exclui uma incrição
+
+```
+``` js
+
+// ROTAS DE EVENTO
+GET    /users                  → usersController.index // Lista todos os usuários
+POST   /users                  → usersController.create // Cria um novo usuário
+PUT    /users/:id              → usersController.update // Atualiza um usuário
+DELETE /users/:id              → usersController.delete // Exclui um usuários
+
+```
 Cada rota acima representa uma operação disponível para os usuários da aplicação.
 
 #### Controle de Eventos
-
 | Método | Rota | Controller & Função | Descrição |
 |--------|------|--------------------|------------|
-| `GET` | `/events` | `eventsController.index` | Lista todos os eventos |
-| `POST` | `/events` | `eventsController.create` | Cria um novo evento |
-| `PUT` | `/events/:id` | `eventsController.update` | Atualiza um evento |
-| `DELETE` | `/events/:id` | `eventsController.delete` | Exclui um evento |
+| `GET` | `/` | `events/Controller.index` | Lista todos os eventos |
+| `POST` | `/` | `events/Controller.create` | Cria um novo evento |
+| `PUT` | `/update/:id` | `events/Controller.update` | Atualiza um evento |
+| `DELETE` | `/delete/:id` | `events/Controller.delete` | Exclui um evento |
+
+#### Controle de Feedbacks
+| Método | Rota | Controller & Função | Descrição |
+|--------|------|--------------------|------------|
+| `GET` | `/` | `feedbacks/Controller.index` | Lista todos os feedbacks |
+| `POST` | `/` | `feedbacks/Controller.create` | Cria um novo feedback |
+| `PUT` | `/update/:id` | `feedbacks/Controller.update` | Atualiza um feedback |
+| `DELETE` | `/delete/:id` | `feedbacks/Controller.delete` | Exclui um feedback |
+
+#### Controle de localizações
+| Método | Rota | Controller & Função | Descrição |
+|--------|------|--------------------|------------|
+| `GET` | `/` | `locations/Controller.index` | Lista todas as localizações |
+| `POST` | `/` | `locations/Controller.create` | Cria uma nova localização |
+| `PUT` | `/update/:id` | `locations/Controller.update` | Atualiza uma localização |
+| `DELETE` | `/delete/:id` | `locations/Controller.delete` | Exclui uma localização |
+
+#### Controle de Playlists
+| Método | Rota | Controller & Função | Descrição |
+|--------|------|--------------------|------------|
+| `GET` | `/` | `playlists/Controller.index` | Lista todas as playlists |
+| `POST` | `/` | `playlists/Controller.create` | Cria uma nova playlist |
+| `PUT` | `/update/:id` | `playlists/Controller.update` | Atualiza uma playlist |
+| `DELETE` | `/delete/:id` | `playlists/Controller.delete` | Exclui uma playlist |
+
+#### Controle de Inscrições
+| Método | Rota | Controller & Função | Descrição |
+|--------|------|--------------------|------------|
+| `GET` | `/` | `subscriptions/Controller.index` | Lista todas as inscrições |
+| `POST` | `/` | `subscriptions/Controller.create` | Cria uma nova inscrição |
+| `PUT` | `/update/:id` | `subscriptions/Controller.update` | Atualiza uma inscrição |
+| `DELETE` | `/delete/:id` | `subscriptions/Controller.delete` | Exclui uma inscrição |
+
+#### Controle de Usuários
+| Método | Rota | Controller & Função | Descrição |
+|--------|------|--------------------|------------|
+| `GET` | `/` | `users/Controller.index` | Lista todos os usuários |
+| `POST` | `/` | `users/Controller.create` | Cria um novo usuário |
+| `PUT` | `/update/:id` | `users/Controller.update` | Atualiza um usuário |
+| `DELETE` | `/delete/:id` | `users/Controller.delete` | Exclui um usuário |
+
 
 
 Esses endpoints são fundamentais para o funcionamento da aplicação Vibra, pois determinam como as interações com o sistema ocorrem. Além disso, com a autenticação por token, as rotas protegidas garantem que apenas usuários autenticados possam realizar ações sensíveis, como criar eventos ou se inscrever neles.
