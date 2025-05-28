@@ -4,11 +4,7 @@ const Events = require('../models/eventsModel');
 exports.index = async (req, res) => {
   try {
     await Events.findAll();
-    if (req.headers.accept && req.headers.accept.includes('application/json')) {
-      res.status(200).json(events);
-    } else {
-      res.render('events/index', { events });
-    }
+    res.status(200).json(events);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

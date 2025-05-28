@@ -7,7 +7,7 @@ exports.index = async (req, res) => {
     if (req.headers.accept && req.headers.accept.includes('application/json')) {
       res.status(200).json(playlists);
     } else {
-      res.render('playlists/index', { playlists });
+      res.render('pages/playlists', { playlists });
     }
   } catch (err) {
     res.status(500).json({ error: err.message });
