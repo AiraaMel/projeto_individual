@@ -17,25 +17,25 @@ db.connect()
     app.use(express.static(path.join(__dirname, 'public')));
     
     const eventsRoutes = require('./routes/eventsRoutes');
-    app.use('/events', eventsRoutes);  
+    app.use('/api/events', eventsRoutes);  
 
     const feedbacksRoutes = require('./routes/feedbacksRoutes');
-    app.use('/feedbacks', feedbacksRoutes); 
+    app.use('/api/feedbacks', feedbacksRoutes); 
 
     const locationsRoutes = require('./routes/locationsRoutes');
-    app.use('/locations', locationsRoutes); 
+    app.use('/api/locations', locationsRoutes); 
 
     const playlistsRoutes = require('./routes/playlistsRoutes');
-    app.use('/playlists', playlistsRoutes); 
+    app.use('/api/playlists', playlistsRoutes); 
 
     const subscriptionsRoutes = require('./routes/subscriptionsRoutes');
-    app.use('/subscriptions', subscriptionsRoutes);
+    app.use('/api/subscriptions', subscriptionsRoutes);
 
     const usersRoutes = require('./routes/usersRoutes');
-    app.use('/users', usersRoutes); 
+    app.use('/api/users', usersRoutes); 
 
-    const frontendRoutes = require('./routes/frontRoutes');
-    app.use('/', frontendRoutes);
+    const frontRoutes = require('./routes/frontRoutes');
+    app.use('/', frontRoutes);
 
     // Middleware para lidar com erros de rota não encontrada
     app.use((req, res, next) => {

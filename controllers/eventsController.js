@@ -3,7 +3,7 @@ const Events = require('../models/eventsModel');
 // Listar todos os eventos
 exports.index = async (req, res) => {
   try {
-    await Events.findAll();
+    const events = await Events.findAll();
     res.status(200).json(events);
   } catch (err) {
     res.status(500).json({ error: err.message });

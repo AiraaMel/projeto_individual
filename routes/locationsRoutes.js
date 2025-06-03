@@ -14,4 +14,6 @@ router.put('/update/:id', controller.update);
 // Deletar localização
 router.delete('/delete/:id', controller.delete);
 
+router.get('/search', controller.searchEventsByCountry);
+
 module.exports = router;

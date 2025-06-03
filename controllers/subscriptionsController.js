@@ -3,7 +3,7 @@ const Subscriptions = require('../models/subscriptionsModel');
 // Listar todas as inscrições
 exports.index = async (req, res) => {
   try {
-    const subscriptions = await Subscriptions.findAll();
+    await Subscriptions.findAll();
     res.status(200).json(subscriptions);
   } catch (err) {
     res.status(500).json({ error: err.message });

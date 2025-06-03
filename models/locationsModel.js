@@ -20,5 +20,10 @@ module.exports = {
   async delete(id) {
     const query = 'DELETE FROM locations WHERE id = $1 RETURNING *';
     return db.query(query, [id]);
+  },
+
+  async searchByCountry(country) {
+    const query = 'SELECT * FROM locations WHERE LOWER(country) LIKE $1';
+    return db.query(query, [`%${country.toLowerCase()}%`]);
   }
 };

@@ -1,18 +1,14 @@
 const Users = require('../models/usersModel');
 
-// Listar todos os usuários
 exports.index = async (req, res) => {
   try {
-    await Users.findAll();
-    if (req.headers.accept && req.headers.accept.includes('application/json')) {
-      res.status(200).json(users);
-    } else {
-      res.render('users/index', { users });
-    }
+    const users = await Users.findAll();
+    res.status(200).json(users);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
+
 
 // Criar um novo usuário
 exports.create = async (req, res) => {
@@ -46,6 +42,33 @@ exports.delete = async (req, res) => {
     await Users.delete(id);
     res.status(200).json({message: "Usuário deletado"});
   } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Login
+exports.login = async (req, res) => {
+  const { email, password } = req.body;
+  console.log('Tentativa de login com:', email, password);
+
+  try {
+    const result = await Users.findByEmail(email);
+    console.log('Resultado do findByEmail:', result);
+
+    if (!result || result.rowCount === 0) {
+      return res.status(401).json({ error: 'Usuário não encontrado' });
+    }
+
+    const user = result.rows[0];
+    console.log('Usuário encontrado:', user);
+
+    if (user.password !== password) {
+      return res.status(401).json({ error: 'Senha incorreta' });
+    }
+
+    res.status(200).json({ message: 'Login realizado com sucesso' });
+  } catch (err) {
+    console.error('Erro no login:', err);
     res.status(500).json({ error: err.message });
   }
 };

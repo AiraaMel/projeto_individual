@@ -14,7 +14,7 @@ module.exports = {
   },
 
   async update(id, data) {
-    const query = 'UPDATE users SET name = $1, email = $2, password = $3, photo = $4, preferences = $5, WHERE id = $6 RETURNING *';
+    const query = 'UPDATE users SET name = $1, email = $2, password = $3, photo = $4, preferences = $5 WHERE id = $6 RETURNING *';
     const values = [data.name, data.email, data.password, data.photo, data.preferences, id];
     return db.query(query, values);
   },
@@ -22,5 +22,11 @@ module.exports = {
   async delete(id) {
     const query = 'DELETE FROM users WHERE id = $1 RETURNING *';
     return db.query(query, [id]);
+  },
+
+  async findByEmail(email) {
+    const query = 'SELECT * FROM users WHERE email = $1';
+    return db.query(query, [email]);
   }
+
 };

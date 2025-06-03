@@ -1,0 +1,40 @@
+
+<!-- Barra de busca -->
+<form action="/api/locations/search" method="GET">
+  <input type="text" name="query" placeholder="Digite o país">
+  <button type="submit">Buscar</button>
+</form>
+
+<!-- Frase -->
+<div>
+  <p>"Conecte-se com o que faz você vibrar."</p>
+</div>
+
+<!-- Mapa clicável -->
+<div>
+  <a href="/searchCountry">
+    <img src="/images/map.png" alt="Mapa países">
+  </a>
+</div>
+
+
+<% if (search) { %>
+  <p>Resultado para: <strong><%= search %></strong></p>
+<% } %>
+
+<ul>
+  <% if (locations && locations.length > 0) { %>
+    <% locations.forEach(location => { %>
+      <li>
+        <strong>País:</strong> <%= location.country %><br>
+        Idioma: <%= location.language %><br>
+        Moeda: <%= location.coin %><br>
+        Costumes: <%= location.customs %><br>
+        Curiosidades: <%= location.curiosities %><br>
+        <hr>
+      </li>
+    <% }) %>
+  <% } else if (search) { %>
+    <p>Nenhum país encontrado.</p>
+  <% } %>
+</ul>

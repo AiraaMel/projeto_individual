@@ -3,8 +3,8 @@ const Feedbacks = require('../models/feedbacksModel');
 // Listar todos os feedbacks
 exports.index = async (req, res) => {
   try {
-    const feedbacks = await Feedbacks.findAll();
-      res.status(200).json(feedbacks);
+    await Feedbacks.findAll();
+    res.status(200).json(feedbacks);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
