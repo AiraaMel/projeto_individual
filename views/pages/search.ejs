@@ -1,63 +1,21 @@
-
-<!-- Barra de busca -->
-<div>
-    <input type="text" placeholder="Busca">
-</div>
-
-<!-- Cartão 1 -->
-<div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px;">
-    <img src="pizza.jpg" alt="Imagem de aula de culinária" width="100">
-    <h4>Aula de Culinária</h4>
-    <p>Cozinhe com chef local!</p>
-    <span style="display: inline-block; border: 1px solid #ccc; padding: 5px 10px; margin-right: 5px;">Itália</span>
-    <span style="display: inline-block; border: 1px solid #ccc; padding: 5px 10px;">Itália</span>
-</div>
-<!-- Cartão 2 -->
-<div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px;">
-    <img src="pizza.jpg" alt="Imagem de aula de culinária" width="100">
-    <h4>Aula de Culinária</h4>
-    <p>Cozinhe com chef local!</p>
-    <span style="display: inline-block; border: 1px solid #ccc; padding: 5px 10px; margin-right: 5px;">Itália</span>
-    <span style="display: inline-block; border: 1px solid #ccc; padding: 5px 10px;">Itália</span>
-</div>
-<!-- Cartão 3 -->
-<div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px;">
-    <img src="pizza.jpg" alt="Imagem de aula de culinária" width="100">
-    <h4>Aula de Culinária</h4>
-    <p>Cozinhe com chef local!</p>
-    <span style="display: inline-block; border: 1px solid #ccc; padding: 5px 10px; margin-right: 5px;">Itália</span>
-    <span style="display: inline-block; border: 1px solid #ccc; padding: 5px 10px;">Itália</span>
-</div>
-<!-- Cartão 4 -->
-<div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px;">
-    <img src="pizza.jpg" alt="Imagem de aula de culinária" width="100">
-    <h4>Aula de Culinária</h4>
-    <p>Cozinhe com chef local!</p>
-    <span style="display: inline-block; border: 1px solid #ccc; padding: 5px 10px; margin-right: 5px;">Itália</span>
-    <span style="display: inline-block; border: 1px solid #ccc; padding: 5px 10px;">Itália</span>
-</div>
-<!-- Cartão 5 -->
-<div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px;">
-    <img src="pizza.jpg" alt="Imagem de aula de culinária" width="100">
-    <h4>Aula de Culinária</h4>
-    <p>Cozinhe com chef local!</p>
-    <span style="display: inline-block; border: 1px solid #ccc; padding: 5px 10px; margin-right: 5px;">Itália</span>
-    <span style="display: inline-block; border: 1px solid #ccc; padding: 5px 10px;">Itália</span>
-</div>
-
-<h2>Resultados da busca: <%= search %></h2>
+<h2>Resultados da busca por: <%= search %></h2>
 
 <% if (events && events.length > 0) { %>
-  <ul>
-    <% events.forEach(event => { %>
-      <li>
-        <strong><%= event.name %></strong><br>
-        Data: <%= event.date %><br>
-        Local: <%= event.location_name || event.location_id %><br>
-        <hr>
-      </li>
-    <% }) %>
-  </ul>
+  <% events.forEach(event => { %>
+    <a href="/api/events/event/<%= event.id %>" style="text-decoration: none; color: inherit;">
+      <div style="border: 1px solid #000; padding: 10px; margin-bottom: 10px;">
+        <img 
+          src="<%= event.photo || '/default.jpg' %>" 
+          alt="Imagem de <%= event.title %>" 
+          width="150" 
+          height="100"
+          style="display: block; margin-bottom: 5px;"
+        />
+        <h4><%= event.title %></h4>
+        <p><%= event.description || 'Sem descrição disponível.' %></p>
+      </div>
+    </a>
+  <% }) %>
 <% } else { %>
   <p>Nenhum evento encontrado.</p>
 <% } %>

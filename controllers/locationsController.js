@@ -58,11 +58,10 @@ exports.searchEventsByCountry = async (req, res) => {
         `SELECT events.*
          FROM events
          JOIN locations ON events.locations_id = locations.id
-         WHERE LOWER(locations.country) LIKE $1`,
+         WHERE unaccent(LOWER(locations.country)) LIKE unaccent($1)`,
         [`%${searchQuery}%`]
       );
     } else {
-      // Se não passou query, traz todos os eventos (ou nenhum, conforme preferir)
       result = await pool.query(`SELECT * FROM events`);
     }
 

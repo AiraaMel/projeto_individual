@@ -3,7 +3,7 @@ const db = require('../config/db');
 module.exports = {
   async create(data) {
     const query = 'INSERT INTO Events (title, type, description, photo, locations_id) VALUES ($1, $2, $3, $4, $5) RETURNING *';
-    const values = [data.title, data.type, data.description, data.photo, data.location_id];
+    const values = [data.title, data.type, data.description, data.photo, data.locations_id];
     return db.query(query, values);
   },
 
@@ -14,12 +14,17 @@ module.exports = {
 
   async update(id, data) {
     const query = 'UPDATE Events SET title = $1, type = $2, description = $3, photo = $4, locations_id = $5 WHERE id = $6 RETURNING *';
-    const values = [data.type, data.description, data.photo, data.location_id, id];
+    const values = [data.title, data.type, data.description, data.photo, data.locations_id, id];
     return db.query(query, values);
   },
 
   async delete(id) {
     const query = 'DELETE FROM events WHERE id = $1 RETURNING *';
     return db.query(query, [id]);
+  },
+
+  async findById(id) {
+    const result = await db.query('SELECT id, title, type, description, photo, locations_id FROM events WHERE id = $1', [id]);
+    return result.rows[0];
   }
 };

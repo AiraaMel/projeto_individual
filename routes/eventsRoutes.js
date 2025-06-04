@@ -14,4 +14,7 @@ router.put('/update/:id', controller.update);
 // Deletar evento
 router.delete('/delete/:id', controller.delete);
 
+// Página evento
+router.get('/event/:id', controller.show);
+
 module.exports = router;

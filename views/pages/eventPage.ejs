@@ -2,22 +2,19 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Detalhes do Evento</title>
+  <title><%= event.title %></title>
 </head>
 <body>
 
   <!-- Imagem e mapa -->
   <section>
-    <img src="imagem-pasta.jpg" alt="Imagem do evento">
-    <div>Mapa com marcador</div>
+    <img src="<%= event.photo || '/default.jpg' %>" alt="Imagem do evento">
+    <div>Mapa com marcador (aqui você pode colocar um iframe com mapa futuramente)</div>
   </section>
 
   <!-- Descrição -->
   <section>
-    <p>
-      Descubra os segredos da tradicional cozinha italiana em uma experiência única e envolvente!
-      Nesta aula prática, você aprenderá a preparar pratos clássicos, sob a orientação de chefs locais apaixonados pela gastronomia.
-    </p>
+    <p><%= event.description %></p>
   </section>
 
   <!-- O que inclui -->
@@ -33,34 +30,39 @@
 
   <!-- Detalhes -->
   <section>
-    <p>Local: Rua, 80</p>
-    <p>Duração: 2h</p>
-    <p>Valor: R$ 50,00</p>
-    <p>Capacidade: 10</p>
-    <p>Avaliação: 4,7</p>
+    <p><strong>Local:</strong> <%= event.location || 'Local não especificado' %></p>
+    <p><strong>Duração:</strong> <%= event.duration || 'N/A' %></p>
+    <p><strong>Valor:</strong> R$ <%= event.price || 'N/A' %></p>
+    <p><strong>Capacidade:</strong> <%= event.capacity || 'N/A' %></p>
+    <p><strong>Avaliação:</strong> <%= event.rating || 'N/A' %></p>
   </section>
 
-  <!-- Datas -->
+  <!-- Datas e horários -->
   <section>
-    <p>Mo 19 | Tu 20 | We 21 | Th 22 | Fr 23 | Sa 24 | <strong>Su 25</strong></p>
-  </section>
-
-  <!-- Horários -->
-  <section>
-    <p>11:00 - 10/10</p>
-    <p>13:00 - 7/10 ✔</p>
-    <p>15:00 - 5/10</p>
+    <h3>Próximas datas e horários:</h3>
+    <% if (event.dates && event.dates.length > 0) { %>
+      <% event.dates.forEach(date => { %>
+        <p><%= date %></p>
+      <% }) %>
+    <% } else { %>
+      <p>Sem datas disponíveis.</p>
+    <% } %>
   </section>
 
   <!-- Avaliações -->
   <section>
-    <h3>Incrível do início ao fim!</h3>
-    <p>A experiência superou minhas expectativas. A aula foi muito bem organizada, com um chef atencioso e apaixonado pela culinária local.</p>
-    <p>Avaliação: 4.0</p>
-
-    <h3>Incrível do início ao fim!</h3>
-    <p>Aula deliciosa e cheia de tradição. Cozinhar na Itália foi mágico!</p>
-    <p>Avaliação: 4.2</p>
+    <h3>Avaliações</h3>
+    <% if (event.reviews && event.reviews.length > 0) { %>
+      <% event.reviews.forEach(review => { %>
+        <div>
+          <h4><%= review.title %></h4>
+          <p><%= review.comment %></p>
+          <p>Avaliação: <%= review.rating %></p>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <p>Sem avaliações ainda.</p>
+    <% } %>
   </section>
 
   <!-- Confirmar -->

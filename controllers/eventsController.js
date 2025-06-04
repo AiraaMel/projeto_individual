@@ -16,7 +16,7 @@ exports.create = async (req, res) => {
 
   try {
     await Events.create({ title, type, description, photo, locations_id });
-    res.status(200).json({message: "Evento criado"});
+    res.status(200).json({ message: "Evento criado" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -29,13 +29,12 @@ exports.update = async (req, res) => {
 
   try {
     await Events.update(id, { title, type, description, photo, locations_id });
-    res.status(200).json({message: "Evento atualizado"});
+    res.status(200).json({ message: "Evento atualizado" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// Deletar evento
 exports.delete = async (req, res) => {
   const { id } = req.params;
 
@@ -44,5 +43,23 @@ exports.delete = async (req, res) => {
     res.status(200).json({ message: 'Evento deletado' });
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+};
+
+exports.show = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const event = await Events.findById(id);
+
+    if (!event) {
+      return res.status(404).send("Evento não encontrado");
+    }
+
+    res.render('pages/eventPage', { event });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Erro ao carregar evento");
   }
 };
