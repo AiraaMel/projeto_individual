@@ -9,10 +9,12 @@ document.addEventListener('DOMContentLoaded', () => {
       datetimeButtons.forEach(b => b.classList.remove('selected'));
       btn.classList.add('selected');
       selectedDate = btn.dataset.datetime;
+      selectedDatetimeId = btn.dataset.datetimeId;  // pegar o id do datetime_event
       selectedDiv.innerText = `Horário selecionado: ${new Date(selectedDate).toLocaleString('pt-BR')}`;
       confirmBtn.style.display = 'inline-block';
     });
   });
+
 
   confirmBtn.addEventListener('click', async () => {
     if (!selectedDate) return;
@@ -25,17 +27,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const hour = dateTime.toISOString().split('T')[1].slice(0, 5);
 
     try {
-      const res = await fetch('/subscriptions', {
+      const res = await fetch('/api/subscriptions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           users_id: userId,
           events_id: eventId,
-          date: date,
-          hour: hour,
+          datetime_event_id: selectedDatetimeId,  // envia o id do datetime
           status: 'pendente'
         })
       });
+
 
       if (res.ok) {
         confirmBtn.innerText = 'Inscrição Confirmada!';

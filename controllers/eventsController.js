@@ -63,7 +63,7 @@ exports.show = async (req, res) => {
     const datetimes = await DateTimeEvent.findByEventId(id);
 
     // Mapeia apenas os valores de day_time (ou envia id também, se necessário depois)
-    event.dates = datetimes.map(d => d.day_time); // ou: [{ id: d.id, day_time: d.day_time }]
+    event.datetimes = datetimes.map(d => ({ id: d.id, day_time: d.day_time }));
 
     res.render('pages/eventPage', { event });
 
