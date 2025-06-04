@@ -12,11 +12,11 @@ exports.index = async (req, res) => {
 
 // Criar um novo evento
 exports.create = async (req, res) => {
-  const { title, type, description, photo, locations_id } = req.body;
+  const { title, type, description, photo, locations_id, included, place, duration, price, capacity } = req.body;
 
   try {
-    await Events.create({ title, type, description, photo, locations_id });
-    res.status(200).json({ message: "Evento criado" });
+    await Events.create({ title, type, description, photo, locations_id, included, place, duration, price, capacity });
+    res.status(201).json({ message: "Evento criado" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -25,16 +25,17 @@ exports.create = async (req, res) => {
 // Atualizar dados do evento
 exports.update = async (req, res) => {
   const { id } = req.params;
-  const { title, type, description, photo, locations_id } = req.body;
+  const { title, type, description, photo, locations_id, included, place, duration, price, capacity } = req.body;
 
   try {
-    await Events.update(id, { title, type, description, photo, locations_id });
+    await Events.update(id, { title, type, description, photo, locations_id, included, place, duration, price, capacity });
     res.status(200).json({ message: "Evento atualizado" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
+// Deletar evento
 exports.delete = async (req, res) => {
   const { id } = req.params;
 
@@ -46,6 +47,7 @@ exports.delete = async (req, res) => {
   }
 };
 
+// Exibir detalhes do evento (renderizar view)
 exports.show = async (req, res) => {
   const { id } = req.params;
 

@@ -3,7 +3,7 @@ const Subscriptions = require('../models/subscriptionsModel');
 // Listar todas as inscrições
 exports.index = async (req, res) => {
   try {
-    await Subscriptions.findAll();
+    const subscriptions = await Subscriptions.findAll();
     res.status(200).json(subscriptions);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -12,10 +12,10 @@ exports.index = async (req, res) => {
 
 // Criar uma nova inscrição
 exports.create = async (req, res) => {
-  const { users_id, events_id, date, hour, status } = req.body;
+  const { users_id, events_id, datetime_event_id, status } = req.body;
   try {
-    await Subscriptions.create({ users_id, events_id, date, hour, status });
-    res.status(200).json({message: "Inscrição criada"});
+    await Subscriptions.create({ users_id, events_id, datetime_event_id, status });
+    res.status(201).json({ message: "Inscrição criada" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -24,11 +24,11 @@ exports.create = async (req, res) => {
 // Atualizar dados da inscrição
 exports.update = async (req, res) => {
   const { id } = req.params;
-  const { users_id, events_id, date, hour, status } = req.body;
+  const { users_id, events_id, datetime_event_id, status } = req.body;
 
   try {
-    await Subscriptions.update(id, { users_id, events_id, date, hour, status });
-    res.status(200).json({message: "Inscrição atualizada"});
+    await Subscriptions.update(id, { users_id, events_id, datetime_event_id, status });
+    res.status(200).json({ message: "Inscrição atualizada" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -40,7 +40,7 @@ exports.delete = async (req, res) => {
 
   try {
     await Subscriptions.delete(id);
-    res.status(200).json({message: "Inscrição deletada"});
+    res.status(200).json({ message: "Inscrição deletada" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

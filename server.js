@@ -12,27 +12,30 @@ db.connect()
     console.log('Conectado ao banco de dados PostgreSQL');
 
     app.use(express.json());
-    
+
     app.use(express.urlencoded({ extended: true }));
     app.use(express.static(path.join(__dirname, 'public')));
-    
+
+    const datetimeEventsRoutes = require('./routes/datetimeEventsRoutes');
+    app.use('/api/datetime-events', datetimeEventsRoutes);
+
     const eventsRoutes = require('./routes/eventsRoutes');
-    app.use('/api/events', eventsRoutes);  
+    app.use('/api/events', eventsRoutes);
 
     const feedbacksRoutes = require('./routes/feedbacksRoutes');
-    app.use('/api/feedbacks', feedbacksRoutes); 
+    app.use('/api/feedbacks', feedbacksRoutes);
 
     const locationsRoutes = require('./routes/locationsRoutes');
-    app.use('/api/locations', locationsRoutes); 
+    app.use('/api/locations', locationsRoutes);
 
     const playlistsRoutes = require('./routes/playlistsRoutes');
-    app.use('/api/playlists', playlistsRoutes); 
+    app.use('/api/playlists', playlistsRoutes);
 
     const subscriptionsRoutes = require('./routes/subscriptionsRoutes');
     app.use('/api/subscriptions', subscriptionsRoutes);
 
     const usersRoutes = require('./routes/usersRoutes');
-    app.use('/api/users', usersRoutes); 
+    app.use('/api/users', usersRoutes);
 
     const frontRoutes = require('./routes/frontRoutes');
     app.use('/', frontRoutes);

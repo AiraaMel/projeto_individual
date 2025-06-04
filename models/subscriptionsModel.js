@@ -2,8 +2,10 @@ const db = require('../config/db');
 
 module.exports = {
   async create(data) {
-    const query = 'INSERT INTO subscriptions (users_id, events_id, date, hour, status) VALUES ($1, $2, $3, $4, $5) RETURNING *';
-    const values = [data.users_id, data.events_id, data.date, data.hour, data.status];
+    const query = `
+      INSERT INTO subscriptions (users_id, events_id, datetime_event_id, status) 
+      VALUES ($1, $2, $3, $4) RETURNING *`;
+    const values = [data.users_id, data.events_id, data.datetime_event_id, data.status];
     return db.query(query, values);
   },
 
@@ -13,8 +15,11 @@ module.exports = {
   },
 
   async update(id, data) {
-    const query = 'UPDATE subscriptions SET users_id = $1, events_id = $2, date = $3, hour = $4, status = $5 WHERE id = $6 RETURNING *';
-    const values = [data.users_id, data.events_id, data.date, data.hour, data.status, id];
+    const query = `
+      UPDATE subscriptions 
+      SET users_id = $1, events_id = $2, datetime_event_id = $3, status = $4 
+      WHERE id = $5 RETURNING *`;
+    const values = [data.users_id, data.events_id, data.datetime_event_id, data.status, id];
     return db.query(query, values);
   },
 
