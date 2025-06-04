@@ -20,17 +20,20 @@
   <!-- O que inclui -->
   <section>
     <h2>Inclui:</h2>
-    <ul>
-      <li>Ingredientes frescos e locais</li>
-      <li>Aula prática em cozinha equipada</li>
-      <li>Degustação dos pratos preparados</li>
-      <li>Taça de vinho local de cortesia</li>
-    </ul>
+    <% if (event.included) { %>
+      <ul>
+        <% event.included.split(',').forEach(item => { %>
+          <li><%= item.trim() %></li>
+        <% }) %>
+      </ul>
+    <% } else { %>
+      <p>Informação não disponível</p>
+    <% } %>
   </section>
 
   <!-- Detalhes -->
   <section>
-    <p><strong>Local:</strong> <%= event.location || 'Local não especificado' %></p>
+    <p><strong>Local:</strong> <%= event.place || 'Local não especificado' %></p>
     <p><strong>Duração:</strong> <%= event.duration || 'N/A' %></p>
     <p><strong>Valor:</strong> R$ <%= event.price || 'N/A' %></p>
     <p><strong>Capacidade:</strong> <%= event.capacity || 'N/A' %></p>
@@ -39,15 +42,25 @@
 
   <!-- Datas e horários -->
   <section>
-    <h3>Próximas datas e horários:</h3>
-    <% if (event.dates && event.dates.length > 0) { %>
-      <% event.dates.forEach(date => { %>
-        <p><%= date %></p>
+  <h3>Próximas datas e horários:</h3>
+  <% if (event.dates && event.dates.length > 0) { %>
+    <div id="datetimeButtons" style="display: flex; flex-wrap: wrap; gap: 10px;">
+      <% event.dates.forEach(datetime => { %>
+        <button 
+          type="button" 
+          class="datetime-option" 
+          data-datetime="<%= new Date(datetime).toISOString() %>">
+          <%= new Date(datetime).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }) %>
+        </button>
       <% }) %>
-    <% } else { %>
-      <p>Sem datas disponíveis.</p>
-    <% } %>
-  </section>
+    </div>
+    <div id="selectedDatetime" style="margin-top: 1em;"></div>
+    <button id="confirmBtn" style="display:none; margin-top: 1em;">Confirmar inscrição</button>
+  <% } else { %>
+    <p>Sem datas disponíveis.</p>
+  <% } %>
+</section>
+
 
   <!-- Avaliações -->
   <section>
@@ -55,9 +68,9 @@
     <% if (event.reviews && event.reviews.length > 0) { %>
       <% event.reviews.forEach(review => { %>
         <div>
-          <h4><%= review.title %></h4>
           <p><%= review.comment %></p>
           <p>Avaliação: <%= review.rating %></p>
+          <p>Data: <%= review.date ? review.date.toLocaleDateString() : '' %></p>
         </div>
       <% }) %>
     <% } else { %>
@@ -65,10 +78,6 @@
     <% } %>
   </section>
 
-  <!-- Confirmar -->
-  <footer>
-    <button>confirmar</button>
-  </footer>
-
+  <script src="/js/timerSelector.js"></script>
 </body>
 </html>

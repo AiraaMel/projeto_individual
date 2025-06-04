@@ -14,4 +14,6 @@ router.put('/update/:id', controller.update);
 // Deletar inscrição
 router.delete('/delete/:id', controller.delete);
 
+router.post('/subscription', controller.create);
+
 module.exports = router;

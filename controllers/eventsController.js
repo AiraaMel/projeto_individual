@@ -1,4 +1,5 @@
 const Events = require('../models/eventsModel');
+const DateTimeEvent = require('../models/datetimeEventsModel');
 
 // Listar todos os eventos
 exports.index = async (req, res) => {
@@ -47,7 +48,7 @@ exports.delete = async (req, res) => {
   }
 };
 
-// Exibir detalhes do evento (renderizar view)
+// Exibir detalhes do evento com datas
 exports.show = async (req, res) => {
   const { id } = req.params;
 
@@ -57,6 +58,12 @@ exports.show = async (req, res) => {
     if (!event) {
       return res.status(404).send("Evento não encontrado");
     }
+
+    // Buscar datas/horários relacionados ao evento
+    const datetimes = await DateTimeEvent.findByEventId(id);
+
+    // Mapeia apenas os valores de day_time (ou envia id também, se necessário depois)
+    event.dates = datetimes.map(d => d.day_time); // ou: [{ id: d.id, day_time: d.day_time }]
 
     res.render('pages/eventPage', { event });
 
