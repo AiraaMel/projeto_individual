@@ -30,9 +30,8 @@ router.get('/preferences', (req, res) => {
 });
 
 router.get('/home', (req, res) => {
-  res.render(path.join(__dirname, '../views/layout/main'), {
+  res.render(path.join(__dirname, '../views/pages/home'), {
     pageTitle: 'Inicial',
-    content: path.join(__dirname, '../views/pages/home'),
     locations: [],  // ou um array real com dados se quiser buscar do DB aqui
     search: null
   });
@@ -40,44 +39,40 @@ router.get('/home', (req, res) => {
 
 
 router.get('/search', (req, res) => {
-  res.render(path.join(__dirname, '../views/layout/main'), {
+  res.render(path.join(__dirname, '../views/pages/search'), {
     pageTitle: 'Busca',
-    content: path.join(__dirname, '../views/pages/search')
+    events: [],  // ou um array real com dados se quiser buscar do DB aqui
+    search: null
   });
 });
 
 router.get('/country', (req, res) => {
-  res.render(path.join(__dirname, '../views/layout/main'), {
+  res.render(path.join(__dirname, '../views/pages/country'), {
     pageTitle: 'País',
-    content: path.join(__dirname, '../views/pages/country')
   });
 });
 
 router.get('/profile', (req, res) => {
-  res.render(path.join(__dirname, '../views/layout/main'), {
+  res.render(path.join(__dirname, '../views/pages/profile'), {
     pageTitle: 'Perfil',
-    content: path.join(__dirname, '../views/pages/profile')
   });
 });
 
 router.get('/feedback', (req, res) => {
-  res.render(path.join(__dirname, '../views/layout/main'), {
+  res.render(path.join(__dirname, '../views/pages/feedback'), {
     pageTitle: 'Avaliação',
-    content: path.join(__dirname, '../views/pages/feedback')
   });
 });
 
 router.get('/searchCountry', (req, res) => {
-  res.render(path.join(__dirname, '../views/layout/main'), {
+  res.render(path.join(__dirname, '../views/pages/searchCountry'), {
     pageTitle: 'Busca países',
-    content: path.join(__dirname, '../views/pages/searchCountry')
   });
 });
 
 router.get('/eventPage', (req, res) => {
-  res.render(path.join(__dirname, '../views/layout/main'), {
+  res.render(path.join(__dirname, '../views/pages/eventPage'), {
     pageTitle: 'Página do evento',
-    content: path.join(__dirname, '../views/pages/eventPage')
   });
 });
 
