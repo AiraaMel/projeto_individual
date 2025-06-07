@@ -10,14 +10,18 @@ exports.index = async (req, res) => {
   }
 };
 
-// Criar uma nova inscrição
+// Criar uma nova inscrição (com JWT já decodificado no middleware)
 exports.create = async (req, res) => {
-  const { users_id, events_id, datetime_event_id, status } = req.body;
+  const { events_id, datetime_event_id, status } = req.body;
+
   try {
+    const users_id = req.user.id; // ID já disponível após autenticação via middleware
+
     await Subscriptions.create({ users_id, events_id, datetime_event_id, status });
-    res.status(201).json({ message: "Inscrição criada" });
+    res.status(201).json({ message: 'Inscrição criada com sucesso' });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error('Erro ao criar inscrição:', err);
+    res.status(500).json({ error: 'Erro ao criar inscrição' });
   }
 };
 

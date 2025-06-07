@@ -5,6 +5,17 @@ document.addEventListener('DOMContentLoaded', () => {
   let selectedDate = null;
   let selectedDatetimeId = null;
 
+  // Recupera userId e eventId do localStorage
+  const userId = localStorage.getItem('userId');
+  const eventId = localStorage.getItem('eventId');
+
+  // Verifica se o usuário está logado
+  if (!userId) {
+    alert('Você precisa estar logado para se inscrever em um evento.');
+    confirmBtn.style.display = 'none';
+    return;
+  }
+
   datetimeButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       datetimeButtons.forEach(b => b.classList.remove('selected'));
@@ -24,24 +35,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const date = dateTime.toISOString().split('T')[0];
     const hour = dateTime.toISOString().split('T')[1].slice(0, 5);
 
+    const token = localStorage.getItem('token'); // Recupera o token JWT armazenado no login
+
     try {
       const res = await fetch('/api/subscriptions', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` // Adiciona o token no cabeçalho
+        },
         body: JSON.stringify({
-          users_id: userId,
           events_id: eventId,
-          datetime_event_id: selectedDatetimeId,  // envia o id do datetime
+          datetime_event_id: selectedDatetimeId,
           status: 'pendente'
         })
       });
-
 
       if (res.ok) {
         confirmBtn.innerText = 'Inscrição Confirmada!';
         confirmBtn.disabled = true;
       } else {
-        alert('Erro ao confirmar inscrição.');
+        const error = await res.json();
+        alert(error.error || 'Erro ao confirmar inscrição.');
       }
 
     } catch (error) {

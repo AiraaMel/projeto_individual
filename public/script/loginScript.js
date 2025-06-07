@@ -20,15 +20,20 @@ async function loginUser() {
     const result = await response.json();
 
     if (response.ok) {
-      // Redireciona para a rota que renderiza a view home.ejs
+      // Armazena o token JWT no localStorage
+      localStorage.setItem('token', result.token);
+
+      // Armazena dados do usuário logado
+      localStorage.setItem('user', JSON.stringify(result.user));
+      localStorage.setItem('userId', result.user.id); // <- ESSENCIAL
+
+      // Redireciona para a página inicial
       window.location.href = '/home';
+
     } else {
       messageDiv.innerText = result.error || 'Falha no login.';
       messageDiv.style.color = 'red';
     }
-
-
-
   } catch (error) {
     console.error('Erro ao realizar login:', error);
     messageDiv.innerText = 'Erro ao conectar com o servidor.';

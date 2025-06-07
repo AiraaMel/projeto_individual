@@ -1,4 +1,7 @@
 const Users = require('../models/usersModel');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
+
 
 exports.index = async (req, res) => {
   try {
@@ -15,7 +18,7 @@ exports.create = async (req, res) => {
   const { name, email, password, photo, preferences } = req.body;
   try {
     await Users.create({ name, email, password, photo, preferences });
-    res.status(200).json({message: "Usuário criado"});
+    res.status(200).json({ message: "Usuário criado" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -28,7 +31,7 @@ exports.update = async (req, res) => {
 
   try {
     await Users.update(id, { name, email, password, photo, preferences });
-    res.status(200).json({message: "Usuário atualizado"})
+    res.status(200).json({ message: "Usuário atualizado" })
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -40,7 +43,7 @@ exports.delete = async (req, res) => {
 
   try {
     await Users.delete(id);
-    res.status(200).json({message: "Usuário deletado"});
+    res.status(200).json({ message: "Usuário deletado" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -66,9 +69,24 @@ exports.login = async (req, res) => {
       return res.status(401).json({ error: 'Senha incorreta' });
     }
 
-    res.status(200).json({ message: 'Login realizado com sucesso' });
+    const token = generateToken(user);
+    res.status(200).json({
+      message: 'Login realizado com sucesso',
+      token,
+      user: { id: user.id, name: user.name, email: user.email }
+    });
+
   } catch (err) {
     console.error('Erro no login:', err);
     res.status(500).json({ error: err.message });
   }
 };
+
+function generateToken(user) {
+  return jwt.sign(
+    { id: user.id, email: user.email },
+    process.env.JWT_SECRET,
+    { expiresIn: process.env.JWT_EXPIRES_IN }
+  );
+}
+
