@@ -3,101 +3,128 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>
-    <%= event.title %>
-  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/eventPage.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <title><%= event.title %></title>
 </head>
 
 <body>
+  <div class="container">
+    <!-- Header com Logo -->
+    <header class="header">
+      <img src="/images/logo-vibra.png" alt="Logo Vibra" class="logo">
+    </header>
 
-  <!-- Imagem e mapa -->
-  <section>
-    <img src="<%= event.photo || '/default.jpg' %>" alt="Imagem do evento">
-    <div>Mapa com marcador (aqui você pode colocar um iframe com mapa futuramente)</div>
-  </section>
-
-  <!-- Descrição -->
-  <section>
-    <p>
-      <%= event.description %>
-    </p>
-  </section>
-
-  <!-- O que inclui -->
-  <section>
-    <h2>Inclui:</h2>
-    <% if (event.included) { %>
-      <ul>
-        <% event.included.split(',').forEach(item=> { %>
-          <li>
-            <%= item.trim() %>
-          </li>
-          <% }) %>
-      </ul>
-      <% } else { %>
-        <p>Informação não disponível</p>
-        <% } %>
-  </section>
-
-  <!-- Detalhes -->
-  <section>
-    <p><strong>Local:</strong>
-      <%= event.place || 'Local não especificado' %>
-    </p>
-    <p><strong>Duração:</strong>
-      <%= event.duration || 'N/A' %>
-    </p>
-    <p><strong>Valor:</strong> R$ <%= event.price || 'N/A' %>
-    </p>
-    <p><strong>Capacidade:</strong>
-      <%= event.capacity || 'N/A' %>
-    </p>
-    <p><strong>Avaliação:</strong>
-      <%= event.rating || 'N/A' %>
-    </p>
-  </section>
-
-  <!-- Datas e horários -->
-  <section>
-    <h3>Próximas datas e horários:</h3>
-    <% if (event.datetimes && event.datetimes.length> 0) { %>
-      <div id="datetimeButtons" style="display: flex; flex-wrap: wrap; gap: 10px;">
-        <% event.datetimes.forEach(datetime=> { %>
-          <button type="button" class="datetime-option" data-datetime-id="<%= datetime.id %>"
-            data-datetime="<%= new Date(datetime.day_time).toISOString() %>">
-            <%= new Date(datetime.day_time).toLocaleString('pt-BR', { dateStyle: 'short' , timeStyle: 'short' }) %>
-          </button>
-          <% }) %>
-      </div>
-
-      <div id="selectedDatetime" style="margin-top: 1em;"></div>
-      <button id="confirmBtn" style="display:none; margin-top: 1em;">Confirmar inscrição</button>
-      <% } else { %>
-        <p>Sem datas disponíveis.</p>
-        <% } %>
-  </section>
-
-
-
-  <!-- Avaliações -->
-  <section>
-    <h3>Avaliações</h3>
-    <% if (event.reviews && event.reviews.length> 0) { %>
-      <% event.reviews.forEach(review=> { %>
-        <div>
-          <p>
-            <%= review.comment %>
-          </p>
-          <p>Avaliação: <%= review.rating %>
-          </p>
-          <p>Data: <%= review.date ? review.date.toLocaleDateString() : '' %>
-          </p>
+    <!-- Imagem e mapa em duas colunas -->
+    <section class="hero-section">
+      <div class="image-map-container">
+        <div class="event-image-container">
+          <img src="<%= event.photo || 'https://placehold.co/180x120' %>" alt="Imagem do evento" class="event-hero-image">
         </div>
-        <% }) %>
-          <% } else { %>
-            <p>Sem avaliações ainda.</p>
-            <% } %>
-  </section>
+        <div class="map-container">
+          <div class="map-placeholder">
+            <svg class="map-pin" width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M21 10C21 17 12 23 12 23S3 17 3 10C3 5.02944 7.02944 1 12 1C16.9706 1 21 5.02944 21 10Z" stroke="currentColor" stroke-width="2"/>
+              <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Descrição -->
+    <section class="description-section">
+      <div class="description-block">
+        <p class="description-text"><%= event.description %></p>
+      </div>
+    </section>
+
+    <!-- O que inclui -->
+    <section class="includes-section">
+      <div class="includes-block">
+        <h3 class="includes-title">Inclui:</h3>
+        <% if (event.included) { %>
+          <ul class="includes-list">
+            <% event.included.split(',').forEach(item => { %>
+              <li class="includes-item"><%= item.trim() %></li>
+            <% }) %>
+          </ul>
+        <% } else { %>
+          <p class="no-info">Informação não disponível</p>
+        <% } %>
+      </div>
+    </section>
+
+    <!-- Informações práticas -->
+    <section class="info-section">
+      <div class="info-grid">
+        <div class="info-item">
+          <svg class="info-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M21 10C21 17 12 23 12 23S3 17 3 10C3 5.02944 7.02944 1 12 1C16.9706 1 21 5.02944 21 10Z" stroke="currentColor" stroke-width="2"/>
+            <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          <span><%= event.place || 'Local não especificado' %></span>
+        </div>
+        <div class="info-item">
+          <svg class="info-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+            <polyline points="12,6 12,12 16,14" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          <span><%= event.duration || 'N/A' %></span>
+        </div>
+        <div class="info-item">
+          <svg class="info-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <line x1="12" y1="1" x2="12" y2="23" stroke="currentColor" stroke-width="2"/>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          <span>R$ <%= event.price || 'N/A' %></span>
+        </div>
+        <div class="info-item">
+          <svg class="info-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" stroke="currentColor" stroke-width="2"/>
+            <rect x="4" y="3" width="16" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          <span><%= event.capacity || 'N/A' %> pessoas</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seletor de dias da semana -->
+    <section class="date-selection">
+      <h3 class="section-title">Selecione o dia:</h3>
+      <div class="days-selector">
+        <button class="day-button">Seg</button>
+        <button class="day-button">Ter</button>
+        <button class="day-button active">Qua</button>
+        <button class="day-button">Qui</button>
+        <button class="day-button">Sex</button>
+        <button class="day-button">Sáb</button>
+        <button class="day-button">Dom</button>
+      </div>
+    </section>
+
+    <!-- Datas e horários -->
+    <section class="datetime-selection">
+      <h3 class="section-title">Horários disponíveis:</h3>
+      <% if (event.datetimes && event.datetimes.length > 0) { %>
+        <div id="datetimeButtons" class="time-slots">
+          <% event.datetimes.forEach(datetime => { %>
+            <button type="button" class="time-slot" data-datetime-id="<%= datetime.id %>"
+              data-datetime="<%= new Date(datetime.day_time).toISOString() %>">
+              <%= new Date(datetime.day_time).toLocaleString('pt-BR', { timeStyle: 'short' }) %>
+            </button>
+          <% }) %>
+        </div>
+
+        <div id="selectedDatetime" class="selected-info"></div>
+        <button id="confirmBtn" class="confirm-button" style="display:none;">Confirmar</button>
+      <% } else { %>
+        <p class="no-info">Sem datas disponíveis.</p>
+      <% } %>
+    </section>
+  </div>
 
   <script src="/script/timeSelector.js"></script>
 </body>

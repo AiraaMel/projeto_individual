@@ -11,16 +11,14 @@ router.get('/playlists', (req, res) => {
 });
 
 router.get('/login', (req, res) => {
-  res.render(path.join(__dirname, '../views/layout/main'), {
-    pageTitle: 'Página Inicial',
-    content: path.join(__dirname, '../views/pages/login')
+  res.render(path.join(__dirname, '../views/pages/login'), {
+    pageTitle: 'Página Inicial'
   });
 });
 
 router.get('/createAccount', (req, res) => {
-  res.render(path.join(__dirname, '../views/layout/main'), {
-    pageTitle: 'Criar conta',
-    content: path.join(__dirname, '../views/pages/createAccount')
+  res.render(path.join(__dirname, '../views/pages/createAccount'), {
+    pageTitle: 'Criar conta'
   });
 });
 

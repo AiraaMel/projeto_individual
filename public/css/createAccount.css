@@ -1,0 +1,157 @@
+/* Resetting the margin and padding for all elements */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body Styles */
+body {
+  font-family: 'Sora', sans-serif;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Container for the Login Form */
+.container {
+  width: 100%;
+  max-width: 420px;  /* Aumentando o tamanho máximo para mais espaço */
+  padding: 30px;  /* Aumentando o padding para mais espaçamento */
+  text-align: center;
+}
+
+/* Logo Container */
+.logo-container {
+  margin-bottom: 30px;  /* Maior espaçamento para a logo */
+}
+
+.logo {
+  width: 140px;  /* Aumentando o tamanho da logo */
+}
+
+/* Heading for the Login Form */
+.form-container h1 {
+  font-size: 28px;  /* Aumentando o tamanho do título */
+  font-weight: 600;
+  margin-bottom: 30px;
+}
+
+/* Group for Input Fields */
+.input-group {
+  margin-bottom: 25px;  /* Aumentando o espaçamento entre os campos */
+}
+
+/* Input Fields Styles */
+input {
+  width: 100%;
+  padding: 15px;  /* Aumentando o padding dos campos */
+  margin: 8px 0;
+  border: 2px solid #f4a4a4;
+  border-radius: 8px;
+  font-size: 18px;  /* Aumentando a fonte */
+}
+
+/* Submit Button Styles */
+.submit-btn {
+  width: 100%;
+  padding: 15px;  /* Aumentando o padding do botão */
+  background-color: #f44e5c;
+  border: none;
+  color: white;
+  font-size: 18px;  /* Aumentando a fonte do botão */
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background-color: #e4464d;
+}
+
+/* "Criar Conta" Link Styles */
+.create-account {
+  color: #f44e5c;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.create-account:hover {
+  text-decoration: underline;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+  /* Container adjustments for smaller screens */
+  .container {
+    max-width: 90%;
+    padding: 25px;
+  }
+
+  /* Adjust logo size for smaller screens */
+  .logo {
+    width: 120px;  /* Ajuste para telas menores */
+  }
+
+  /* Adjust heading size for smaller screens */
+  .form-container h1 {
+    font-size: 26px;
+    margin-bottom: 20px;
+  }
+
+  /* Adjust input field padding and font size */
+  .input-group input {
+    font-size: 16px;
+    padding: 12px;
+  }
+
+  /* Adjust submit button padding and font size */
+  .submit-btn {
+    font-size: 16px;
+    padding: 14px;
+  }
+
+  /* Adjust link font size */
+  .create-account {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 430px) {
+  /* Adjust for very small screens like iPhone 16 Pro */
+  .container {
+    width: 90%;
+    max-width: 380px;
+    padding: 25px;
+  }
+
+  /* Adjust logo size for very small screens */
+  .logo {
+    width: 110px;  /* Ajusta o tamanho da logo para telas muito pequenas */
+  }
+
+  /* Adjust heading size for very small screens */
+  .form-container h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  /* Adjust input field padding and font size */
+  .input-group input {
+    font-size: 16px;
+    padding: 14px;
+  }
+
+  /* Adjust submit button padding and font size */
+  .submit-btn {
+    font-size: 16px;
+    padding: 14px;
+  }
+
+  /* Adjust link font size for very small screens */
+  .create-account {
+    font-size: 12px;
+  }
+}

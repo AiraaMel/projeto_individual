@@ -1,8 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const datetimeButtons = document.querySelectorAll('.datetime-option');
+  const datetimeButtons = document.querySelectorAll('.time-slot');
   const selectedDiv = document.getElementById('selectedDatetime');
   const confirmBtn = document.getElementById('confirmBtn');
   let selectedDate = null;
+  let selectedDatetimeId = null;
 
   datetimeButtons.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -11,16 +12,13 @@ document.addEventListener('DOMContentLoaded', () => {
       selectedDate = btn.dataset.datetime;
       selectedDatetimeId = btn.dataset.datetimeId;  // pegar o id do datetime_event
       selectedDiv.innerText = `Horário selecionado: ${new Date(selectedDate).toLocaleString('pt-BR')}`;
-      confirmBtn.style.display = 'inline-block';
+      confirmBtn.style.display = 'block';
     });
   });
 
 
   confirmBtn.addEventListener('click', async () => {
     if (!selectedDate) return;
-
-    const eventId = document.body.dataset.eventId; // vamos pegar o id do evento do atributo data-event-id no body
-    const userId = 1; // substitua pelo ID real do usuário
 
     const dateTime = new Date(selectedDate);
     const date = dateTime.toISOString().split('T')[0];

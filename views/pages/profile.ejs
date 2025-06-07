@@ -1,51 +1,67 @@
-<div>
-  <img src="/images/logo-vibra.png" alt="Logo Vibra">
-</div>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/profile.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>Vibra - Perfil</title>
+</head>
+<body>
+  <div class="container">
+    <!-- Header com Logo -->
+    <header class="header">
+      <img src="/images/logo-vibra.png" alt="Logo Vibra" class="logo">
+    </header>
 
-<h2>Meus eventos</h2>
-<!-- Cartão 1 -->
-<div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px;">
-  <img src="pizza.jpg" alt="Imagem de aula de culinária" width="100">
-  <h4>Aula de Culinária</h4>
-  <p>Cozinhe com chef local!</p>
-  <span style="display: inline-block; border: 1px solid #ccc; padding: 5px 10px; margin-right: 5px;">Itália</span>
-  <span style="display: inline-block; border: 1px solid #ccc; padding: 5px 10px;">Itália</span>
-</div>
-<!-- Cartão 2 -->
-<div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px;">
-  <img src="pizza.jpg" alt="Imagem de aula de culinária" width="100">
-  <h4>Aula de Culinária</h4>
-  <p>Cozinhe com chef local!</p>
-  <span style="display: inline-block; border: 1px solid #ccc; padding: 5px 10px; margin-right: 5px;">Itália</span>
-  <span style="display: inline-block; border: 1px solid #ccc; padding: 5px 10px;">Itália</span>
-</div>
+    <!-- Meus eventos -->
+    <section class="events-section">
+      <h2 class="section-title">Meus eventos</h2>
 
-<h2>Meus dados</h2>
-<thead>
-  <tr>
-    <th>Locations_id</th>
-    <th>Name</th>
-    <th>Link</th>
-  </tr>
-</thead>
-<tbody>
+      <!-- Cartão 1 -->
+      <div class="event-card">
+        <img src="https://placehold.co/100x100" alt="Imagem de aula de culinária" class="event-image">
+        <div class="event-details">
+          <h3 class="event-title">Aula de Culinária</h3>
+          <p class="event-description">Cozinhe com chef local!</p>
+          <div class="event-tags">
+            <span class="event-tag">Itália</span>
+            <span class="event-tag">Sensorial</span>
+          </div>
+        </div>
+      </div>
 
-  <h2>Preferências</h2>
-  <div>
-    <div style="border: 1px solid #ccc; padding: 10px; border-radius: 8px;">
-      <label>
-        <input type="checkbox" name="paises" value="Brasil">
-        Brasil
-      </label><br>
+      <!-- Cartão 2 -->
+      <div class="event-card">
+        <img src="https://placehold.co/100x100" alt="Imagem de aula de culinária" class="event-image">
+        <div class="event-details">
+          <h3 class="event-title">Aula de Culinária</h3>
+          <p class="event-description">Cozinhe com chef local!</p>
+          <div class="event-tags">
+            <span class="event-tag">Itália</span>
+            <span class="event-tag">Sensorial</span>
+          </div>
+        </div>
+      </div>
+    </section>
 
-      <label>
-        <input type="checkbox" name="paises" value="Espanha">
-        Espanha
-      </label><br>
-
-      <label>
-        <input type="checkbox" name="paises" value="Itália">
-        Itália
-      </label><br>
-
-      <button>Confirmar</button>
+    <!-- Meus dados -->
+    <section class="profile-section">
+      <h2 class="section-title">Meus dados</h2>
+      <form class="profile-form">
+        <div class="input-group">
+          <input type="text" placeholder="Nome" class="form-input">
+        </div>
+        <div class="input-group">
+          <input type="email" placeholder="E-mail" class="form-input">
+        </div>
+        <div class="input-group">
+          <input type="password" placeholder="Senha" class="form-input">
+        </div>
+        <button type="submit" class="button-primary">Confirmar</button>
+      </form>
+    </section>
+  </div>
+</body>
+</html>

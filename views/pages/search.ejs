@@ -1,21 +1,64 @@
-<h2>Resultados da busca por: <%= search %></h2>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/search.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>Vibra - Busca</title>
+</head>
+<body>
+  <div class="container">
+    <!-- Header com Logo -->
+    <header class="header">
+      <img src="/images/logo-vibra.png" alt="Logo Vibra" class="logo">
+    </header>
 
-<% if (events && events.length > 0) { %>
-  <% events.forEach(event => { %>
-    <a href="/api/events/event/<%= event.id %>" style="text-decoration: none; color: inherit;">
-      <div style="border: 1px solid #000; padding: 10px; margin-bottom: 10px;">
-        <img 
-          src="<%= event.photo || '/default.jpg' %>" 
-          alt="Imagem de <%= event.title %>" 
-          width="150" 
-          height="100"
-          style="display: block; margin-bottom: 5px;"
-        />
-        <h4><%= event.title %></h4>
-        <p><%= event.description || 'Sem descrição disponível.' %></p>
+    <!-- Barra de busca -->
+    <div class="search-container">
+      <div class="search-box">
+        <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M21 21L16.514 16.506L21 21ZM19 10.5C19 15.194 15.194 19 10.5 19C5.806 19 2 15.194 2 10.5C2 5.806 5.806 2 10.5 2C15.194 2 19 5.806 19 10.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <input type="text" placeholder="Digite o país" class="search-input" value="<%= search %>">
       </div>
-    </a>
-  <% }) %>
-<% } else { %>
-  <p>Nenhum evento encontrado.</p>
-<% } %>
+    </div>
+
+    <h2 class="search-title">Resultados da busca por: <span class="search-term"><%= search %></span></h2>
+
+    <!-- Lista de eventos -->
+    <div class="events-list">
+      <% if (events && events.length > 0) { %>
+        <% events.forEach(event => { %>
+          <a href="/api/events/event/<%= event.id %>" class="event-link">
+            <div class="event-card">
+              <img
+                src="<%= event.photo || 'https://placehold.co/100x100' %>"
+                alt="Imagem de <%= event.title %>"
+                class="event-image"
+              />
+              <div class="event-details">
+                <h3 class="event-title"><%= event.title %></h3>
+                <p class="event-description"><%= event.description || 'Sem descrição disponível.' %></p>
+                <div class="event-tags">
+                  <span class="event-tag">Evento</span>
+                </div>
+              </div>
+            </div>
+          </a>
+        <% }) %>
+      <% } else { %>
+        <div class="no-results">
+          <p>Nenhum evento encontrado.</p>
+        </div>
+      <% } %>
+    </div>
+
+    <!-- Mapa no final -->
+    <div class="map-container">
+      <img src="/images/map.png" alt="Mapa países" class="world-map">
+    </div>
+  </div>
+</body>
+</html>

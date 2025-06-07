@@ -1,39 +1,75 @@
-<!-- Barra de busca -->
-<form action="/api/locations/search" method="GET">
-  <input type="text" name="query" placeholder="Digite o país">
-  <button type="submit">Buscar</button>
-</form>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/home.css">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>Vibra - Home</title>
+</head>
+<body>
+  <div class="container">
+    <!-- Logo no topo à esquerda -->
+    <header class="header">
+      <img src="/images/logo-vibra.png" alt="Logo Vibra" class="logo">
+    </header>
 
-<!-- Frase -->
-<div>
-  <p>"Conecte-se com o que faz você vibrar."</p>
-</div>
+    <!-- Barra de busca -->
+    <div class="search-container">
+      <form action="/api/locations/search" method="GET" class="search-box">
+        <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M21 21L16.514 16.506L21 21ZM19 10.5C19 15.194 15.194 19 10.5 19C5.806 19 2 15.194 2 10.5C2 5.806 5.806 2 10.5 2C15.194 2 19 5.806 19 10.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <input type="text" name="query" placeholder="Digite o país" class="search-input">
+      </form>
+    </div>
 
-<!-- Mapa clicável -->
-<div>
-  <a href="/searchCountry">
-    <img src="/images/map.png" alt="Mapa países">
-  </a>
-</div>
+    <!-- Cartão de Evento -->
+    <div class="event-card">
+      <img src="https://placehold.co/100x100" alt="Aula de Culinária" class="event-image">
+      <div class="event-details">
+        <h3 class="event-title">Aula de Culinária</h3>
+        <p class="event-description">Cozinhe com chef local!</p>
+        <div class="event-tags">
+          <span class="event-tag">Itália</span>
+          <span class="event-tag">Sensorial</span>
+        </div>
+      </div>
+    </div>
 
+    <!-- Bloco com frase -->
+    <div class="quote-block">
+      <p class="quote-text">"Conecte-se com o que faz você vibrar."</p>
+    </div>
 
-<% if (search) { %>
-  <p>Resultado para: <strong><%= search %></strong></p>
-<% } %>
+    <!-- Mapa clicável -->
+    <div class="map-container">
+      <a href="/searchCountry">
+        <img src="/images/map.png" alt="Mapa países" class="world-map">
+      </a>
+    </div>
 
-<ul>
-  <% if (locations && locations.length > 0) { %>
-    <% locations.forEach(location => { %>
-      <li>
-        <strong>País:</strong> <%= location.country %><br>
-        Idioma: <%= location.language %><br>
-        Moeda: <%= location.coin %><br>
-        Costumes: <%= location.customs %><br>
-        Curiosidades: <%= location.curiosities %><br>
-        <hr>
-      </li>
-    <% }) %>
-  <% } else if (search) { %>
-    <p>Nenhum país encontrado.</p>
-  <% } %>
-</ul>
+    <!-- Resultados da busca (se houver) -->
+    <% if (search) { %>
+      <div class="search-results">
+        <p>Resultado para: <strong><%= search %></strong></p>
+        <% if (locations && locations.length > 0) { %>
+          <div class="locations-list">
+            <% locations.forEach(location => { %>
+              <div class="location-card">
+                <h4><%= location.country %></h4>
+                <p><strong>Idioma:</strong> <%= location.language %></p>
+                <p><strong>Moeda:</strong> <%= location.coin %></p>
+                <p><strong>Costumes:</strong> <%= location.customs %></p>
+                <p><strong>Curiosidades:</strong> <%= location.curiosities %></p>
+              </div>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <p>Nenhum país encontrado.</p>
+        <% } %>
+      </div>
+    <% } %>
+  </div>
+</body>
+</html>
