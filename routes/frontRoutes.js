@@ -29,13 +29,23 @@ router.get('/preferences', (req, res) => {
   });
 });
 
-router.get('/home', (req, res) => {
-  res.render(path.join(__dirname, '../views/pages/home'), {
-    pageTitle: 'Inicial',
-    locations: [],  // ou um array real com dados se quiser buscar do DB aqui
-    search: null
-  });
+const Events = require('../models/eventsModel'); // certifique-se de que esteja no topo do arquivo
+
+router.get('/home', async (req, res) => {
+  try {
+    const events = await Events.findAll(); // busca eventos disponíveis
+    res.render(path.join(__dirname, '../views/pages/home'), {
+      pageTitle: 'Inicial',
+      locations: [],
+      search: null,
+      events
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Erro ao carregar eventos");
+  }
 });
+
 
 
 router.get('/search', (req, res) => {

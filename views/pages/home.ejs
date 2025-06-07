@@ -24,18 +24,23 @@
       </form>
     </div>
 
-    <!-- Cartão de Evento -->
-    <div class="event-card">
-      <img src="https://placehold.co/100x100" alt="Aula de Culinária" class="event-image">
-      <div class="event-details">
-        <h3 class="event-title">Aula de Culinária</h3>
-        <p class="event-description">Cozinhe com chef local!</p>
-        <div class="event-tags">
-          <span class="event-tag">Itália</span>
-          <span class="event-tag">Sensorial</span>
+<div class="carousel-container">
+  <div class="carousel-track" id="carouselTrack">
+    <% events.forEach(event => { %>
+      <a href="/api/events/event/<%= event.id %>" class="event-card">
+        <img src="<%= event.photo || 'https://placehold.co/100x100' %>" alt="Imagem de <%= event.title %>" class="event-image">
+        <div class="event-details">
+          <h3 class="event-title"><%= event.title %></h3>
+          <p class="event-description"><%= event.description || 'Sem descrição disponível.' %></p>
+          <div class="event-tags">
+            <span class="event-tag"><%= event.type || 'Evento' %></span>
+          </div>
         </div>
-      </div>
-    </div>
+      </a>
+    <% }) %>
+  </div>
+</div>
+
 
     <!-- Bloco com frase -->
     <div class="quote-block">
@@ -73,3 +78,25 @@
   </div>
 </body>
 </html>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const track = document.getElementById('carouselTrack');
+    const cards = document.querySelectorAll('.event-card');
+    let currentIndex = 0;
+
+    const nextSlide = () => {
+      if (currentIndex < cards.length - 1) {
+        currentIndex++;
+        const offset = -currentIndex * 100;
+        track.style.transform = `translateX(${offset}%)`;
+      }
+    };
+
+    // Muda de slide a cada 4 segundos
+    setInterval(() => {
+      nextSlide();
+    }, 4000);
+  });
+</script>
+
