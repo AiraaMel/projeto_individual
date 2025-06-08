@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <title>Vibra - Perfil</title>
 </head>
+
 <body>
   <div class="container">
     <!-- Header com Logo -->
@@ -18,50 +20,32 @@
     <!-- Meus eventos -->
     <section class="events-section">
       <h2 class="section-title">Meus eventos</h2>
-
-      <!-- Cartão 1 -->
-      <div class="event-card">
-        <img src="https://placehold.co/100x100" alt="Imagem de aula de culinária" class="event-image">
-        <div class="event-details">
-          <h3 class="event-title">Aula de Culinária</h3>
-          <p class="event-description">Cozinhe com chef local!</p>
-          <div class="event-tags">
-            <span class="event-tag">Itália</span>
-            <span class="event-tag">Sensorial</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Cartão 2 -->
-      <div class="event-card">
-        <img src="https://placehold.co/100x100" alt="Imagem de aula de culinária" class="event-image">
-        <div class="event-details">
-          <h3 class="event-title">Aula de Culinária</h3>
-          <p class="event-description">Cozinhe com chef local!</p>
-          <div class="event-tags">
-            <span class="event-tag">Itália</span>
-            <span class="event-tag">Sensorial</span>
-          </div>
-        </div>
-      </div>
-    </section>
+      <div id="events-container" class="events-container"></div> <!-- container dos cards -->
+    </section> <!-- FECHAMENTO CORRETO -->
 
     <!-- Meus dados -->
     <section class="profile-section">
       <h2 class="section-title">Meus dados</h2>
       <form class="profile-form">
         <div class="input-group">
-          <input type="text" placeholder="Nome" class="form-input">
+          <input id="input-name" type="text" placeholder="Nome" class="form-input" disabled>
         </div>
         <div class="input-group">
-          <input type="email" placeholder="E-mail" class="form-input">
+          <input id="input-email" type="email" placeholder="E-mail" class="form-input" disabled>
         </div>
         <div class="input-group">
-          <input type="password" placeholder="Senha" class="form-input">
+          <input type="password" placeholder="Senha" class="form-input" disabled>
         </div>
-        <button type="submit" class="button-primary">Confirmar</button>
+        <button type="submit" class="button-primary" disabled>Confirmar</button>
       </form>
     </section>
+
+    <% if (pageTitle !== 'Login') { %>
+      <%- include('../partials/navbar') %>
+    <% } %>
   </div>
+
+  <script src="/script/profileScript.js"></script>
 </body>
+
 </html>

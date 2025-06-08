@@ -1,0 +1,23 @@
+<nav class="bottom-nav">
+  <a href="/home" class="nav-btn" id="btn-home">
+    <img src="/icons/home.svg" alt="Início" class="nav-icon" />
+  </a>
+  <a href="/search" class="nav-btn" id="btn-search">
+    <img src="/icons/search.svg" alt="Buscar" class="nav-icon" />
+  </a>
+  <a href="/searchCountry" class="nav-btn" id="btn-country">
+    <img src="/icons/globo.svg" alt="Países" class="nav-icon" />
+  </a>
+  <a href="/profile" class="nav-btn" id="btn-profile">
+    <img src="/icons/user.svg" alt="Perfil" class="nav-icon" />
+  </a>
+</nav>
+
+
+<script>
+  const path = window.location.pathname;
+  if (path.includes('/home')) document.getElementById('btn-home')?.classList.add('active');
+  if (path.includes('/search') && !path.includes('Country')) document.getElementById('btn-search')?.classList.add('active');
+  if (path.includes('/searchCountry')) document.getElementById('btn-country')?.classList.add('active');
+  if (path.includes('/profile')) document.getElementById('btn-profile')?.classList.add('active');
+</script>

@@ -1,20 +1,61 @@
 
-<div>
-  <img src="/images/map.png" alt="Mapa países">
-</div>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/searchCountry.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>Vibra - Selecionar País</title>
+</head>
+<body>
+  <div class="container">
+    <!-- Header com Logo -->
+    <header class="header">
+      <img src="/images/logo-vibra.png" alt="Logo Vibra" class="logo">
+    </header>
 
+    <!-- Título -->
+    <h1 class="page-title">Países</h1>
 
-<div>
-  <div>Alemanha</div>
-  <div>Brasil</div>
-  <div>Coreia do Sul</div>
+    <!-- Mapa ilustrativo -->
+    <div class="map-container">
+      <img src="/images/map.png" alt="Mapa países" class="world-map">
+    </div>
 
-  <!-- País selecionado -->
-  <div>
-    <span>Espanha</span>
-    <span></span> <!-- Representa o check -->
+    <!-- Lista de países -->
+    <div class="country-list">
+      <button class="country-button" data-country="alemanha">
+        <span>Alemanha</span>
+      </button>
+
+      <button class="country-button" data-country="brasil">
+        <span>Brasil</span>
+      </button>
+
+      <button class="country-button" data-country="coreia">
+        <span>Coreia do Sul</span>
+      </button>
+
+      <!-- País selecionado -->
+      <button class="country-button selected" data-country="espanha">
+        <span>Espanha</span>
+        <svg class="checkmark" width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <button class="country-button" data-country="grecia">
+        <span>Grécia</span>
+      </button>
+
+      <button class="country-button" data-country="monaco">
+        <span>Monaco</span>
+      </button>
+    </div>
   </div>
-
-  <div>Grécia</div>
-  <div>Monaco</div>
-</div>
+  <%- include('../partials/navbar') %>
+  <script src="/script/searchCountryScript.js"></script>
+</body>
+</html>

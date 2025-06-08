@@ -7,7 +7,9 @@
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/eventPage.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <title><%= event.title %></title>
+  <title>
+    <%= event.title %>
+  </title>
 </head>
 
 <body>
@@ -21,13 +23,15 @@
     <section class="hero-section">
       <div class="image-map-container">
         <div class="event-image-container">
-          <img src="<%= event.photo || 'https://placehold.co/180x120' %>" alt="Imagem do evento" class="event-hero-image">
+          <img src="<%= event.photo || 'https://placehold.co/180x120' %>" alt="Imagem do evento"
+            class="event-hero-image">
         </div>
         <div class="map-container">
           <div class="map-placeholder">
             <svg class="map-pin" width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M21 10C21 17 12 23 12 23S3 17 3 10C3 5.02944 7.02944 1 12 1C16.9706 1 21 5.02944 21 10Z" stroke="currentColor" stroke-width="2"/>
-              <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2"/>
+              <path d="M21 10C21 17 12 23 12 23S3 17 3 10C3 5.02944 7.02944 1 12 1C16.9706 1 21 5.02944 21 10Z"
+                stroke="currentColor" stroke-width="2" />
+              <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2" />
             </svg>
           </div>
         </div>
@@ -37,7 +41,9 @@
     <!-- Descrição -->
     <section class="description-section">
       <div class="description-block">
-        <p class="description-text"><%= event.description %></p>
+        <p class="description-text">
+          <%= event.description %>
+        </p>
       </div>
     </section>
 
@@ -47,13 +53,15 @@
         <h3 class="includes-title">Inclui:</h3>
         <% if (event.included) { %>
           <ul class="includes-list">
-            <% event.included.split(',').forEach(item => { %>
-              <li class="includes-item"><%= item.trim() %></li>
-            <% }) %>
+            <% event.included.split(',').forEach(item=> { %>
+              <li class="includes-item">
+                <%= item.trim() %>
+              </li>
+              <% }) %>
           </ul>
-        <% } else { %>
-          <p class="no-info">Informação não disponível</p>
-        <% } %>
+          <% } else { %>
+            <p class="no-info">Informação não disponível</p>
+            <% } %>
       </div>
     </section>
 
@@ -62,31 +70,38 @@
       <div class="info-grid">
         <div class="info-item">
           <svg class="info-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path d="M21 10C21 17 12 23 12 23S3 17 3 10C3 5.02944 7.02944 1 12 1C16.9706 1 21 5.02944 21 10Z" stroke="currentColor" stroke-width="2"/>
-            <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2"/>
+            <path d="M21 10C21 17 12 23 12 23S3 17 3 10C3 5.02944 7.02944 1 12 1C16.9706 1 21 5.02944 21 10Z"
+              stroke="currentColor" stroke-width="2" />
+            <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2" />
           </svg>
-          <span><%= event.place || 'Local não especificado' %></span>
+          <span>
+            <%= event.place || 'Local não especificado' %>
+          </span>
         </div>
         <div class="info-item">
           <svg class="info-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
-            <polyline points="12,6 12,12 16,14" stroke="currentColor" stroke-width="2"/>
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+            <polyline points="12,6 12,12 16,14" stroke="currentColor" stroke-width="2" />
           </svg>
-          <span><%= event.duration || 'N/A' %></span>
+          <span>
+            <%= event.duration || 'N/A' %>
+          </span>
         </div>
         <div class="info-item">
           <svg class="info-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <line x1="12" y1="1" x2="12" y2="23" stroke="currentColor" stroke-width="2"/>
-            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="currentColor" stroke-width="2"/>
+            <line x1="12" y1="1" x2="12" y2="23" stroke="currentColor" stroke-width="2" />
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="currentColor" stroke-width="2" />
           </svg>
           <span>R$ <%= event.price || 'N/A' %></span>
         </div>
         <div class="info-item">
           <svg class="info-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" stroke="currentColor" stroke-width="2"/>
-            <rect x="4" y="3" width="16" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" stroke="currentColor" stroke-width="2" />
+            <rect x="4" y="3" width="16" height="18" rx="2" stroke="currentColor" stroke-width="2" />
           </svg>
-          <span><%= event.capacity || 'N/A' %> pessoas</span>
+          <span>
+            <%= event.capacity || 'N/A' %> pessoas
+          </span>
         </div>
       </div>
     </section>
@@ -108,25 +123,28 @@
     <!-- Datas e horários -->
     <section class="datetime-selection">
       <h3 class="section-title">Horários disponíveis:</h3>
-      <% if (event.datetimes && event.datetimes.length > 0) { %>
+      <% if (event.datetimes && event.datetimes.length> 0) { %>
         <div id="datetimeButtons" class="time-slots">
-          <% event.datetimes.forEach(datetime => { %>
+          <% event.datetimes.forEach(datetime=> { %>
             <button type="button" class="time-slot" data-datetime-id="<%= datetime.id %>"
               data-datetime="<%= new Date(datetime.day_time).toISOString() %>">
               <%= new Date(datetime.day_time).toLocaleString('pt-BR', { timeStyle: 'short' }) %>
             </button>
-          <% }) %>
+            <% }) %>
         </div>
 
         <div id="selectedDatetime" class="selected-info"></div>
         <button id="confirmBtn" class="confirm-button" style="display:none;">Confirmar</button>
-      <% } else { %>
-        <p class="no-info">Sem datas disponíveis.</p>
-      <% } %>
+        <% } else { %>
+          <p class="no-info">Sem datas disponíveis.</p>
+          <% } %>
     </section>
+    <%- include('../partials/navbar') %>
   </div>
 
   <script src="/script/timeSelector.js"></script>
 </body>
 
 </html>
+
+<script src="/script/eventPageScript.js"></script>

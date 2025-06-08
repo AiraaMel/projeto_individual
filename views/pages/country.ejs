@@ -1,54 +1,102 @@
-<div>
-  <img src="/images/logo-vibra.png" alt="Logo Vibra">
-</div>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/country.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>Vibra - Espanha</title>
+</head>
+<body>
+  <div class="container">
+    <!-- Header com Logo -->
+    <header class="header">
+      <img src="/images/logo-vibra.png" alt="Logo Vibra" class="logo">
+    </header>
 
-<h2>Espanha</h2>
-<div style="display: flex; gap: 20px; margin-bottom: 20px;">
-  <img src="/images/espanha.jpg" alt="Bandeira da Espanha" width="150" style="border-radius: 10px;">
-  <div style="border: 1px solid #eee; padding: 10px; border-radius: 10px;">
-    <p><strong>Me porto bonito</strong></p>
-    <p>Bad Bunny</p>
-    <p style="font-size: 12px;">icons</p>
-    <p style="font-size: 12px;">Teletransporte para espanha</p>
-  </div>
-</div>
+    <!-- Título do país -->
+    <h1 class="country-title">Espanha</h1>
 
-<h3>Curiosidades</h3>
-<div style="border: 1px solid #ddd; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
-  <ul>
-    <li>O país com mais bares por habitante da Europa</li>
-    <li>A língua espanhola varia MUITO dentro do país</li>
-    <li>Tem o restaurante mais antigo do mundo em funcionamento</li>
-    <li>Tomatina: guerra de tomates</li>
-    <li>A Sagrada Família ainda está em construção</li>
-  </ul>
-</div>
+    <!-- Seção topo: Bandeira e Player de música -->
+    <div class="top-section">
+      <div class="flag-container">
+        <img src="https://placehold.co/150x100" alt="Bandeira da Espanha" class="flag-image">
+      </div>
+      <div class="music-player">
+        <div class="music-info">
+          <h3 class="song-title">Me porto bonito</h3>
+          <p class="artist-name">Bad Bunny</p>
+        </div>
+        <div class="player-controls">
+          <svg class="play-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <polygon points="5,3 19,12 5,21" fill="currentColor"/>
+          </svg>
+          <svg class="music-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M9 18V5l12-2v13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="6" cy="18" r="3" stroke="currentColor" stroke-width="2"/>
+            <circle cx="18" cy="16" r="3" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </div>
+        <p class="music-description">Teletransporte para espanha</p>
+      </div>
+    </div>
 
-<h3>Dicas</h3>
-<div style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 20px;">
-  <div style="border: 1px solid #eee; padding: 10px; border-radius: 10px; width: 45%;">
-    <img src="/images/mulher.jpg" alt="Dica" width="50">
-    <p>Os espanhóis jantam tarde — restaurantes costumam abrir às 20h. Aproveite para curtir o ritmo local!</p>
-  </div>
+    <!-- Seção Curiosidades -->
+    <section class="curiosities-section">
+      <h2 class="section-title">Curiosidades</h2>
+      <div class="country-card">
+        <ul class="curiosities-list">
+          <li>O país com mais bares por habitante da Europa</li>
+          <li>A língua espanhola varia MUITO dentro do país</li>
+          <li>Tem o restaurante mais antigo do mundo em funcionamento</li>
+          <li>Tomatina: guerra de tomates</li>
+          <li>A Sagrada Família ainda está em construção</li>
+        </ul>
+      </div>
+    </section>
 
-  <div style="border: 1px solid #eee; padding: 10px; border-radius: 10px; width: 45%;">
-    <img src="/images/homem.jpg" alt="Dica" width="50">
-    <p>Não tente ver tudo de uma vez! Escolha poucas cidades e aproveite com calma</p>
-  </div>
-</div>
+    <!-- Seção Dicas -->
+    <section class="tips-section">
+      <h2 class="section-title">Dicas</h2>
+      <div class="tips-grid">
+        <div class="tip-card">
+          <img src="https://placehold.co/60x60" alt="Dica" class="tip-avatar">
+          <div class="tip-content">
+            <p>Os espanhóis jantam tarde — restaurantes costumam abrir às 20h. Aproveite para curtir o ritmo local!</p>
+          </div>
+        </div>
 
-<h3>Imperdível</h3>
-<div style="display: flex; gap: 10px;">
-  <div style="border: 1px solid #eee; padding: 5px; border-radius: 10px;">
-    <img src="/images/comida.jpg" alt="Aula de Culinária" width="100">
-    <p><strong>Aula de Culinária</strong></p>
+        <div class="tip-card">
+          <img src="https://placehold.co/60x60" alt="Dica" class="tip-avatar">
+          <div class="tip-content">
+            <p>Não tente ver tudo de uma vez! Escolha poucas cidades e aproveite com calma</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção Imperdível -->
+    <section class="must-see-section">
+      <h2 class="section-title">Imperdível</h2>
+      <div class="imperdivel-grid">
+        <div class="must-see-card">
+          <img src="https://placehold.co/100x80" alt="Aula de Culinária" class="must-see-image">
+          <h4 class="must-see-title">Aula de Culinária</h4>
+        </div>
+
+        <div class="must-see-card">
+          <img src="https://placehold.co/100x80" alt="Salsa" class="must-see-image">
+          <h4 class="must-see-title">Salsa</h4>
+        </div>
+
+        <div class="must-see-card">
+          <img src="https://placehold.co/100x80" alt="Jogo Clássico" class="must-see-image">
+          <h4 class="must-see-title">Jogo clássico</h4>
+        </div>
+      </div>
+    </section>
+    <%- include('../partials/navbar') %>
   </div>
-  <div style="border: 1px solid #eee; padding: 5px; border-radius: 10px;">
-    <img src="/images/salsa.jpg" alt="Salsa" width="100">
-    <p><strong>Salsa</strong></p>
-  </div>
-  <div style="border: 1px solid #eee; padding: 5px; border-radius: 10px;">
-    <img src="/images/jogo.jpg" alt="Jogo Clássico" width="100">
-    <p><strong>Jogo clássico</strong></p>
-  </div>
-</div>
+</body>
+</html>

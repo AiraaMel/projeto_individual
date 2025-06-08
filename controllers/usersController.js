@@ -2,7 +2,7 @@ const Users = require('../models/usersModel');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-
+// Lista todos
 exports.index = async (req, res) => {
   try {
     const users = await Users.findAll();
@@ -52,22 +52,26 @@ exports.delete = async (req, res) => {
 // Login
 exports.login = async (req, res) => {
   const { email, password } = req.body;
-  console.log('Tentativa de login com:', email, password);
 
   try {
     const result = await Users.findByEmail(email);
-    console.log('Resultado do findByEmail:', result);
 
     if (!result || result.rowCount === 0) {
       return res.status(401).json({ error: 'Usuário não encontrado' });
     }
 
     const user = result.rows[0];
-    console.log('Usuário encontrado:', user);
 
     if (user.password !== password) {
       return res.status(401).json({ error: 'Senha incorreta' });
     }
+
+    // Sessão salva
+    req.session.user = {
+      id: user.id,
+      name: user.name,
+      email: user.email
+    };
 
     const token = generateToken(user);
     res.status(200).json({
@@ -81,6 +85,8 @@ exports.login = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+
 
 function generateToken(user) {
   return jwt.sign(

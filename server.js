@@ -1,8 +1,15 @@
 require('dotenv').config();
+const session = require('express-session');
 const express = require('express');
 const app = express();
 const db = require('./config/db');
 const path = require('path');
+
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'vibra_secret',
+  resave: false,
+  saveUninitialized: false
+}));
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -36,6 +43,9 @@ db.connect()
 
     const usersRoutes = require('./routes/usersRoutes');
     app.use('/api/users', usersRoutes);
+
+    const profileRoutes = require('./routes/profileRoutes');
+    app.use('/api/profile', profileRoutes);
 
     const frontRoutes = require('./routes/frontRoutes');
     app.use('/', frontRoutes);

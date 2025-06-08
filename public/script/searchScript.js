@@ -1,29 +1,24 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('searchForm');
-  const resultsDiv = document.getElementById('searchResults');
+  const mapImage = document.getElementById('mapImage');
+  const searchInput = document.getElementById('searchInput');
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const searchInput = document.getElementById('searchInput');
-    const query = searchInput.value.trim();
+  if (mapImage) {
+    mapImage.addEventListener('click', () => {
+      window.location.href = '/searchCountry';
+    });
+  }
 
-    if (!query) return;
-
-    try {
-      const response = await fetch(`/api/locations/search?query=${encodeURIComponent(query)}`);
-      
-      if (!response.ok) {
-        throw new Error('Erro ao buscar localizações.');
+  if (searchInput) {
+    searchInput.addEventListener('keypress', (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        const query = searchInput.value.trim();
+        if (query) {
+          window.location.href = `/search?query=${encodeURIComponent(query)}`;
+        } else {
+          window.location.href = '/search';
+        }
       }
-
-      const html = await response.text();
-
-      // Substitui o conteúdo da div com os resultados renderizados pelo servidor
-      resultsDiv.innerHTML = html;
-
-    } catch (error) {
-      resultsDiv.innerHTML = `<p style="color:red;">Erro: ${error.message}</p>`;
-    }
-  });
+    });
+  }
 });
