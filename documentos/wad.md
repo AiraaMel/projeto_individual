@@ -35,16 +35,23 @@
 <sup>Fonte: Autoria Própia, Faculdade Inteli 2025</sup>
 </div>
 
+Clara Monteiro é uma viajante conectada de 27 anos, moradora de Barcelona, que busca vivências culturais autênticas em suas viagens. Extrovertida e curiosa, ela evita experiências genéricas e sente frustração ao perder eventos por falta de informação. Suas principais dores envolvem a dificuldade de organizar viagens com foco local e a sensação de não acessar a essência real dos destinos.
+
+Com hábitos digitais ativos em plataformas como Instagram, TikTok e Spotify, Clara espera descobrir eventos únicos de forma rápida, segura e sem burocracia. Suas necessidades principais incluem: inscrições facilitadas e acesso a dicas culturais que enriqueçam sua experiência de viagem.
+
+A aplicação Vibra foi desenhada para atender exatamente a esse perfil: conectando usuários como Clara a eventos, promovendo imersão cultural e experiências inesquecíveis.
+
 ### 2.2. User Stories (Semana 01)
 
+Abaixo estão as histórias de usuário que guiam o desenvolvimento da aplicação Vibra, baseadas nas principais dores, comportamentos e objetivos da persona definida.
 
-> US01 | Como turista, quero descobrir eventos únicos enquanto viajo, para que eu possa viver cada destino profundamente e inesquecível.
+> US01 | Como uma viajante conectada, quero descobrir eventos únicos enquanto viajo, para que eu possa viver experiências culturais autênticas em cada destino.
 
-> US02 | Como uma usuária que valoriza praticidade, quero me inscrever em eventos de forma rápida e segura, para garantir minha participação sem complicações e evitar filas ou processos demorados.
+> US02 | Como uma viajante conectada, quero me inscrever em eventos de forma rápida e segura, para garantir minha participação sem complicações e evitar filas ou processos demorados.
 
 > US03 | Como uma amante de viagens culturais, quero receber recomendações de eventos, festas e atividades locais baseadas no meu perfil e destino, para otimizar minha experiência e tornar cada viagem inesquecível.
 
-> US04 | | Sendo uma viajante conectada, quero acessar a aplicação diretamente pelo celular, para ter todas as funcionalidades disponíveis na palma da mão, sempre que eu estiver conectada à internet.
+> US04 | Como uma viajante conectada, quero acessar todas as funcionalidades da plataforma diretamente pelo celular, para planejar e interagir com eventos a qualquer momento durante minhas viagens.
 <br>
 
 INVEST US02 <br>
@@ -111,10 +118,21 @@ O modelo físico representa a implementação concreta da estrutura do banco de 
 - `when`: Data e hora do evento.
 - `locations_id`: Localidade do evento (FK).
 
+**Data e Hora dos Eventos (datetime_events)**: Representa as datas e horas dos eventos.
+- `id`: Identificador da data e hora (PK).
+- `day_time`: Data e hora do evento.
+- `event_id`: Evento relacionado (FK).
+
 **Localidade (locations)**: Representa onde os evetntos acontecem.
 - `id`: Identificador da localidade (PK)
 - `country``language`, `coin`: Dados culturais do país.
 - `customs`, `curiosities`: Costumes e curiosidades.
+
+**Playlist (playlists)**: Representa playlists de músicas de cada localidade.
+- `id`: Identificador da playlist (PK).
+- `locations_id`: Localidade da playlist (FK).
+- `name`: Nome da playlist.
+- `link`: Link para a playlist.
 
 ```SQL
 CREATE TABLE IF NOT EXISTS "users" (
@@ -133,6 +151,13 @@ CREATE TABLE IF NOT EXISTS "events" (
   "description" VARCHAR(500),
   "photo" VARCHAR(255),
   "locations_id" INT
+);
+
+CREATE TABLE IF NOT EXISTS "datetime_events" (
+  "id" SERIAL PRIMARY KEY,
+  "day_time" TIMESTAMP,
+  "event_id" INT,
+  CONSTRAINT fk_event FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS "locations" (
@@ -197,8 +222,9 @@ CREATE TABLE IF NOT EXISTS "playlists" (
 - Cada playlist ocorre em uma localidade.
 
 ```SQL
+-- FKs
 ALTER TABLE "subscriptions" ADD FOREIGN KEY ("users_id") REFERENCES "users" ("id");
-ALTER TABLE "subscriptions" ADD FOREIGN KEY ("events_id") REFERENCES "events" ("id");
+ALTER TABLE "subscriptions" ADD FOREIGN KEY ("events_id") REFERENCES "events" ("id") ON DELETE CASCADE;
 
 ALTER TABLE "events" ADD FOREIGN KEY ("locations_id") REFERENCES "locations" ("id");
 
@@ -206,6 +232,9 @@ ALTER TABLE "feedbacks" ADD FOREIGN KEY ("users_id") REFERENCES "users" ("id");
 ALTER TABLE "feedbacks" ADD FOREIGN KEY ("events_id") REFERENCES "events" ("id");
 
 ALTER TABLE "playlists" ADD FOREIGN KEY ("locations_id") REFERENCES "locations" ("id");
+
+-- Extensões
+CREATE EXTENSION IF NOT EXISTS unaccent;
 ```
 
 A modelagem do banco de dados da aplicação Vibra organiza as entidades principais, como eventos, inscrições, playlists e feedbacks, proporcionando uma experiência fluida para os usuários. A estrutura também facilita futuras expansões, como integração com redes sociais e novos conteúdos.
@@ -243,6 +272,21 @@ Essa implementação garante que a comunicação com o banco de dados seja feita
 
 Nesta etapa do projeto, foram definidos os **models** responsáveis por realizar a comunicação entre a aplicação e o banco de dados **PostgreSQL**, utilizando queries SQL por meio da biblioteca `pg`. Cada model representa uma entidade da aplicação e encapsula as operações CRUD (Create, Read, Update, Delete).
 
+Abaixo, está a tabela que resume os models utilizados, com seus respectivos campos e métodos:
+
+Tabela de Models
+
+| Arquivo               | Entidade       | Campos Principais                                  | Métodos Principais                                  |
+|-----------------------|----------------|----------------------------------------------------|-----------------------------------------------------|
+| `datetimeEventsModel.js`  | Datas e Horários  | `id`, `day_time`, `event_id`                                  | `findAll()`, `findByEventId()`, `create()`, `update()`, `delete()`          |
+| `eventsModel.js`      | Events        | `id`, `title`, `type`, `description`, `photo`, `locations_id` | `findAll()`, `findById()`, `create()`, `update()`, `delete()` |
+| `feedbacksModel.js`   | Feedbacks      | `id`, `users_id`, `events_id`, `comments`, `grade` | `findAll()`, `create()`                             |
+| `locationsModel.js`   | Locations   | `id`, `country`, `language`, `coin`, `customs`, `curiosities` | `findAll()`, `findById()`                           |
+| `playlistsModel.js`   | Playlists      | `id`, `name`, `locations_id`                       | `findByLocationId()`                                |
+| `subscriptionsModel.js` | Subscriptions   | `id`, `users_id`, `events_id`, `date`, `hour`, `status` | `findByUserId()`, `create()`                        |
+| `usersModel.js`       | Users          | `id`, `name`, `email`, `password`, `photo`, `preferences` | `findByEmail()`, `create()`, `update()`            |
+
+
 Abaixo, exemplo da estrutura do model `event`, responsável por manipular os dados da tabela `events`.
 
 Arquivo: `models/eventsModel.js`
@@ -260,35 +304,61 @@ Este model gerencia os dados dos eventos culturais disponíveis na aplicação. 
 **Métodos implementados:**
 
 ```js
-// Criação de um novo evento
-async create(data) {
-  const query = 'INSERT INTO Events (title, type, description, photo, locations_id) VALUES ($1, $2, $3, $4, $5) RETURNING *';
-  const values = [data.title, data.type, data.description, data.photo, data.location_id];
-  return db.query(query, values);
-}
+const db = require('../config/db');
 
-// Consulta de todos os eventos
-async findAll() {
-  const result = await db.query('SELECT id, title, type, description, photo, locations_id FROM events ORDER BY id ASC');
-  return result.rows;
-}
+module.exports = {
+  async create(data) {
+    const query = `
+      INSERT INTO events 
+        (title, type, description, photo, locations_id, included, place, duration, price, capacity) 
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) 
+      RETURNING *`;
+    const values = [data.title, data.type, data.description, data.photo, data.locations_id, data.included, data.place, data.duration, data.price, data.capacity];
+    return db.query(query, values);
+  },
 
-// Atualização de um evento por ID
-async update(id, data) {
-  const query = 'UPDATE Events SET title = $1, type = $2, description = $3, photo = $4, locations_id = $5 WHERE id = $6 RETURNING *';
-  const values = [data.type, data.description, data.photo, data.location_id, id];
-  return db.query(query, values);
-}
+  async findAll() {
+    const result = await db.query(`
+      SELECT id, title, type, description, photo, locations_id, included, place, duration, price, capacity 
+      FROM events 
+      ORDER BY id ASC
+    `);
+    return result.rows;
+  },
 
-// Exclusão de um evento por ID
-async delete(id) {
-  const query = 'DELETE FROM events WHERE id = $1 RETURNING *';
-  return db.query(query, [id]);
-}
+  async update(id, data) {
+    const query = `
+      UPDATE events 
+      SET title = $1, type = $2, description = $3, photo = $4, locations_id = $5,
+          included = $6, place = $7, duration = $8, price = $9, capacity = $10
+      WHERE id = $11 
+      RETURNING *`;
+    const values = [data.title, data.type, data.description, data.photo, data.locations_id, data.included, data.place, data.duration, data.price, data.capacity, id];
+    return db.query(query, values);
+  },
+
+  async delete(id) {
+    const query = 'DELETE FROM events WHERE id = $1 RETURNING *';
+    return db.query(query, [id]);
+  },
+
+  async findById(id) {
+    const result = await db.query(`
+      SELECT id, title, type, description, photo, locations_id, included, place, duration, price, capacity 
+      FROM events 
+      WHERE id = $1
+    `, [id]);
+    return result.rows[0];
+  }
+};
 ```
-A estrutura de models implementada no projeto segue princípios fundamentais de organização e desacoplamento da lógica de acesso a dados. Cada entidade possui responsabilidades definidas, encapsulando suas operações em módulos separados. Essa abordagem facilita a manutenção do sistema, permitindo que atualizações, correções e expansões futuras sejam feitas de maneira mais eficiente e segura.
+A estrutura de **models** implementada no projeto segue princípios sólidos de organização e desacoplamento da lógica de acesso a dados. Cada model representa uma entidade do sistema e encapsula suas operações específicas em módulos separados, garantindo responsabilidades bem definidas e maior legibilidade do código.
 
-Esses models são a base das operações CRUD realizadas pela API e foram organizados conforme os princípios da arquitetura MVC. A definição dos relacionamentos entre entidades garante a integridade dos dados e facilita a construção de funcionalidades como:
+Todos os models utilizam o módulo centralizado `db.js`, que gerencia a conexão com o banco de dados **PostgreSQL** por meio da biblioteca `pg`. Isso permite uma comunicação consistente, segura e reutilizável com o banco, evitando duplicação de lógica e facilitando a manutenção.
+
+Essa abordagem está alinhada ao padrão arquitetural **MVC (Model-View-Controller)**, no qual os models atuam como camada de persistência, fornecendo métodos padronizados para as operações **CRUD** da API. A organização modular também favorece a escalabilidade e facilita a implementação de testes automatizados.
+
+A definição clara dos relacionamentos entre entidades, refletidos nos métodos dos models, garante a integridade dos dados e viabiliza funcionalidades como:
 
 - Listagem de eventos com usuários inscritos
 - Consulta de eventos em que um usuário está inscrito
