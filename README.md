@@ -7,35 +7,82 @@ Vibra é uma aplicação web, com foco inicial em dispositivos móveis, que faci
 ```
 projeto_individual/
 │
+├── assets/                # Assets do projeto
 ├── config/                # Arquivos de configuração do banco
 │   └── db.js
 ├── controllers/           # Lógica de controle das requisições
+│   └── datetimeEventsController.js
 │   └── eventsController.js
 │   └── feedbacksController.js
 │   └── locationsController.js
 │   └── playlistsController.js
+│   └── profileController.js
 │   └── subscriptionsController.js
 │   └── usersController.js
+|middleware/               # Funções intermediárias
+│   └── auth.js
 ├── models/                # Definição de modelos de dados (estrutura do banco)
+│   └── datetimeEventsModel.js
 │   └── eventsModel.js
 │   └── feedbacksModel.js
 │   └── locationsModel.js
 │   └── playlistsModel.js
 │   └── subscriptionsModel.js
 │   └── usersModel.js
+├── public/                
+│   ├── css/   
+│   │   └── country.css        
+│   │   └── createAccount.css    
+│   │   └── eventPage.css        
+│   │   └── home.css             
+│   │   └── layout.css           
+│   │   └── login.css            
+│   │   └── profile.css          
+│   │   └── search.css           
+│   │   └── searchCountry.css    
+│   │   └── style.css            
+│   ├── images/            # Imagens
+│   ├── icons/             # Icones
+│   └── script/            # Scripts 
+│       └── createAccountScript.js 
+│       └── eventPageScript.js     
+│       └── homeScript.js          
+│       └── loginScript.js         
+│       └── profileScript.js       
+│       └── searchCountryScript.js 
+│       └── searchScript.js        
+│       └── timeSelector.js        
 ├── routes/                # Definição das rotas do sistema
+│   └── datetimeEventsRoutes.js
 │   └── eventsRoutes.js
-│   └── feedbacksRoutes.js]
+│   └── feedbacksRoutes.js
+│   └── frontRoutes.js
 │   └── locationsRoutes.js
 │   └── playlistsRoutes.js
+│   └── profileRoutes.js
 │   └── subscriptionsRoutes.js
 │   └── usersRoutes.js
-├── assets/                # Arquivos públicos como imagens e fontes
 ├── scripts/               # Arquivos de JavaScript públicos
 │   └── init.sql
+│   └── runSQLScript.js
 ├── styles/                # Arquivos CSS públicos
 ├── tests/                 # Arquivos de testes unitários
 │   └── example.test.js
+├── views/                 # Arquivos de HTML públicos
+│   └── layout/            # Layouts
+│   └── pages/             # Páginas
+│   │   └── country.ejs        
+│   │   └── createAccount.ejs    
+│   │   └── eventPage.ejs        
+│   │   └── feedback.ejs        
+│   │   └── home.ejs             
+│   │   └── login.ejs            
+│   │   └── preferences.ejs      
+│   │   └── profile.ejs         
+│   │   └── search.ejs           
+│   │   └── searchCountry.ejs    
+│   └── partials/         
+│       └── navbar.ejs       
 ├── .gitignore             # Arquivo para ignorar arquivos no Git
 ├── .env                   # Arquivo de variáveis de ambiente
 ├── jest.config.js         # Arquivo de configuração do Jest
