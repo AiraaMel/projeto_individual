@@ -689,9 +689,141 @@ A aplicação Vibra utiliza autenticação baseada em JWT (JSON Web Token) para 
 
 ### 3.7 Interface e Navegação (Semana 07)
 
-*Descreva e ilustre aqui o desenvolvimento do frontend do sistema web, explicando brevemente o que foi entregue em termos de código e sistema. Utilize prints de tela para ilustrar.*
 
----
+O frontend do sistema Vibra foi desenvolvido com foco em responsividade, experiência do usuário e aderência ao guia de estilo visual da aplicação. Utilizando a engine EJS para renderização de páginas no servidor, o sistema conta com HTML semântico, integração com CSS modularizado e scripts JavaScript responsáveis por ações dinâmicas como carrosséis, validação de formulários e consumo de API.
+Todas as páginas foram testadas para exibição correta em dispositivos móveis, especialmente no formato do iPhone 16 Pro.
+
+#### Tabela de Views, Scripts e Estilos
+
+| Página / View       | Caminho EJS               | Script Relacionado         | CSS Relacionado           | Finalidade Principal                                      |
+|---------------------|---------------------------|----------------------------|----------------------------|-----------------------------------------------------------|
+| Login               | `views/login.ejs`         | `scripts/login.js`         | `css/login.css`            | Autenticar o usuário no sistema                           |
+| Cadastro            | `views/createAccount.ejs` | `scripts/createAccount.js` | `css/createAccount.css`    | Cadastrar novos usuários                                  |
+| Página Inicial      | `views/home.ejs`          | `scripts/home.js`          | `css/home.css`             | Exibir eventos em destaque em formato de carrossel        |
+| Resultados da Busca | `views/search.ejs`        | `scripts/search.js`        | `css/search.css`           | Exibir eventos com base na busca por país                 |
+| Detalhes do Evento  | `views/eventPage.ejs`     | `scripts/eventPage.js`     | `css/eventPage.css`        | Mostrar detalhes do evento e permitir escolha de horário  |
+| Perfil do Usuário   | `views/profile.ejs`       | `scripts/profile.js`       | `css/profile.css`          | Exibir dados do usuário e eventos em que está inscrito    |
+
+
+#### Login
+
+<div align="center">
+<sub>Figura 4 - Protótipo - Vibra </sub>
+<img src="../assets/wad/login.png">
+<sup>Fonte: Autoria Própia, Faculdade Inteli 2025</sup>
+</div>
+
+A tela de login é o ponto de entrada para os usuários autenticarem seu acesso ao sistema. Com um layout minimalista e centralizado, ela apresenta:
+- O logotipo do Vibra no topo esquerdo;
+- Título de boas-vindas em destaque;Dois campos de entrada: e-mail e senha;
+- Botão de “Entrar” com destaque em tom coral;
+- Link para criação de nova conta.
+
+O estilo segue o guia de identidade visual da aplicação, com cores suaves, inputs arredondados e contraste entre o branco do conteúdo e o rosa-claro do fundo
+
+#### Criar Conta
+
+<div align="center">
+<sub>Figura 4 - Protótipo - Vibra </sub>
+<img src="../assets/wad/criarConta.png">
+<sup>Fonte: Autoria Própia, Faculdade Inteli 2025</sup>
+</div>
+
+A tela de cadastro permite que novos usuários criem uma conta na plataforma Vibra.  
+Com uma interface limpa e centralizada, a tela apresenta:
+
+- Logotipo do Vibra no topo;
+- Três campos de entrada: nome, e-mail e senha;
+- Botão “Criar Conta” com destaque em coral;
+- Link para redirecionar à tela de login.
+
+#### Página Inicial
+
+<div align="center">
+<sub>Figura 4 - Protótipo - Vibra </sub>
+<img src="../assets/wad/inicial.png">
+<sup>Fonte: Autoria Própia, Faculdade Inteli 2025</sup>
+</div>
+
+A tela inicial exibe os eventos disponíveis na plataforma de forma visual e interativa.  
+Nela, o usuário encontra:
+
+- Logotipo da Vibra no topo;
+- Barra de busca para digitar o país de interesse;
+- Cartões de eventos com imagem, título, descrição e categoria;
+- Destaque visual com botão de categoria (“Esportivo”, por exemplo);
+- Citação motivacional no estilo da identidade da marca;
+- Menu de navegação fixo na parte inferior com ícones para acesso rápido.
+
+A estrutura favorece a descoberta de eventos e proporciona uma navegação intuitiva.
+
+#### Resultados da Busca
+
+<div align="center">
+<sub>Figura 4 - Protótipo - Vibra </sub>
+<img src="../assets/wad/resultado.png">
+<sup>Fonte: Autoria Própia, Faculdade Inteli 2025</sup>
+</div>
+
+A tela apresenta os eventos encontrados com base no país pesquisado pelo usuário.  
+Sua estrutura inclui:
+
+- Logotipo do Vibra no topo;
+- Campo de busca com o termo digitado;
+- Texto com a indicação do filtro aplicado (“Resultados da busca por: [país]”);
+- Cartão do evento correspondente com imagem, título, descrição e categoria;
+- Elemento visual com ilustração do mapa;
+- Menu de navegação fixo na parte inferior da tela.
+
+A tela reforça o foco na descoberta de eventos culturais e facilita a navegação entre países.
+
+#### Página do evento
+<div align="center">
+<sub>Figura 4 - Protótipo - Vibra </sub>
+<img src="../assets/wad/evento.png">
+<sup>Fonte: Autoria Própia, Faculdade Inteli 2025</sup>
+</div>
+
+A página de detalhes do evento apresenta informações completas sobre a experiência oferecida, permitindo ao usuário realizar a inscrição com base na data e horário selecionados.  
+A estrutura da tela inclui:
+
+- Imagem destacada do evento no topo;
+- Descrição textual do evento;
+- Lista de itens inclusos (como cerimônias, jantar e fogos de artifício);
+- Informações adicionais: localização, duração, preço e número de participantes;
+- Seletor de dias da semana;
+- Lista de horários disponíveis;
+- Exibição do horário selecionado com formatação clara;
+- Menu de navegação fixo na base da tela.
+
+A tela é organizada em seções verticais bem espaçadas e prioriza clareza na escolha do horário para inscrição.
+
+#### Perfil do Usuário
+
+<div align="center">
+<sub>Figura 4 - Protótipo - Vibra </sub>
+<img src="../assets/wad/perfil.png">
+<sup>Fonte: Autoria Própia, Faculdade Inteli 2025</sup>
+</div>
+
+
+A tela de perfil permite ao usuário visualizar os eventos nos quais está inscrito e conferir ou editar seus dados pessoais.  
+A estrutura da tela inclui:
+
+- Lista de eventos com imagem, título, descrição e tags de localização e categoria;
+- Seção "Meus dados" com os campos nome, e-mail e senha preenchidos;
+- Campos de entrada com visual arredondado, consistentes com o restante do sistema;
+- Menu de navegação fixo na parte inferior da tela com destaque para o ícone do perfil.
+
+Essa tela integra informações do usuário com seus eventos relacionados, oferecendo uma experiência personalizada.  
+
+#### **Conclusão**
+
+A construção das views do sistema seguiu uma abordagem centrada na clareza, consistência visual e usabilidade. Cada página foi projetada para atender a uma funcionalidade específica do sistema, integrando-se ao fluxo de navegação proposto e respeitando a identidade visual definida no guia de estilos. A estrutura modular com EJS permitiu organização e reaproveitamento de componentes, enquanto a separação entre HTML, CSS e JavaScript garantiu manutenibilidade e escalabilidade.  
+A documentação apresentada serve como referência tanto para compreensão técnica quanto para futuras iterações de melhoria da interface.
+
+As principais funcionalidades da aplicação já foram implementadas, incluindo login, cadastro, navegação por eventos, visualização de detalhes e gerenciamento de perfil. Entretanto, o sistema ainda está em fase de desenvolvimento em partes específicas, como o módulo de feedback e a página dedicada aos países, que estão sendo aprimorados. Mesmo com essas pendências, a aplicação já está funcional e utilizável, oferecendo uma experiência consistente. O projeto segue em evolução contínua com foco em proporcionar uma navegação mais fluida, intuitiva e agradável para os usuários.
+
 
 ## <a name="c4"></a>4. Desenvolvimento da Aplicação Web (Semana 8)
 
