@@ -378,15 +378,45 @@ O diagrama abaixo representa a arquitetura da aplicação, evidenciando a forma 
 </div>
 
 #### **View (Visualização)**
-A camada responsável pela interface com o usuário. É por meio dela que os usuários interagem com a aplicação. No momento, essa camada ainda será implementada, mas sua função será apresentar os dados processados pela Controller de forma clara e intuitiva.
+A camada de View é responsável pela interface com o usuário. No projeto Vibra, essa camada é composta por arquivos .ejs (Embedded JavaScript Templates), que renderizam dinamicamente os dados fornecidos pelos controllers.
+
+Cada página do sistema — como a listagem de eventos (events.ejs), o detalhamento de um evento (eventPage.ejs) ou o perfil do usuário (profile.ejs) — é construída com foco em responsividade e usabilidade móvel. As views recebem variáveis e objetos do back-end e os exibem com sintaxe EJS, proporcionando uma experiência fluida e personalizada ao usuário.
+> ℹ️ **Nota:** A relação entre os controllers e suas respectivas views (EJS) está detalhada na [seção 3.7 – Interface e Navegação](#37-interface-e-navegação).
+
 
 #### **Controller (Controle)**
-Atua como intermediária entre a View e o Model. Recebe as requisições feitas pelos usuários (por exemplo, criar uma conta, buscar eventos ou deixar feedback), processa essas ações e, se necessário, comunica-se com o Model para manipular os dados. No projeto, temos controllers específicos para cada entidade: `usersController`, `locationsController`, `eventsController`, `subscriptionsController`, `feedbacksController` e `playlistsController`.
+Atua como intermediária entre a **View** e o **Model**, sendo responsável por processar as requisições feitas pelos usuários (como criar conta, buscar eventos ou enviar feedback). Os controllers aplicam regras de negócio, validam entradas e, quando necessário, interagem com os models para acessar ou modificar os dados.
+
+No projeto **Vibra**, cada entidade possui um controller específico, o que garante uma organização modular e coesa da lógica da aplicação. São eles:
+
+- `usersController`
+- `locationsController`
+- `eventsController`
+- `subscriptionsController`
+- `feedbacksController`
+- `playlistsController`
+- `datetimeEventsController`
+
+| Controller                   | Responsabilidade Principal                               | Models Relacionados                  |
+|-----------------------------|----------------------------------------------------------|--------------------------------------|
+| `datetimeEventsController.js` | Controla os dias e horários disponíveis para os eventos  | `datetimeEventsModel`                |
+| `eventsController.js`        | Gerencia operações CRUD de eventos culturais             | `eventsModel`, `datetimeEventsModel` |
+| `feedbacksController.js`     | Controla o envio e listagem de feedbacks                 | `feedbacksModel`                     |
+| `locationsController.js`     | Gerencia dados de localização geográfica                 | `locationsModel`                     |
+| `playlistsController.js`     | Lista playlists por localização                          | `playlistsModel`                     |
+| `profileController.js`       | Exibe dados do usuário e eventos inscritos no perfil     | `usersModel`, `subscriptionsModel`   |
+| `subscriptionsController.js` | Administra inscrições em eventos                         | `subscriptionsModel`                 |
+| `usersController.js`         | Gerencia usuários e autenticação                         | `usersModel`                         |
+                                              
 
 #### **Model (Modelo)**
-A camada que lida diretamente com a lógica de negócios e com o banco de dados. É responsável por representar e gerenciar os dados da aplicação. Cada model representa uma tabela no banco de dados (ex: users, locations, events, etc), incluindo seus atributos e relacionamentos.
 
-Esse padrão permite que cada parte da aplicação seja modificada de forma independente. Assim, a arquitetura MVC torna o projeto Vibra mais modular, seguro e fácil de evoluir conforme novas funcionalidades forem implementadas.
+A camada responsável por lidar diretamente com a lógica de negócios e com o banco de dados. Cada **model** representa uma tabela no banco PostgreSQL (como `users`, `locations`, `events`, entre outras), incluindo seus atributos e relacionamentos. Além disso, encapsula as operações CRUD (Create, Read, Update, Delete) por meio de queries SQL estruturadas com a biblioteca `pg`.
+
+Esse padrão permite que cada parte da aplicação seja modificada de forma independente. Assim, a arquitetura **MVC** torna o projeto **Vibra** mais modular, seguro e fácil de evoluir conforme novas funcionalidades forem implementadas.
+
+> Para detalhes completos sobre os models e seus métodos, consulte a seção [**3.1.1 BD e Models**](#311-bd-e-models-semana-5).
+
 
 ### 3.3. Wireframes (Semana 03)
 
@@ -503,19 +533,30 @@ Nesta seção, é apresentada a estrutura de WebAPI desenvolvida para o projeto 
 
 Os **endpoints** são componentes essenciais de qualquer aplicação web moderna. Eles definem como a aplicação responde a solicitações HTTP (como GET, POST, PUT e DELETE), funcionando como pontos de acesso à lógica de negócios e ao banco de dados.
 
-No contexto do projeto **Vibra**, os endpoints foram implementados utilizando o framework **Express.js**, com estrutura baseada no padrão **MVC (Model-View-Controller)**. Cada rota é mapeada para uma ação específica em um controller, o que garante organização, modularidade e manutenibilidade ao sistema.
+No contexto do projeto **Vibra**, os endpoints foram implementados utilizando o framework **Express.js**, com estrutura baseada no padrão **MVC (Model-View-Controller)** Cada endpoint é mapeado para funções específicas em um controller, o que garante modularidade, escalabilidade e manutenibilidade.
 
-A WebAPI da aplicação foi pensada para permitir que usuários possam:
+Funcionalidades expostas pela API:
+- Cadastro e autenticação de usuários (JWT)
+- Criação, edição, exclusão e listagem de eventos
+- Inscrição em eventos e visualização de status
+- Envio de feedbacks
+- Consulta por playlists e localizações
 
-- Criar contas e realizar login (com autenticação via JWT)
-- Visualizar, criar, editar e deletar eventos
-- Realizar e consultar inscrições em eventos
+> Algumas rotas estão protegidas por autenticação via JWT, garantindo acesso apenas a usuários logados.
 
 Essa estrutura também facilita a integração com interfaces front-end e serviços externos, promovendo flexibilidade e escalabilidade à aplicação.
 
 A seguir, uma amostra das rotas implementadas e seus respectivos controllers:
 
 ---
+``` js
+GET    /                      → datetimeEventsController.index
+GET    /event/:eventId       → datetimeEventsController.byEvent
+POST   /                      → datetimeEventsController.create
+PUT    /update/:id           → datetimeEventsController.update
+DELETE /delete/:id           → datetimeEventsController.delete
+
+```
 
 ```js
 
@@ -524,6 +565,7 @@ GET    /events                  → eventsController.index // Lista todos os eve
 POST   /events                  → eventsController.create // Cria um novo evento
 PUT    /events/:id              → eventsController.update // Atualiza um evento
 DELETE /events/:id              → eventsController.delete // Exclui um evento
+GET    /events/event/:id        → eventsController.show // Exibe detalhes de um evento
 
 ```
 
@@ -556,12 +598,16 @@ DELETE /playlists/:id              → playlistsController.delete // Exclui uma 
 
 ```
 ``` js
+GET    /                    → profileController.getUserProfile     [auth]
+```
+``` js
 
 // ROTAS DE INSCRIÇÃO
 GET    /subscriptions                  → subscriptionsController.index // Lista todas as inscrições
 POST   /subscriptions                  → subscriptionsController.create // Cria uma nova inscrição
 PUT    /subscriptions/:id              → subscriptionsController.update // Atualiza uma inscrição
 DELETE /subscriptions/:id              → subscriptionsController.delete // Exclui uma incrição
+GET    /subscriptions/user/:id        → subscriptionsController.userSubscriptions // Lista todas as inscrições de um usuário
 
 ```
 ``` js
@@ -571,61 +617,74 @@ GET    /users                  → usersController.index // Lista todos os usuá
 POST   /users                  → usersController.create // Cria um novo usuário
 PUT    /users/:id              → usersController.update // Atualiza um usuário
 DELETE /users/:id              → usersController.delete // Exclui um usuários
+POST   /users/login            → usersController.login // Autentica um usuário
 
 ```
 Cada rota acima representa uma operação disponível para os usuários da aplicação.
 
-#### Controle de Eventos
-| Método | Rota | Controller & Função | Descrição |
-|--------|------|--------------------|------------|
-| `GET` | `/` | `events/Controller.index` | Lista todos os eventos |
-| `POST` | `/` | `events/Controller.create` | Cria um novo evento |
-| `PUT` | `/update/:id` | `events/Controller.update` | Atualiza um evento |
-| `DELETE` | `/delete/:id` | `events/Controller.delete` | Exclui um evento |
+#### Tabela de Rotas da WebAPI
 
-#### Controle de Feedbacks
-| Método | Rota | Controller & Função | Descrição |
-|--------|------|--------------------|------------|
-| `GET` | `/` | `feedbacks/Controller.index` | Lista todos os feedbacks |
-| `POST` | `/` | `feedbacks/Controller.create` | Cria um novo feedback |
-| `PUT` | `/update/:id` | `feedbacks/Controller.update` | Atualiza um feedback |
-| `DELETE` | `/delete/:id` | `feedbacks/Controller.delete` | Exclui um feedback |
-
-#### Controle de localizações
-| Método | Rota | Controller & Função | Descrição |
-|--------|------|--------------------|------------|
-| `GET` | `/` | `locations/Controller.index` | Lista todas as localizações |
-| `POST` | `/` | `locations/Controller.create` | Cria uma nova localização |
-| `PUT` | `/update/:id` | `locations/Controller.update` | Atualiza uma localização |
-| `DELETE` | `/delete/:id` | `locations/Controller.delete` | Exclui uma localização |
-
-#### Controle de Playlists
-| Método | Rota | Controller & Função | Descrição |
-|--------|------|--------------------|------------|
-| `GET` | `/` | `playlists/Controller.index` | Lista todas as playlists |
-| `POST` | `/` | `playlists/Controller.create` | Cria uma nova playlist |
-| `PUT` | `/update/:id` | `playlists/Controller.update` | Atualiza uma playlist |
-| `DELETE` | `/delete/:id` | `playlists/Controller.delete` | Exclui uma playlist |
-
-#### Controle de Inscrições
-| Método | Rota | Controller & Função | Descrição |
-|--------|------|--------------------|------------|
-| `GET` | `/` | `subscriptions/Controller.index` | Lista todas as inscrições |
-| `POST` | `/` | `subscriptions/Controller.create` | Cria uma nova inscrição |
-| `PUT` | `/update/:id` | `subscriptions/Controller.update` | Atualiza uma inscrição |
-| `DELETE` | `/delete/:id` | `subscriptions/Controller.delete` | Exclui uma inscrição |
-
-#### Controle de Usuários
-| Método | Rota | Controller & Função | Descrição |
-|--------|------|--------------------|------------|
-| `GET` | `/` | `users/Controller.index` | Lista todos os usuários |
-| `POST` | `/` | `users/Controller.create` | Cria um novo usuário |
-| `PUT` | `/update/:id` | `users/Controller.update` | Atualiza um usuário |
-| `DELETE` | `/delete/:id` | `users/Controller.delete` | Exclui um usuário |
-
+| Rota                         | Método | Controller                               | Retorno                 | Middleware     |
+|------------------------------|--------|------------------------------------------|-------------------------|----------------|
+| `/events`                    | GET    | `eventsController.index`                 | Lista de eventos        | -              |
+| `/events/:id`                | GET    | `eventsController.show`                  | Detalhes do evento      | -              |
+| `/events`                    | POST   | `eventsController.create`                | Novo evento criado      | `auth`         |
+| `/events/update/:id`         | PUT    | `eventsController.update`                | Evento atualizado       | `auth`         |
+| `/events/delete/:id`         | DELETE | `eventsController.delete`                | Confirmação de exclusão | `auth`         |
+| `/feedbacks`                 | GET    | `feedbacksController.index`              | Lista de feedbacks      | -              |
+| `/feedbacks`                 | POST   | `feedbacksController.create`             | Novo feedback criado    | `auth`         |
+| `/locations`                 | GET    | `locationsController.index`              | Lista de localizações   | -              |
+| `/playlists`                 | GET    | `playlistsController.index`              | Lista de playlists      | -              |
+| `/subscriptions`             | POST   | `subscriptionsController.create`         | Nova inscrição          | `auth`         |
+| `/subscriptions/user/:id`    | GET    | `subscriptionsController.findByUserId`   | Inscrições do usuário   | `auth`         |
+| `/users`                     | GET    | `usersController.index`                  | Lista de usuários       | `auth (admin)` |
+| `/users`                     | POST   | `usersController.create`                 | Criação de usuário      | -              |
+| `/users/login`               | POST   | `usersController.login`                  | Token JWT               | -              |
+| `/`                          | GET    | `profileController.getUserProfile`       | Perfil do usuário       | `auth`         |
+| `/datetime-events`           | GET    | `datetimeEventsController.index`         | Todas as datas/horários | -              |
+| `/datetime-events/event/:id` | GET    | `datetimeEventsController.byEvent`       | Datas de um evento      | -              |
+| `/datetime-events`           | POST   | `datetimeEventsController.create`        | Nova data criada        | `auth`         |
+| `/datetime-events/update/:id`| PUT    | `datetimeEventsController.update`        | Data atualizada         | `auth`         |
+| `/datetime-events/delete/:id`| DELETE | `datetimeEventsController.delete`        | Exclusão confirmada     | `auth`         |
 
 
 Esses endpoints são fundamentais para o funcionamento da aplicação Vibra, pois determinam como as interações com o sistema ocorrem. Além disso, com a autenticação por token, as rotas protegidas garantem que apenas usuários autenticados possam realizar ações sensíveis, como criar eventos ou se inscrever neles.
+
+#### **Autenticação (JWT)**
+
+A aplicação Vibra utiliza autenticação baseada em JWT (JSON Web Token) para garantir segurança no acesso às rotas protegidas da WebAPI. Essa abordagem permite validar a identidade dos usuários e controlar permissões de acesso conforme o tipo de operação requisitada.
+
+
+#### Visão Geral
+
+- **Tipo**: Autenticação stateless via token
+- **Tecnologia**: JWT (jsonwebtoken)
+- **Armazenamento do Token**: `localStorage` ou `sessionStorage` no front-end
+- **Formato do Token**: `Bearer <token>`, enviado no header `Authorization`
+- **Controle de Acesso**: Middleware de autenticação e verificação de role (`admin`, `user`)
+
+
+#### 🔄 Fluxo de Autenticação
+
+1. **Login** (`POST /users/login`)
+   - O usuário envia `email` e `senha`.
+   - Se as credenciais forem válidas:
+     - É gerado um token JWT com:
+       - `id` do usuário
+       - `role` do usuário
+     - O token é retornado como resposta.
+   
+2. **Uso do Token**
+   - O front-end salva o token e o envia no cabeçalho `Authorization`:
+     ```
+     Authorization: Bearer <token>
+     ```
+
+3. **Verificação nas Rotas Protegidas**
+   - O middleware `authenticateToken`:
+     - Verifica e decodifica o token.
+     - Injeta os dados do usuário em `req.user`.
+
 
 
 ### 3.7 Interface e Navegação (Semana 07)
