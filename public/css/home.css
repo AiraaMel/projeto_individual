@@ -42,6 +42,7 @@ body {
   max-width: 402px;
   margin: 0 auto;
   padding: var(--spacing-lg);
+  padding-bottom: 100px; /* Espaço para navbar fixa */
 }
 
 /* Header com Logo */
@@ -63,21 +64,24 @@ body {
   display: flex;
   align-items: center;
   background-color: var(--color-background);
-  padding: var(--spacing-md);
+  padding: var(--spacing-lg);
   border-radius: 999px;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-md);
+  min-height: 56px;
 }
 
 .search-icon {
   color: var(--color-text-secondary);
   flex-shrink: 0;
+  width: 24px;
+  height: 24px;
 }
 
 .search-input {
   border: none;
   outline: none;
   background: transparent;
-  font-size: 1rem;
+  font-size: 1.125rem;
   width: 100%;
   color: var(--color-text-primary);
   font-family: 'Sora', sans-serif;
@@ -85,6 +89,7 @@ body {
 
 .search-input::placeholder {
   color: var(--color-text-secondary);
+  font-size: 1rem;
 }
 
 /* Cartão de Evento */

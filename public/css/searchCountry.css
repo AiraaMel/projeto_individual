@@ -39,6 +39,7 @@ body {
   max-width: 402px;
   margin: 0 auto;
   padding: var(--spacing-lg);
+  padding-bottom: 100px; /* Espaço para navbar fixa */
 }
 
 /* Header com Logo */

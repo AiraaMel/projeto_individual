@@ -10,11 +10,12 @@ exports.getUserProfile = async (req, res) => {
 
     // Eventos em que o usuário está inscrito
     const eventsResult = await db.query(`
-      SELECT e.title, e.description, e.photo, e.place AS location, e.type AS category
+      SELECT s.id as subscription_id, e.id as event_id,e.title, e.description, e.photo, e.place AS location,e.type AS category, e.duration,e.price,d.day_time,d.id as datetime_event_id
       FROM subscriptions s
       JOIN datetime_events d ON s.datetime_event_id = d.id
       JOIN events e ON d.event_id = e.id
       WHERE s.users_id = $1
+      ORDER BY d.day_time ASC
     `, [userId]);
 
     res.status(200).json({ user, events: eventsResult.rows });

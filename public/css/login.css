@@ -58,27 +58,29 @@ body {
 }
 
 .form-container h1 {
-  font-size: 2rem;
+  font-size: 2.25rem;
   font-weight: 700;
   margin-bottom: var(--spacing-xl);
   color: var(--color-text-primary);
+  line-height: 1.2;
 }
 
 .input-group {
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
 }
 
 input {
   width: 100%;
-  padding: var(--spacing-md);
+  padding: var(--spacing-lg);
   border: 1px solid var(--color-primary);
   border-radius: 20px;
-  font-size: 1rem;
+  font-size: 1.125rem;
   font-family: 'Sora', sans-serif;
   background-color: var(--color-surface);
   color: var(--color-text-primary);
   outline: none;
   transition: border-color 0.3s ease;
+  min-height: 56px;
 }
 
 input:focus {
@@ -87,20 +89,22 @@ input:focus {
 
 input::placeholder {
   color: var(--color-text-secondary);
+  font-size: 1rem;
 }
 
 .submit-btn {
   width: 100%;
-  padding: var(--spacing-md);
+  padding: var(--spacing-lg);
   background-color: var(--color-primary);
   border: none;
   color: white;
-  font-size: 1rem;
+  font-size: 1.125rem;
   font-weight: 600;
   border-radius: 999px;
   cursor: pointer;
   transition: background-color 0.3s ease;
   margin-bottom: var(--spacing-lg);
+  min-height: 56px;
 }
 
 .submit-btn:hover {
@@ -109,9 +113,9 @@ input::placeholder {
 
 .create-account {
   color: var(--color-primary);
-  font-weight: 400;
+  font-weight: 500;
   text-decoration: none;
-  font-size: 1rem;
+  font-size: 1.125rem;
 }
 
 .create-account:hover {
@@ -135,11 +139,15 @@ input::placeholder {
   }
 
   input {
-    padding: var(--spacing-sm) var(--spacing-md);
+    padding: var(--spacing-lg);
+    font-size: 1rem;
+    min-height: 52px;
   }
 
   .submit-btn {
-    padding: var(--spacing-sm) var(--spacing-md);
+    padding: var(--spacing-lg);
+    font-size: 1rem;
+    min-height: 52px;
   }
 }
 
@@ -161,16 +169,18 @@ input::placeholder {
   }
 
   input {
-    font-size: 0.875rem;
-    padding: var(--spacing-md);
+    font-size: 1rem;
+    padding: var(--spacing-lg);
+    min-height: 48px;
   }
 
   .submit-btn {
-    font-size: 0.875rem;
-    padding: var(--spacing-md);
+    font-size: 1rem;
+    padding: var(--spacing-lg);
+    min-height: 48px;
   }
 
   .create-account {
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
 }
