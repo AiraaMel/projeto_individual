@@ -827,21 +827,1398 @@ As principais funcionalidades da aplicação já foram implementadas, incluindo 
 
 ## <a name="c4"></a>4. Desenvolvimento da Aplicação Web (Semana 8)
 
+A fase final do projeto envolveu a consolidação e entrega das funcionalidades previstas na aplicação Vibra, integrando o back-end (Node.js + PostgreSQL) ao front-end responsivo desenvolvido com EJS e estilização personalizada. Durante esta etapa, a aplicação passou por refinamento de interface e verificação da integração entre rotas, controllers e views, com o objetivo de garantir uma experiência fluida, segura e intuitiva para o usuário final.
+
+O desenvolvimento foi guiado pelas histórias de usuário, pelo protótipo de alta fidelidade e pelas boas práticas de arquitetura MVC. A interface foi otimizada para dispositivos móveis, especialmente para o iPhone 16 Pro, e o sistema oferece uma jornada completa: do cadastro ao login, da busca por eventos até a inscrição, com visualização de dados e histórico no perfil.
+
+A integração entre as camadas Model, View e Controller foi implementada seguindo o padrão MVC, garantindo separação de responsabilidades e facilitando a manutenção do código. O uso de middleware de autenticação JWT assegura que apenas usuários autenticados possam acessar funcionalidades protegidas, enquanto a estrutura modular permite escalabilidade futura da aplicação.
+
+**Middleware de Autenticação JWT:**
+```javascript
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ error: 'Token de acesso requerido' });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.status(403).json({ error: 'Token inválido' });
+    }
+    req.user = user;
+    next();
+  });
+};
+```
+
+**Configuração do Banco de Dados:**
+```javascript
+const { Pool } = require('pg');
+require('dotenv').config();
+
+const pool = new Pool({
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_DATABASE,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
+  ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
+});
+
+module.exports = {
+  query: (text, params) => pool.query(text, params),
+  connect: () => pool.connect(),
+};
+```
+
 ### 4.1 Demonstração do Sistema Web (Semana 8)
 
-*VIDEO: Insira o link do vídeo demonstrativo nesta seção*
-*Descreva e ilustre aqui o desenvolvimento do sistema web completo, explicando brevemente o que foi entregue em termos de código e sistema. Utilize prints de tela para ilustrar.*
+A seguir, uma demonstração visual das principais funcionalidades do sistema Vibra em execução. As telas apresentadas validam os requisitos definidos nas etapas anteriores de projeto e design, comprovando o funcionamento das rotas, a correta comunicação com o banco de dados e a interface responsiva que permite ao usuário interagir com eventos de forma prática e envolvente.
+
+> [Assista à demonstração completa do sistema no Google Drive](https://drive.google.com/file/d/1k8arxQxFYei8jWrZsxqSffjZk4xX3OQP/view?usp=drive_link)
+
+
+#### **Tela de Login**
+![Tela de Login](../assets/wad/login.png)
+
+A tela de login é o ponto de entrada da aplicação, apresentando um design minimalista e centrado na experiência do usuário. Com campos para e-mail e senha, ela conecta diretamente ao sistema de autenticação JWT implementado no back-end. O formulário realiza validação client-side e server-side, garantindo segurança no acesso. Após autenticação bem-sucedida, o usuário é redirecionado para a página inicial com seu token armazenado localmente.
+
+**Script JavaScript do Login:**
+```javascript
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+
+  try {
+    const response = await fetch('/api/users/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      window.location.href = '/home';
+    } else {
+      alert(data.error || 'Erro ao fazer login');
+    }
+  } catch (error) {
+    alert('Erro de conexão');
+  }
+});
+```
+
+#### **Tela de Cadastro**
+![Tela de Cadastro](../assets/wad/criarConta.png)
+
+A interface de cadastro permite que novos usuários criem suas contas na plataforma. Com campos para nome, e-mail e senha, o formulário implementa validações de entrada e criptografia de senha usando bcrypt. A tela mantém a consistência visual com o restante da aplicação, utilizando a paleta de cores e tipografia definidas no guia de estilos.
+
+**Validação Client-Side do Cadastro:**
+```javascript
+document.getElementById('createAccountForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById('name').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+
+  // Validações
+  if (name.length < 2) {
+    alert('Nome deve ter pelo menos 2 caracteres');
+    return;
+  }
+
+  if (!email.includes('@')) {
+    alert('E-mail inválido');
+    return;
+  }
+
+  if (password.length < 6) {
+    alert('Senha deve ter pelo menos 6 caracteres');
+    return;
+  }
+
+  try {
+    const response = await fetch('/api/users', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      alert('Conta criada com sucesso!');
+      window.location.href = '/login';
+    } else {
+      alert(data.error || 'Erro ao criar conta');
+    }
+  } catch (error) {
+    alert('Erro de conexão');
+  }
+});
+```
+
+#### **Página Inicial (Home)**
+![Página Inicial](../assets/wad/inicial.png)
+
+A página inicial apresenta eventos em destaque através de um carrossel interativo, implementado com JavaScript vanilla. Os usuários podem navegar pelos eventos disponíveis, utilizar a barra de busca para filtrar por países e acessar rapidamente outras seções através da navegação inferior. A integração com o banco de dados garante que os eventos exibidos estejam sempre atualizados.
+
+**Carrossel de Eventos (JavaScript):**
+```javascript
+document.addEventListener('DOMContentLoaded', () => {
+  const carousel = document.querySelector('.events-carousel');
+  const cards = document.querySelectorAll('.event-card');
+  let currentIndex = 0;
+
+  function showCard(index) {
+    cards.forEach((card, i) => {
+      card.style.display = i === index ? 'block' : 'none';
+    });
+  }
+
+  function nextCard() {
+    currentIndex = (currentIndex + 1) % cards.length;
+    showCard(currentIndex);
+  }
+
+  function prevCard() {
+    currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+    showCard(currentIndex);
+  }
+
+  // Auto-play do carrossel
+  setInterval(nextCard, 5000);
+
+  // Navegação por touch (mobile)
+  let startX = 0;
+  carousel.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
+  });
+
+  carousel.addEventListener('touchend', (e) => {
+    const endX = e.changedTouches[0].clientX;
+    const diff = startX - endX;
+
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) nextCard();
+      else prevCard();
+    }
+  });
+
+  showCard(0);
+});
+```
+
+**CSS Responsivo para Mobile:**
+```css
+.events-carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg) 0;
+}
+
+.event-card {
+  min-width: 280px;
+  scroll-snap-align: start;
+  background: var(--color-surface);
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.event-card:hover {
+  transform: translateY(-4px);
+}
+
+@media (max-width: 430px) {
+  .event-card {
+    min-width: 260px;
+  }
+
+  .events-carousel {
+    padding: var(--spacing-md) 0;
+  }
+}
+```
+
+#### **Resultados de Busca**
+![Resultados de Busca](../assets/wad/busca.png)
+
+A funcionalidade de busca permite aos usuários encontrar eventos específicos por título ou descrição. A página exibe resultados filtrados dinamicamente, com cards informativos que incluem imagem, título, descrição e categorização. Quando acessada sem termos de busca, a página carrega automaticamente os eventos mais recentes, garantindo que sempre haja conteúdo disponível.
+
+**Busca Dinâmica com Debounce:**
+```javascript
+document.addEventListener('DOMContentLoaded', () => {
+  const searchInput = document.getElementById('searchInput');
+  const searchForm = document.querySelector('.search-box');
+  let searchTimeout;
+
+  // Busca com debounce para melhor performance
+  searchInput.addEventListener('input', () => {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+      const query = searchInput.value.trim();
+      if (query.length >= 2) {
+        performSearch(query);
+      }
+    }, 500);
+  });
+
+  // Busca ao submeter formulário
+  searchForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    performSearch(searchInput.value.trim());
+  });
+
+  function performSearch(query) {
+    if (query) {
+      window.location.href = `/search?query=${encodeURIComponent(query)}`;
+    } else {
+      window.location.href = '/search';
+    }
+  }
+});
+```
+
+**Controller de Busca Otimizado:**
+```javascript
+async searchEvents(req, res) {
+  const search = req.query.query || '';
+  const page = parseInt(req.query.page) || 1;
+  const limit = 10;
+  const offset = (page - 1) * limit;
+
+  try {
+    let query, params;
+
+    if (search.trim() !== '') {
+      query = `
+        SELECT e.*, l.country
+        FROM events e
+        LEFT JOIN locations l ON e.locations_id = l.id
+        WHERE LOWER(unaccent(e.title)) LIKE LOWER(unaccent($1))
+           OR LOWER(unaccent(e.description)) LIKE LOWER(unaccent($1))
+           OR LOWER(unaccent(l.country)) LIKE LOWER(unaccent($1))
+        ORDER BY e.id DESC
+        LIMIT $2 OFFSET $3
+      `;
+      params = [`%${search}%`, limit, offset];
+    } else {
+      query = `
+        SELECT e.*, l.country
+        FROM events e
+        LEFT JOIN locations l ON e.locations_id = l.id
+        ORDER BY e.id DESC
+        LIMIT $1 OFFSET $2
+      `;
+      params = [limit, offset];
+    }
+
+    const result = await db.query(query, params);
+
+    res.render('pages/search', {
+      pageTitle: 'Busca',
+      search,
+      events: result.rows,
+      currentPage: page,
+      hasMore: result.rows.length === limit
+    });
+  } catch (error) {
+    console.error('Erro na busca:', error);
+    res.render('pages/search', {
+      pageTitle: 'Busca',
+      search,
+      events: [],
+      currentPage: 1,
+      hasMore: false
+    });
+  }
+}
+```
+
+#### **Página do Evento**
+![Página do Evento](../assets/wad/evento.png)
+
+A página de detalhes do evento oferece informações completas sobre a experiência, incluindo descrição, localização, duração, preço e capacidade. Os usuários podem selecionar datas e horários disponíveis através de uma interface intuitiva, com feedback visual para seleções. O sistema de inscrição integra-se diretamente ao banco de dados, registrando a participação do usuário autenticado.
+
+**Seleção de Data/Hora e Inscrição:**
+```javascript
+document.addEventListener('DOMContentLoaded', () => {
+  const datetimeBtns = document.querySelectorAll('.datetime-btn');
+  const subscribeBtn = document.getElementById('subscribeBtn');
+  let selectedDatetimeId = null;
+
+  datetimeBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Remove seleção anterior
+      datetimeBtns.forEach(b => b.classList.remove('selected'));
+
+      // Adiciona seleção atual
+      btn.classList.add('selected');
+      selectedDatetimeId = btn.dataset.datetimeId;
+
+      // Habilita botão de inscrição
+      subscribeBtn.disabled = false;
+      subscribeBtn.textContent = 'Inscrever-se';
+    });
+  });
+
+  subscribeBtn.addEventListener('click', async () => {
+    if (!selectedDatetimeId) {
+      alert('Selecione uma data e horário');
+      return;
+    }
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Você precisa estar logado para se inscrever');
+      window.location.href = '/login';
+      return;
+    }
+
+    subscribeBtn.disabled = true;
+    subscribeBtn.textContent = 'Inscrevendo...';
+
+    try {
+      const response = await fetch('/api/subscriptions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          datetime_event_id: selectedDatetimeId
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert('Inscrição realizada com sucesso!');
+        subscribeBtn.textContent = 'Inscrito ✓';
+        subscribeBtn.style.backgroundColor = '#28a745';
+      } else {
+        alert(data.error || 'Erro ao realizar inscrição');
+        subscribeBtn.disabled = false;
+        subscribeBtn.textContent = 'Inscrever-se';
+      }
+    } catch (error) {
+      alert('Erro de conexão');
+      subscribeBtn.disabled = false;
+      subscribeBtn.textContent = 'Inscrever-se';
+    }
+  });
+});
+```
+
+**CSS para Seleção Visual:**
+```css
+.datetime-btn {
+  padding: var(--spacing-md);
+  border: 2px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: var(--spacing-sm);
+}
+
+.datetime-btn:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+}
+
+.datetime-btn.selected {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: white;
+  box-shadow: 0 4px 12px rgba(255, 99, 99, 0.3);
+}
+
+.subscribe-btn:disabled {
+  background-color: var(--color-border);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+```
+
+#### **Perfil do Usuário**
+![Perfil do Usuário](../assets/wad/perfil.png)
+
+A página de perfil centraliza as informações do usuário e seus eventos inscritos. Implementa funcionalidade de popup para visualização detalhada de eventos, com opção de cancelamento de inscrições. A interface responsiva adapta-se perfeitamente a diferentes tamanhos de tela, mantendo usabilidade em dispositivos móveis. A integração com o sistema de autenticação garante que apenas dados do usuário logado sejam exibidos.
+
+**Carregamento Dinâmico do Perfil:**
+```javascript
+document.addEventListener('DOMContentLoaded', async () => {
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    window.location.href = '/login';
+    return;
+  }
+
+  try {
+    const response = await fetch('/api/profile', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Erro ao carregar perfil');
+    }
+
+    const data = await response.json();
+
+    // Preencher dados do usuário
+    document.getElementById('name').value = data.user.name;
+    document.getElementById('email').value = data.user.email;
+
+    // Preencher eventos inscritos
+    const container = document.getElementById('events-container');
+    container.innerHTML = '';
+
+    data.events.forEach(event => {
+      const card = createEventCard(event);
+      container.appendChild(card);
+    });
+
+  } catch (error) {
+    console.error('Erro:', error);
+    alert('Erro ao carregar perfil');
+  }
+});
+
+function createEventCard(event) {
+  const card = document.createElement('div');
+  card.className = 'event-card';
+  card.style.cursor = 'pointer';
+
+  const eventDate = new Date(event.day_time);
+  const formattedDate = eventDate.toLocaleDateString('pt-BR');
+  const formattedTime = eventDate.toLocaleTimeString('pt-BR', {
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+
+  card.innerHTML = `
+    <img src="${event.photo || '/images/default-event.jpg'}"
+         alt="${event.title}" class="event-image">
+    <div class="event-details">
+      <h3 class="event-title">${event.title}</h3>
+      <p class="event-description">${event.description}</p>
+      <div class="event-tags">
+        <span class="event-tag">${event.location}</span>
+        <span class="event-tag">${event.category}</span>
+        <span class="event-tag">${formattedDate} ${formattedTime}</span>
+      </div>
+    </div>
+  `;
+
+  card.addEventListener('click', () => openEventPopup(event));
+  return card;
+}
+```
+
+**Popup de Evento com Cancelamento:**
+```javascript
+function openEventPopup(event) {
+  const overlay = document.createElement('div');
+  overlay.className = 'event-popup-overlay';
+
+  const eventDate = new Date(event.day_time);
+  const formattedDate = eventDate.toLocaleDateString('pt-BR', {
+    day: '2-digit', month: '2-digit', year: 'numeric'
+  });
+  const formattedTime = eventDate.toLocaleTimeString('pt-BR', {
+    hour: '2-digit', minute: '2-digit'
+  });
+
+  overlay.innerHTML = `
+    <div class="event-popup">
+      <button class="popup-close">&times;</button>
+      <img src="${event.photo}" alt="${event.title}" class="popup-event-image">
+      <h2 class="popup-event-title">${event.title}</h2>
+      <p class="popup-event-description">${event.description}</p>
+
+      <div class="popup-event-info">
+        <div class="popup-info-item">
+          <span>📅 ${formattedDate} às ${formattedTime}</span>
+        </div>
+        <div class="popup-info-item">
+          <span>📍 ${event.location}</span>
+        </div>
+      </div>
+
+      <button class="popup-cancel-btn" data-subscription-id="${event.subscription_id}">
+        Cancelar Inscrição
+      </button>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  // Event listeners
+  overlay.querySelector('.popup-close').addEventListener('click', () => {
+    closeEventPopup(overlay);
+  });
+
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeEventPopup(overlay);
+  });
+
+  overlay.querySelector('.popup-cancel-btn').addEventListener('click', () => {
+    cancelSubscription(event.subscription_id, overlay);
+  });
+
+  // Mostrar com animação
+  setTimeout(() => overlay.classList.add('active'), 10);
+}
+
+async function cancelSubscription(subscriptionId, overlay) {
+  const token = localStorage.getItem('token');
+  const cancelBtn = overlay.querySelector('.popup-cancel-btn');
+
+  cancelBtn.disabled = true;
+  cancelBtn.textContent = 'Cancelando...';
+
+  try {
+    const response = await fetch(`/api/subscriptions/delete/${subscriptionId}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (response.ok) {
+      alert('Inscrição cancelada com sucesso!');
+      closeEventPopup(overlay);
+      window.location.reload(); // Recarregar para atualizar lista
+    } else {
+      const error = await response.json();
+      alert(error.error || 'Erro ao cancelar inscrição');
+      cancelBtn.disabled = false;
+      cancelBtn.textContent = 'Cancelar Inscrição';
+    }
+  } catch (error) {
+    alert('Erro de conexão');
+    cancelBtn.disabled = false;
+    cancelBtn.textContent = 'Cancelar Inscrição';
+  }
+}
+```
 
 ### 4.2 Conclusões e Trabalhos Futuros (Semana 8)
 
-*Indique pontos fortes e pontos a melhorar de maneira geral.*
-*Relacione também quaisquer outras ideias que você tenha para melhorias futuras.*
+#### **Pontos Fortes do Projeto**
+
+- **Arquitetura MVC Sólida**: A implementação rigorosa do padrão Model-View-Controller garantiu separação clara de responsabilidades, facilitando manutenção e escalabilidade do código.
+
+- **Banco de Dados Estruturado**: O modelo relacional bem definido com PostgreSQL assegura integridade dos dados e suporte a relacionamentos complexos entre usuários, eventos e inscrições.
+
+- **Responsividade Mobile-First**: Interface otimizada para dispositivos móveis, especialmente iPhone 16 Pro, com testes extensivos de usabilidade em diferentes resoluções.
+
+- **Segurança com JWT**: Sistema de autenticação robusto utilizando JSON Web Tokens, protegendo rotas sensíveis e garantindo acesso seguro às funcionalidades.
+
+- **Interface Consistente**: Aplicação rigorosa do guia de estilos em todas as telas, utilizando a fonte Sora e paleta de cores definida, criando experiência visual coesa.
+
+- **Funcionalidades Integradas**: Sistema completo de busca, inscrição em eventos, gerenciamento de perfil e cancelamento de inscrições funcionando de forma integrada.
+
+#### **Possíveis Melhorias**
+
+- **Painel Administrativo**: Implementação de interface para administradores gerenciarem eventos, usuários e relatórios de inscrições.
+
+- **Sistema de Favoritos**: Funcionalidade para usuários salvarem eventos de interesse para visualização posterior.
+
+- **Avaliações com Estrelas**: Sistema de feedback mais visual com classificação por estrelas e comentários detalhados.
+
+- **Notificações Push**: Alertas sobre novos eventos, lembretes de eventos inscritos e confirmações de ações.
+
+- **Filtros Avançados**: Busca por categoria, faixa de preço, data e localização específica.
+
+- **Sistema de Recomendações**: Algoritmo para sugerir eventos baseado no histórico e preferências do usuário.
+
+#### **Ideias para Trabalhos Futuros**
+
+- **Integração com Redes Sociais**: Compartilhamento de eventos no Instagram, Facebook e WhatsApp, com login social.
+
+- **Dashboard Analytics**: Painel com métricas de engajamento, eventos mais populares e estatísticas de usuários.
+
+- **Aplicativo Mobile Nativo**: Desenvolvimento de app iOS/Android com funcionalidades offline e geolocalização.
+
+- **Sistema de Pagamentos**: Integração com gateways de pagamento para eventos pagos e processamento de transações.
+
+- **Chatbot de Atendimento**: Assistente virtual para dúvidas sobre eventos e suporte ao usuário.
+
+- **Integração com Calendários**: Sincronização automática com Google Calendar e Apple Calendar.
+
+- **Realidade Aumentada**: Preview de locais de eventos através de AR para melhor experiência do usuário.
+
+- **Modo escuro**: Eventos noturnos.
+
+### 4.3 Fluxo de Usuário com Telas e Códigos
+
+Esta seção apresenta os principais fluxos da aplicação, demonstrando como o padrão MVC se aplica em cada funcionalidade, desde a interface do usuário até a persistência de dados no banco PostgreSQL.
+
+#### **Fluxo de Login**
+
+![Tela de Login](../assets/wad/login.png)
+
+O usuário acessa a tela de login, insere suas credenciais (e-mail e senha) e submete o formulário. O sistema valida as informações e, se corretas, gera um token JWT para autenticação nas próximas requisições.
+
+**View EJS (HTML)**
+```html
+<form class="form-container" id="loginForm">
+  <h1>Bem-vindo de volta!</h1>
+  <div class="input-group">
+    <input type="email" id="email" name="email" placeholder="E-mail" required>
+  </div>
+  <div class="input-group">
+    <input type="password" id="password" name="password" placeholder="Senha" required>
+  </div>
+  <button type="submit" class="submit-btn">Entrar</button>
+  <p>Não tem uma conta? <a href="/createAccount" class="create-account">Criar conta</a></p>
+</form>
+```
+
+**Rota (Express)**
+```javascript
+router.post('/users/login', usersController.login);
+```
+
+**Controller**
+```javascript
+async login(req, res) {
+  try {
+    const { email, password } = req.body;
+    const user = await usersModel.findByEmail(email);
+
+    if (!user || !await bcrypt.compare(password, user.password)) {
+      return res.status(401).json({ error: 'Credenciais inválidas' });
+    }
+
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '24h' });
+    res.json({ token, user: { id: user.id, name: user.name, email: user.email } });
+  } catch (error) {
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+}
+```
+
+**Model**
+```javascript
+async findByEmail(email) {
+  const result = await db.query('SELECT * FROM users WHERE email = $1', [email]);
+  return result.rows[0];
+}
+```
+
+**Middleware de Validação:**
+```javascript
+const validateLoginData = (req, res, next) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({
+      error: 'E-mail e senha são obrigatórios'
+    });
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({
+      error: 'E-mail inválido'
+    });
+  }
+
+  if (password.length < 6) {
+    return res.status(400).json({
+      error: 'Senha deve ter pelo menos 6 caracteres'
+    });
+  }
+
+  next();
+};
+```
+
+O padrão MVC se aplica claramente: a **View** captura os dados do usuário, a **Rota** direciona para o **Controller** apropriado, que implementa a lógica de autenticação e utiliza o **Model** para consultar o banco de dados.
+
+#### **Fluxo de Cadastro**
+
+![Tela de Cadastro](../assets/wad/cadastro.png)
+
+O usuário preenche o formulário de cadastro com nome, e-mail e senha. O sistema valida os dados, criptografa a senha e cria um novo registro no banco de dados.
+
+**View EJS (HTML)**
+```html
+<form class="form-container" id="createAccountForm">
+  <h1>Criar Conta</h1>
+  <div class="input-group">
+    <input type="text" id="name" name="name" placeholder="Nome completo" required>
+  </div>
+  <div class="input-group">
+    <input type="email" id="email" name="email" placeholder="E-mail" required>
+  </div>
+  <div class="input-group">
+    <input type="password" id="password" name="password" placeholder="Senha" required>
+  </div>
+  <button type="submit" class="submit-btn">Criar Conta</button>
+</form>
+```
+
+**Rota (Express)**
+```javascript
+router.post('/users', usersController.create);
+```
+
+**Controller**
+```javascript
+async create(req, res) {
+  try {
+    const { name, email, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = await usersModel.create({
+      name,
+      email,
+      password: hashedPassword
+    });
+
+    res.status(201).json({ message: 'Usuário criado com sucesso', user: newUser });
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao criar usuário' });
+  }
+}
+```
+
+**Model**
+```javascript
+async create(userData) {
+  const query = `
+    INSERT INTO users (name, email, password)
+    VALUES ($1, $2, $3)
+    RETURNING id, name, email
+  `;
+  const values = [userData.name, userData.email, userData.password];
+  const result = await db.query(query, values);
+  return result.rows[0];
+}
+
+async checkEmailExists(email) {
+  const result = await db.query(
+    'SELECT COUNT(*) FROM users WHERE email = $1',
+    [email]
+  );
+  return parseInt(result.rows[0].count) > 0;
+}
+```
+
+**Tratamento de Erros no Controller:**
+```javascript
+async create(req, res) {
+  try {
+    const { name, email, password } = req.body;
+
+    // Verificar se e-mail já existe
+    const emailExists = await usersModel.checkEmailExists(email);
+    if (emailExists) {
+      return res.status(409).json({
+        error: 'E-mail já cadastrado'
+      });
+    }
+
+    // Criptografar senha
+    const saltRounds = 12;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    const newUser = await usersModel.create({
+      name: name.trim(),
+      email: email.toLowerCase().trim(),
+      password: hashedPassword
+    });
+
+    // Log de auditoria
+    console.log(`Novo usuário criado: ${newUser.email} (ID: ${newUser.id})`);
+
+    res.status(201).json({
+      message: 'Usuário criado com sucesso',
+      user: {
+        id: newUser.id,
+        name: newUser.name,
+        email: newUser.email
+      }
+    });
+  } catch (error) {
+    console.error('Erro ao criar usuário:', error);
+
+    if (error.code === '23505') { // Violação de constraint única
+      return res.status(409).json({
+        error: 'E-mail já cadastrado'
+      });
+    }
+
+    res.status(500).json({
+      error: 'Erro interno do servidor'
+    });
+  }
+}
+```
+
+Neste fluxo, o padrão MVC garante que a **View** colete os dados, o **Controller** processe e valide as informações (incluindo criptografia), e o **Model** persista os dados no banco PostgreSQL.
+
+#### **Fluxo da Página Inicial**
+
+![Página Inicial](../assets/wad/inicial.png)
+
+A página inicial exibe eventos em destaque através de um carrossel interativo. O usuário pode navegar pelos eventos, utilizar a barra de busca e acessar outras funcionalidades através da navegação inferior.
+
+**View EJS (HTML)**
+```html
+<div class="container">
+  <div class="search-section">
+    <form class="search-box" action="/search" method="GET">
+      <input type="text" name="query" placeholder="Buscar por país..." class="search-input">
+    </form>
+  </div>
+
+  <div class="events-carousel">
+    <% events.forEach(event => { %>
+      <div class="event-card" onclick="window.location.href='/event/<%= event.id %>'">
+        <img src="<%= event.photo %>" alt="<%= event.title %>" class="event-image">
+        <div class="event-content">
+          <h3 class="event-title"><%= event.title %></h3>
+          <p class="event-description"><%= event.description %></p>
+          <span class="event-category"><%= event.type %></span>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</div>
+```
+
+**Rota (Express)**
+```javascript
+router.get('/home', async (req, res) => {
+  try {
+    const events = await eventsModel.findAll();
+    res.render(path.join(__dirname, '../views/pages/home'), {
+      pageTitle: 'Home',
+      events
+    });
+  } catch (error) {
+    res.render(path.join(__dirname, '../views/pages/home'), {
+      pageTitle: 'Home',
+      events: []
+    });
+  }
+});
+```
+
+**Controller**
+```javascript
+async index(req, res) {
+  try {
+    const events = await eventsModel.findAll();
+    res.json(events);
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao buscar eventos' });
+  }
+}
+```
+
+**Model**
+```javascript
+async findAll() {
+  const result = await db.query(`
+    SELECT id, title, type, description, photo, locations_id,
+           included, place, duration, price, capacity
+    FROM events
+    ORDER BY id ASC
+  `);
+  return result.rows;
+}
+```
+
+A **View** renderiza dinamicamente os eventos usando EJS, o **Controller** busca todos os eventos disponíveis, e o **Model** executa a consulta SQL no banco PostgreSQL.
+
+#### **Fluxo de Busca por País**
+
+![Resultados de Busca](../assets/wad/busca.png)
+
+O usuário utiliza a barra de busca para encontrar eventos específicos. O sistema filtra eventos por título ou descrição, exibindo resultados relevantes ou todos os eventos quando não há termo de busca.
+
+**View EJS (HTML)**
+```html
+<div class="container">
+  <form class="search-box" action="/search" method="GET">
+    <input id="searchInput" type="text" name="query" placeholder="Buscar eventos..."
+           class="search-input" value="<%= search || '' %>">
+  </form>
+
+  <% if (search && search.trim() !== '') { %>
+    <h2 class="search-title">
+      Resultados da busca por: <span class="search-term"><%= search %></span>
+    </h2>
+  <% } else { %>
+    <h2 class="search-title">Eventos Disponíveis</h2>
+  <% } %>
+
+  <div id="searchResults">
+    <% if (events && events.length > 0) { %>
+      <% events.forEach(event => { %>
+        <div class="event-card" onclick="window.location.href='/event/<%= event.id %>'">
+          <img src="<%= event.photo %>" alt="<%= event.title %>" class="event-image">
+          <div class="event-details">
+            <h3 class="event-title"><%= event.title %></h3>
+            <p class="event-description"><%= event.description %></p>
+          </div>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <div class="no-results">
+        <p>Nenhum evento encontrado.</p>
+      </div>
+    <% } %>
+  </div>
+</div>
+```
+
+**Rota (Express)**
+```javascript
+router.get('/search', async (req, res) => {
+  const search = req.query.query || '';
+  try {
+    let result;
+    if (search.trim() !== '') {
+      result = await db.query(
+        `SELECT * FROM events WHERE LOWER(title) LIKE LOWER($1)
+         OR LOWER(description) LIKE LOWER($1) ORDER BY id DESC`,
+        [`%${search}%`]
+      );
+    } else {
+      result = await db.query(`SELECT * FROM events ORDER BY id DESC LIMIT 20`);
+    }
+
+    res.render(path.join(__dirname, '../views/pages/search'), {
+      pageTitle: 'Busca',
+      search,
+      events: result.rows
+    });
+  } catch (error) {
+    res.render(path.join(__dirname, '../views/pages/search'), {
+      pageTitle: 'Busca',
+      search,
+      events: []
+    });
+  }
+});
+```
+
+O padrão MVC permite que a **View** exiba resultados filtrados dinamicamente, a **Rota** processe parâmetros de busca, e a consulta SQL filtre dados diretamente no banco de dados.
+
+#### **Fluxo de Visualização de Evento + Inscrição**
+
+![Página do Evento](../assets/wad/evento.png)
+
+O usuário acessa os detalhes de um evento específico, visualiza informações completas e pode se inscrever selecionando data e horário disponíveis.
+
+**View EJS (HTML)**
+```html
+<div class="container">
+  <div class="event-header">
+    <img src="<%= event.photo %>" alt="<%= event.title %>" class="event-main-image">
+    <h1 class="event-title"><%= event.title %></h1>
+    <p class="event-description"><%= event.description %></p>
+  </div>
+
+  <div class="event-details">
+    <div class="detail-item">
+      <span class="detail-label">Local:</span>
+      <span class="detail-value"><%= event.place %></span>
+    </div>
+    <div class="detail-item">
+      <span class="detail-label">Duração:</span>
+      <span class="detail-value"><%= event.duration %></span>
+    </div>
+    <div class="detail-item">
+      <span class="detail-label">Preço:</span>
+      <span class="detail-value">R$ <%= event.price %></span>
+    </div>
+  </div>
+
+  <div class="datetime-selection">
+    <h3>Selecione data e horário:</h3>
+    <div class="datetime-options">
+      <% datetimes.forEach(datetime => { %>
+        <button class="datetime-btn" data-datetime-id="<%= datetime.id %>">
+          <%= new Date(datetime.day_time).toLocaleDateString('pt-BR') %> -
+          <%= new Date(datetime.day_time).toLocaleTimeString('pt-BR') %>
+        </button>
+      <% }) %>
+    </div>
+    <button id="subscribeBtn" class="subscribe-btn">Inscrever-se</button>
+  </div>
+</div>
+```
+
+**Rota (Express)**
+```javascript
+router.get('/event/:id', async (req, res) => {
+  try {
+    const eventId = req.params.id;
+    const event = await eventsModel.findById(eventId);
+    const datetimes = await datetimeEventsModel.findByEventId(eventId);
+
+    res.render(path.join(__dirname, '../views/pages/eventPage'), {
+      pageTitle: event.title,
+      event,
+      datetimes
+    });
+  } catch (error) {
+    res.status(404).render(path.join(__dirname, '../views/pages/404'));
+  }
+});
+
+router.post('/api/subscriptions', authenticateToken, subscriptionsController.create);
+```
+
+**Controller**
+```javascript
+async create(req, res) {
+  try {
+    const { datetime_event_id } = req.body;
+    const users_id = req.user.id;
+
+    const subscription = await subscriptionsModel.create({
+      users_id,
+      datetime_event_id,
+      status: 'confirmada'
+    });
+
+    res.status(201).json({
+      message: 'Inscrição realizada com sucesso',
+      subscription
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao realizar inscrição' });
+  }
+}
+```
+
+**Model**
+```javascript
+async create(subscriptionData) {
+  const query = `
+    INSERT INTO subscriptions (users_id, datetime_event_id, status)
+    VALUES ($1, $2, $3)
+    RETURNING *
+  `;
+  const values = [
+    subscriptionData.users_id,
+    subscriptionData.datetime_event_id,
+    subscriptionData.status
+  ];
+  const result = await db.query(query, values);
+  return result.rows[0];
+}
+```
+
+Este fluxo demonstra como o padrão MVC gerencia operações complexas: a **View** apresenta dados do evento e captura seleções do usuário, o **Controller** processa a inscrição com autenticação JWT, e o **Model** persiste a relação usuário-evento no banco.
+
+#### **Fluxo da Página de Perfil**
+
+![Perfil do Usuário](../assets/wad/perfil.png)
+
+O usuário acessa seu perfil para visualizar dados pessoais e eventos inscritos. Pode editar informações e cancelar inscrições através de popups interativos.
+
+**View EJS (HTML)**
+```html
+<div class="container">
+  <div class="profile-section">
+    <h2>Meus Eventos</h2>
+    <div id="events-container">
+      <!-- Eventos carregados dinamicamente via JavaScript -->
+    </div>
+  </div>
+
+  <div class="user-data-section">
+    <h2>Meus Dados</h2>
+    <form id="profileForm">
+      <div class="input-group">
+        <input type="text" id="name" name="name" placeholder="Nome" class="form-input">
+      </div>
+      <div class="input-group">
+        <input type="email" id="email" name="email" placeholder="E-mail" class="form-input">
+      </div>
+      <button type="submit" class="button-primary">Atualizar Dados</button>
+    </form>
+  </div>
+</div>
+```
+
+**Rota (Express)**
+```javascript
+router.get('/api/profile', authenticateToken, profileController.getUserProfile);
+router.delete('/api/subscriptions/delete/:id', authenticateToken, subscriptionsController.delete);
+```
+
+**Controller**
+```javascript
+async getUserProfile(req, res) {
+  try {
+    const userId = req.user.id;
+    const user = await usersModel.findById(userId);
+    const eventsResult = await db.query(`
+      SELECT
+        s.id as subscription_id,
+        e.id as event_id,
+        e.title,
+        e.description,
+        e.photo,
+        e.place AS location,
+        e.type AS category,
+        d.day_time
+      FROM subscriptions s
+      JOIN datetime_events d ON s.datetime_event_id = d.id
+      JOIN events e ON d.event_id = e.id
+      WHERE s.users_id = $1
+      ORDER BY d.day_time ASC
+    `, [userId]);
+
+    res.json({
+      user: { name: user.name, email: user.email },
+      events: eventsResult.rows
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao carregar perfil' });
+  }
+}
+```
+
+**Model**
+```javascript
+async delete(id) {
+  const query = 'DELETE FROM subscriptions WHERE id = $1 RETURNING *';
+  const result = await db.query(query, [id]);
+  return result.rows[0];
+}
+```
+
+O padrão MVC neste fluxo coordena múltiplas operações: a **View** exibe dados do usuário e eventos inscritos, o **Controller** gerencia autenticação e operações CRUD, e o **Model** executa consultas complexas com JOINs entre tabelas relacionadas.
+
+#### **Conclusão dos Fluxos**
+
+A implementação dos fluxos de usuário demonstra a importância de ter uma arquitetura bem integrada entre interface, back-end e persistência de dados. O padrão MVC aplicado no projeto Vibra garante que cada camada tenha responsabilidades bem definidas: as **Views** focam na experiência do usuário e apresentação de dados, os **Controllers** implementam a lógica de negócio e validações, e os **Models** gerenciam o acesso aos dados de forma consistente e segura.
+
+Esta separação de responsabilidades facilita a manutenção do código, permite testes independentes de cada camada e possibilita a evolução da aplicação de forma modular. A integração com autenticação JWT, validações client-side e server-side, e o uso de consultas SQL otimizadas garantem que a aplicação seja robusta, segura e performática, oferecendo uma experiência fluida e confiável para os usuários finais.
+
+**Configuração de Rotas Principais:**
+```javascript
+// routes/index.js
+const express = require('express');
+const router = express.Router();
+const path = require('path');
+
+// Middleware de autenticação
+const { authenticateToken } = require('../middleware/auth');
+
+// Importar controllers
+const usersController = require('../controllers/usersController');
+const eventsController = require('../controllers/eventsController');
+const subscriptionsController = require('../controllers/subscriptionsController');
+const profileController = require('../controllers/profileController');
+
+// Rotas públicas (front-end)
+router.get('/', (req, res) => {
+  res.render(path.join(__dirname, '../views/pages/login'), {
+    pageTitle: 'Login - Vibra'
+  });
+});
+
+router.get('/login', (req, res) => {
+  res.render(path.join(__dirname, '../views/pages/login'), {
+    pageTitle: 'Login - Vibra'
+  });
+});
+
+router.get('/createAccount', (req, res) => {
+  res.render(path.join(__dirname, '../views/pages/createAccount'), {
+    pageTitle: 'Criar Conta - Vibra'
+  });
+});
+
+// Rotas protegidas (requerem autenticação)
+router.get('/home', authenticateToken, async (req, res) => {
+  try {
+    const events = await eventsController.getAllEvents();
+    res.render(path.join(__dirname, '../views/pages/home'), {
+      pageTitle: 'Home - Vibra',
+      events,
+      user: req.user
+    });
+  } catch (error) {
+    res.render(path.join(__dirname, '../views/pages/home'), {
+      pageTitle: 'Home - Vibra',
+      events: [],
+      user: req.user
+    });
+  }
+});
+
+router.get('/profile', authenticateToken, (req, res) => {
+  res.render(path.join(__dirname, '../views/pages/profile'), {
+    pageTitle: 'Perfil - Vibra',
+    user: req.user
+  });
+});
+
+// API Routes
+router.post('/api/users/login', usersController.login);
+router.post('/api/users', usersController.create);
+router.get('/api/profile', authenticateToken, profileController.getUserProfile);
+router.post('/api/subscriptions', authenticateToken, subscriptionsController.create);
+router.delete('/api/subscriptions/delete/:id', authenticateToken, subscriptionsController.delete);
+
+module.exports = router;
+```
+
+**Estrutura de Tratamento de Erros Global:**
+```javascript
+// middleware/errorHandler.js
+const errorHandler = (err, req, res, next) => {
+  console.error('Erro capturado:', err);
+
+  // Erro de validação do JWT
+  if (err.name === 'JsonWebTokenError') {
+    return res.status(401).json({
+      error: 'Token inválido'
+    });
+  }
+
+  // Erro de token expirado
+  if (err.name === 'TokenExpiredError') {
+    return res.status(401).json({
+      error: 'Token expirado'
+    });
+  }
+
+  // Erro de banco de dados
+  if (err.code) {
+    switch (err.code) {
+      case '23505': // Violação de constraint única
+        return res.status(409).json({
+          error: 'Dados já existem no sistema'
+        });
+      case '23503': // Violação de foreign key
+        return res.status(400).json({
+          error: 'Referência inválida'
+        });
+      case '23502': // Violação de not null
+        return res.status(400).json({
+          error: 'Campos obrigatórios não preenchidos'
+        });
+      default:
+        return res.status(500).json({
+          error: 'Erro de banco de dados'
+        });
+    }
+  }
+
+  // Erro genérico
+  res.status(500).json({
+    error: 'Erro interno do servidor'
+  });
+};
+
+module.exports = errorHandler;
+```
+
+**Configuração Principal da Aplicação:**
+```javascript
+// app.js
+const express = require('express');
+const path = require('path');
+const cors = require('cors');
+const helmet = require('helmet');
+require('dotenv').config();
+
+const app = express();
+
+// Middleware de segurança
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com"],
+      imgSrc: ["'self'", "data:", "https:", "http:"],
+      scriptSrc: ["'self'"]
+    }
+  }
+}));
+
+// CORS configurado
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  credentials: true
+}));
+
+// Middleware de parsing
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Arquivos estáticos
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Engine de template
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+// Rotas
+const routes = require('./routes');
+app.use('/', routes);
+
+// Middleware de tratamento de erros
+const errorHandler = require('./middleware/errorHandler');
+app.use(errorHandler);
+
+// 404 Handler
+app.use('*', (req, res) => {
+  res.status(404).render('pages/404', {
+    pageTitle: 'Página não encontrada - Vibra'
+  });
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(` Servidor rodando na porta ${PORT}`);
+  console.log(` Acesse: http://localhost:${PORT}`);
+});
+
+module.exports = app;
+```
 
 
 
 ## <a name="c5"></a>5. Referências
 
-_Incluir as principais referências de seu projeto, para que seu parceiro possa consultar caso ele se interessar em aprofundar. Um exemplo de referência de livro e de site:_<br>
+Não se aplica.  
+Este projeto foi desenvolvido com base em conhecimentos adquiridos ao longo do curso, sem a utilização de fontes bibliográficas ou referências externas específicas que justifiquem citação formal.
+<br>
 
 ---
 ---
