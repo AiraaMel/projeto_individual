@@ -1054,7 +1054,7 @@ document.addEventListener('DOMContentLoaded', () => {
 ```
 
 #### **Resultados de Busca**
-![Resultados de Busca](../assets/wad/busca.png)
+![Resultados de Busca](../assets/wad/resultado.png)
 
 A funcionalidade de busca permite aos usuários encontrar eventos específicos por título ou descrição. A página exibe resultados filtrados dinamicamente, com cards informativos que incluem imagem, título, descrição e categorização. Quando acessada sem termos de busca, a página carrega automaticamente os eventos mais recentes, garantindo que sempre haja conteúdo disponível.
 
