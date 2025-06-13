@@ -250,15 +250,12 @@ O arquivo `db.js` é responsável por configurar e gerenciar a conexão com o ba
 const { Pool } = require('pg');
 require('dotenv').config();
 
-const isSSL = process.env.DB_SSL === 'true';
-
 const pool = new Pool({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
   database: process.env.DB_DATABASE,
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
-  ssl: isSSL ? { rejectUnauthorized: false } : false,
 });
 
 module.exports = {
@@ -864,7 +861,6 @@ const pool = new Pool({
   database: process.env.DB_DATABASE,
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
-  ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
 });
 
 module.exports = {
@@ -877,7 +873,7 @@ module.exports = {
 
 A seguir, uma demonstração visual das principais funcionalidades do sistema Vibra em execução. As telas apresentadas validam os requisitos definidos nas etapas anteriores de projeto e design, comprovando o funcionamento das rotas, a correta comunicação com o banco de dados e a interface responsiva que permite ao usuário interagir com eventos de forma prática e envolvente.
 
-> [Assista à demonstração completa do sistema no Google Drive](https://drive.google.com/file/d/1k8arxQxFYei8jWrZsxqSffjZk4xX3OQP/view?usp=drive_link)
+> [Assista à demonstração completa do sistema no Google Drive](https://drive.google.com/file/d/18daQ6Orp3fSFLgmK0EY-DccuvLvUf6GJ/view?usp=sharing)
 
 
 #### **Tela de Login**
