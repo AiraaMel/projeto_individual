@@ -1356,10 +1356,10 @@ function openEventPopup(event) {
 
       <div class="popup-event-info">
         <div class="popup-info-item">
-          <span>📅 ${formattedDate} às ${formattedTime}</span>
+          <span> ${formattedDate} às ${formattedTime}</span>
         </div>
         <div class="popup-info-item">
-          <span>📍 ${event.location}</span>
+          <span> ${event.location}</span>
         </div>
       </div>
 
