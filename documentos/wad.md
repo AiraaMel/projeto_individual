@@ -425,13 +425,13 @@ Os wireframes são representações visuais simples e estruturadas das telas da 
 #### Wireframes de baixa fidelidade
 
 <div align="center">
-<sub>Figura 3 - Wireframe - Vibra </sub>
+<sub>Figura 5 - Wireframe - Vibra </sub>
 <img src="../assets/wad/wireframe1.jpg">
 <sup>Fonte: Autoria Própia, Faculdade Inteli 2025</sup>
 </div>
 
 <div align="center">
-<sub>Figura 4 - Wireframe - Vibra </sub>
+<sub>Figura 6 - Wireframe - Vibra </sub>
 <img src="../assets/wad/wireframe2.jpg">
 <sup>Fonte: Autoria Própia, Faculdade Inteli 2025</sup>
 </div>
@@ -465,7 +465,7 @@ A identidade visual do Vibra é marcada por tons quentes e vibrantes, que transm
 - #333333 – Cinza escuro, ideal para textos e legibilidade.
 
 <div align="center">
-<sub>Figura 4 - Paleta de cores - Vibra </sub>
+<sub>Figura 7 - Paleta de cores - Vibra </sub>
 <img src="../assets/wad/paleta.png">
 <sup>Fonte: Autoria Própia, Faculdade Inteli 2025</sup>
 </div>
@@ -479,7 +479,7 @@ A fonte escolhida para a plataforma, Sora, é moderna, legível e amigável, gar
 - Botões e menus: Caixa alta ou destaque sutil, com contraste adequado.
 
 <div align="center">
-<sub>Figura 4 - Wireframe - Vibra </sub>
+<sub>Figura 8 - Wireframe - Vibra </sub>
 <img src="../assets/wad/tipografia.png">
 <sup>Fonte: Autoria Própia, Faculdade Inteli 2025</sup>
 </div>
@@ -487,7 +487,7 @@ A fonte escolhida para a plataforma, Sora, é moderna, legível e amigável, gar
 #### **Ícones**
 Os ícones são minimalistas e seguem uma linha clara, com proporções uniformes. Eles reforçam a ação visualmente e facilitam a navegação, sendo utilizados em menus, botões e seções informativas.
 <div align="center">
-<sub>Figura 4 - Ícones - Vibra </sub>
+<sub>Figura 9 - Ícones - Vibra </sub>
 <img src="../assets/wad/icones.png">
 <sup>Fonte: Autoria Própia, Faculdade Inteli 2025</sup>
 </div>
@@ -495,7 +495,7 @@ Os ícones são minimalistas e seguem uma linha clara, com proporções uniforme
 #### **Componentes**
 Os componentes foram criados para garantir consistência visual e facilitar a manutenção da interface. Elementos como cards de evento, campos de busca, botões e seções de perfil seguem padrões de espaçamento, tipografia e cores definidos no guia, promovendo uma experiência coesa e intuitiva para o usuário.
 <div align="center">
-<sub>Figura 4 - Componentes - Vibra </sub>
+<sub>Figura 10 - Componentes - Vibra </sub>
 <img src="../assets/wad/componentes.png">
 <sup>Fonte: Autoria Própia, Faculdade Inteli 2025</sup>
 </div>
@@ -514,7 +514,7 @@ Esses documentos reúnem as definições visuais e os principais elementos reuti
 O protótipo de alta fidelidade representa uma versão visual próxima do produto final, integrando a identidade visual, os componentes definidos no design system e a experiência pensada a partir das necessidades dos usuários. Através dele, é possível visualizar o fluxo de navegação, testar interações e validar decisões de design antes do desenvolvimento.
 
 <div align="center">
-<sub>Figura 4 - Protótipo - Vibra </sub>
+<sub>Figura 11 - Protótipo - Vibra </sub>
 <img src="../assets/wad/prototipo.png">
 <sup>Fonte: Autoria Própia, Faculdade Inteli 2025</sup>
 </div>
@@ -708,7 +708,7 @@ Todas as páginas foram testadas para exibição correta em dispositivos móveis
 #### Login
 
 <div align="center">
-<sub>Figura 4 - Protótipo - Vibra </sub>
+<sub>Figura 12 - Protótipo - Vibra </sub>
 <img src="../assets/wad/login.png">
 <sup>Fonte: Autoria Própia, Faculdade Inteli 2025</sup>
 </div>
@@ -724,7 +724,7 @@ O estilo segue o guia de identidade visual da aplicação, com cores suaves, inp
 #### Criar Conta
 
 <div align="center">
-<sub>Figura 4 - Protótipo - Vibra </sub>
+<sub>Figura 13 - Protótipo - Vibra </sub>
 <img src="../assets/wad/criarConta.png">
 <sup>Fonte: Autoria Própia, Faculdade Inteli 2025</sup>
 </div>
@@ -740,7 +740,7 @@ Com uma interface limpa e centralizada, a tela apresenta:
 #### Página Inicial
 
 <div align="center">
-<sub>Figura 4 - Protótipo - Vibra </sub>
+<sub>Figura 14 - Protótipo - Vibra </sub>
 <img src="../assets/wad/inicial.png">
 <sup>Fonte: Autoria Própia, Faculdade Inteli 2025</sup>
 </div>
@@ -760,7 +760,7 @@ A estrutura favorece a descoberta de eventos e proporciona uma navegação intui
 #### Resultados da Busca
 
 <div align="center">
-<sub>Figura 4 - Protótipo - Vibra </sub>
+<sub>Figura 15 - Protótipo - Vibra </sub>
 <img src="../assets/wad/resultado.png">
 <sup>Fonte: Autoria Própia, Faculdade Inteli 2025</sup>
 </div>
@@ -779,7 +779,7 @@ A tela reforça o foco na descoberta de eventos culturais e facilita a navegaç�
 
 #### Página do evento
 <div align="center">
-<sub>Figura 4 - Protótipo - Vibra </sub>
+<sub>Figura 16 - Protótipo - Vibra </sub>
 <img src="../assets/wad/evento.png">
 <sup>Fonte: Autoria Própia, Faculdade Inteli 2025</sup>
 </div>
@@ -801,7 +801,7 @@ A tela é organizada em seções verticais bem espaçadas e prioriza clareza na 
 #### Perfil do Usuário
 
 <div align="center">
-<sub>Figura 4 - Protótipo - Vibra </sub>
+<sub>Figura 17 - Protótipo - Vibra </sub>
 <img src="../assets/wad/perfil.png">
 <sup>Fonte: Autoria Própia, Faculdade Inteli 2025</sup>
 </div>
