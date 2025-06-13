@@ -3,12 +3,16 @@ const Feedbacks = require('../models/feedbacksModel');
 // Listar todos os feedbacks
 exports.index = async (req, res) => {
   try {
-    await Feedbacks.findAll();
-    res.status(200).json(feedbacks);
+    const feedbacks = await Feedbacks.findAll();
+    if (feedbacks.length === 0) {
+      return res.status(404).json({ message: "Nenhum feedback encontrado" });
+    }
+    res.status(200).json(feedbacks); 
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
+
 
 // Criar um novo feedback
 exports.create = async (req, res) => {

@@ -3,8 +3,11 @@ const Playlists = require('../models/playlistsModel');
 // Listar todas as playlists
 exports.index = async (req, res) => {
   try {
-    await Playlists.findAll();
-    res.status(200).json(playlists);
+    const playlists = await Playlists.findAll(); 
+    if (playlists.length === 0) {
+      return res.status(404).json({ message: "Nenhuma playlist encontrada" });
+    }
+    res.status(200).json(playlists); 
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
