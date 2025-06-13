@@ -1421,56 +1421,7 @@ async function cancelSubscription(subscriptionId, overlay) {
   }
 }
 ```
-
-### 4.2 Conclusões e Trabalhos Futuros (Semana 8)
-
-#### **Pontos Fortes do Projeto**
-
-- **Arquitetura MVC Sólida**: A implementação rigorosa do padrão Model-View-Controller garantiu separação clara de responsabilidades, facilitando manutenção e escalabilidade do código.
-
-- **Banco de Dados Estruturado**: O modelo relacional bem definido com PostgreSQL assegura integridade dos dados e suporte a relacionamentos complexos entre usuários, eventos e inscrições.
-
-- **Responsividade Mobile-First**: Interface otimizada para dispositivos móveis, especialmente iPhone 16 Pro, com testes extensivos de usabilidade em diferentes resoluções.
-
-- **Segurança com JWT**: Sistema de autenticação robusto utilizando JSON Web Tokens, protegendo rotas sensíveis e garantindo acesso seguro às funcionalidades.
-
-- **Interface Consistente**: Aplicação rigorosa do guia de estilos em todas as telas, utilizando a fonte Sora e paleta de cores definida, criando experiência visual coesa.
-
-- **Funcionalidades Integradas**: Sistema completo de busca, inscrição em eventos, gerenciamento de perfil e cancelamento de inscrições funcionando de forma integrada.
-
-#### **Possíveis Melhorias**
-
-- **Painel Administrativo**: Implementação de interface para administradores gerenciarem eventos, usuários e relatórios de inscrições.
-
-- **Sistema de Favoritos**: Funcionalidade para usuários salvarem eventos de interesse para visualização posterior.
-
-- **Avaliações com Estrelas**: Sistema de feedback mais visual com classificação por estrelas e comentários detalhados.
-
-- **Notificações Push**: Alertas sobre novos eventos, lembretes de eventos inscritos e confirmações de ações.
-
-- **Filtros Avançados**: Busca por categoria, faixa de preço, data e localização específica.
-
-- **Sistema de Recomendações**: Algoritmo para sugerir eventos baseado no histórico e preferências do usuário.
-
-#### **Ideias para Trabalhos Futuros**
-
-- **Integração com Redes Sociais**: Compartilhamento de eventos no Instagram, Facebook e WhatsApp, com login social.
-
-- **Dashboard Analytics**: Painel com métricas de engajamento, eventos mais populares e estatísticas de usuários.
-
-- **Aplicativo Mobile Nativo**: Desenvolvimento de app iOS/Android com funcionalidades offline e geolocalização.
-
-- **Sistema de Pagamentos**: Integração com gateways de pagamento para eventos pagos e processamento de transações.
-
-- **Chatbot de Atendimento**: Assistente virtual para dúvidas sobre eventos e suporte ao usuário.
-
-- **Integração com Calendários**: Sincronização automática com Google Calendar e Apple Calendar.
-
-- **Realidade Aumentada**: Preview de locais de eventos através de AR para melhor experiência do usuário.
-
-- **Modo escuro**: Eventos noturnos.
-
-### 4.3 Fluxo de Usuário com Telas e Códigos
+### 4.1.1 Fluxo de Usuário com Telas e Códigos
 
 A implementação dos fluxos de usuário demonstra a importância de ter uma arquitetura bem integrada entre interface, back-end e persistência de dados. O padrão MVC aplicado no projeto Vibra garante que cada camada tenha responsabilidades bem definidas: as **Views** focam na experiência do usuário e apresentação de dados, os **Controllers** implementam a lógica de negócio e validações, e os **Models** gerenciam o acesso aos dados de forma consistente e segura.
 
@@ -1661,6 +1612,54 @@ app.listen(PORT, () => {
 
 module.exports = app;
 ```
+
+### 4.2 Conclusões e Trabalhos Futuros (Semana 8)
+
+#### **Pontos Fortes do Projeto**
+
+- **Arquitetura MVC Sólida**: A implementação rigorosa do padrão Model-View-Controller garantiu separação clara de responsabilidades, facilitando manutenção e escalabilidade do código.
+
+- **Banco de Dados Estruturado**: O modelo relacional bem definido com PostgreSQL assegura integridade dos dados e suporte a relacionamentos complexos entre usuários, eventos e inscrições.
+
+- **Responsividade Mobile-First**: Interface otimizada para dispositivos móveis, especialmente iPhone 16 Pro, com testes extensivos de usabilidade em diferentes resoluções.
+
+- **Segurança com JWT**: Sistema de autenticação robusto utilizando JSON Web Tokens, protegendo rotas sensíveis e garantindo acesso seguro às funcionalidades.
+
+- **Interface Consistente**: Aplicação rigorosa do guia de estilos em todas as telas, utilizando a fonte Sora e paleta de cores definida, criando experiência visual coesa.
+
+- **Funcionalidades Integradas**: Sistema completo de busca, inscrição em eventos, gerenciamento de perfil e cancelamento de inscrições funcionando de forma integrada.
+
+#### **Possíveis Melhorias**
+
+- **Painel Administrativo**: Implementação de interface para administradores gerenciarem eventos, usuários e relatórios de inscrições.
+
+- **Sistema de Favoritos**: Funcionalidade para usuários salvarem eventos de interesse para visualização posterior.
+
+- **Avaliações com Estrelas**: Sistema de feedback mais visual com classificação por estrelas e comentários detalhados.
+
+- **Notificações Push**: Alertas sobre novos eventos, lembretes de eventos inscritos e confirmações de ações.
+
+- **Filtros Avançados**: Busca por categoria, faixa de preço, data e localização específica.
+
+- **Sistema de Recomendações**: Algoritmo para sugerir eventos baseado no histórico e preferências do usuário.
+
+#### **Ideias para Trabalhos Futuros**
+
+- **Integração com Redes Sociais**: Compartilhamento de eventos no Instagram, Facebook e WhatsApp, com login social.
+
+- **Dashboard Analytics**: Painel com métricas de engajamento, eventos mais populares e estatísticas de usuários.
+
+- **Aplicativo Mobile Nativo**: Desenvolvimento de app iOS/Android com funcionalidades offline e geolocalização.
+
+- **Sistema de Pagamentos**: Integração com gateways de pagamento para eventos pagos e processamento de transações.
+
+- **Chatbot de Atendimento**: Assistente virtual para dúvidas sobre eventos e suporte ao usuário.
+
+- **Integração com Calendários**: Sincronização automática com Google Calendar e Apple Calendar.
+
+- **Realidade Aumentada**: Preview de locais de eventos através de AR para melhor experiência do usuário.
+
+- **Modo escuro**: Eventos noturnos.
 
 
 ## <a name="c5"></a>5. Referências
